@@ -17,15 +17,14 @@ namespace Application.Application
         {
         }
 
-        public void EndSession(string token)
+        public Task<User> GetUserData(string userId)
         {
-            _repository.APIJWTSession.EndSession(token);
-            _repository.SaveChanges();
+            return Task.FromResult(_repository.UserRepository.GetById(userId));
         }
 
-        public async Task<APIJWTSession> GetSessionData(string token)
+        public Task<IEnumerable<User>> GetUsers()
         {
-           return await _repository.APIJWTSession.GetSession(token);
+            return Task.FromResult(_repository.UserRepository.GetAll());
         }
 
         public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId)
@@ -41,14 +40,15 @@ namespace Application.Application
                 _repository.UserRepository.Add(user);
                 _repository.SaveChanges();
                 result.Success = true;
+                result.Return = user;
             }
 
             return result;
         }
 
-        public async Task<Result<APIJWTSession>> UserLogin(string email, string password)
+        public async Task<Result<Dictionary<string, User>>> UserLogin(string email, string password)
         {
-            Result<APIJWTSession> result = new Result<APIJWTSession>();
+            Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
 
             Result<User> loginResult = _repository.UserRepository.GetUserByEmail(email);
             User? user = loginResult.Return;
@@ -60,7 +60,9 @@ namespace Application.Application
             else
             {
                 _repository.UserRepository.LoginUser(user);
-                result.Return = await _repository.APIJWTSession.StartSession(user);
+                string token = GenerateJwtToken(user);
+                result.Return = new Dictionary<string, User> { { token, user } };
+                result.Success = true;
                 _repository.SaveChanges();
             }
 
@@ -73,7 +75,8 @@ namespace Application.Application
             User? user = _repository.UserRepository.GetById(userId);
             if (user != null)
             {
-                _repository.UserRepository.Delete(user);
+                user.Deleted = true;
+                _repository.UserRepository.Update(user);
                 result.Success = true;
                 _repository.SaveChanges();
             }

@@ -21,7 +21,6 @@ namespace Data.Context
 
         #region Dbset
         public DbSet<User> Users { get; set; }
-        public DbSet<APIJWTSession> APIJWTSession { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,7 +38,6 @@ namespace Data.Context
         {
             #region Configurations
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new APIJWTSessionConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);

@@ -1,10 +1,14 @@
 ﻿using Data.Context;
 using Data.Interface;
+using Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +24,6 @@ namespace Data.Repository
             _context = context;
             _configuration = configuration;
             UserRepository = new UserRepository(_context);
-            APIJWTSession = new APIJWTSessionRepository(_context);
         }
 
         #region Repositories
@@ -30,7 +33,6 @@ namespace Data.Repository
         }
 
         public IUserRepository UserRepository { get; private set; }
-        public IAPIJWTSessionRepository APIJWTSession { get; private set; }
 
         #endregion
 

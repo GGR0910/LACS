@@ -1,7 +1,6 @@
 ﻿using Data.Context;
 using Data.Interface;
 using Data.Repository;
-using LACS_API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -23,8 +22,6 @@ namespace LACS_API
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepositorio>();
-
-            services.AddScoped<GlobalValidationMiddleware>();
         }
     }
 }

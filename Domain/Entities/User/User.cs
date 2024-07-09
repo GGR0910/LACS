@@ -24,9 +24,5 @@ namespace Domain.Entities
         public DateTime? LastAcess { get; set; }
         public bool Active { get; set; }
         public bool EmailConfirmed { get; set; }
-
-
-
-        public virtual ICollection<APIJWTSession> Sessions { get; set; }
     }
 }

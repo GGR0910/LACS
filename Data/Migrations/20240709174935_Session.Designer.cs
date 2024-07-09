@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240709174935_Session")]
+    partial class Session
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,48 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Entities.APIJWTSession", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("DateLimitToUse")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JWTKeyUsed")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("APIJWTSession");
+                });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
@@ -77,16 +122,32 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "54ef8ed9-668c-4389-a638-9460e4806587",
+                            Id = "06240d1c-e077-4b51-b400-0dc5da925402",
                             Active = true,
-                            CreatedAt = new DateTime(2024, 7, 9, 16, 38, 26, 905, DateTimeKind.Local).AddTicks(9626),
-                            CreatedBy = "9f929feb-1db6-4fc2-b630-9ee1d47abc50",
+                            CreatedAt = new DateTime(2024, 7, 9, 14, 49, 34, 978, DateTimeKind.Local).AddTicks(7700),
+                            CreatedBy = "6a3bbcb5-b307-42a8-bfae-3d784cfd359e",
                             Deleted = false,
                             Email = "ggr0910@hotmail.com",
                             EmailConfirmed = false,
                             EncryptedPassword = "Gogoll90@",
                             UserName = "SystemUser"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.APIJWTSession", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Sessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
         }

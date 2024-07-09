@@ -19,7 +19,6 @@ namespace Data.Interface
 
         IBaseRepository<TEntity> Repository<TEntity>() where TEntity : class;
         IUserRepository UserRepository { get; }
-        IAPIJWTSessionRepository APIJWTSession { get; }
 
         #endregion
 

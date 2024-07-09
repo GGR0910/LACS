@@ -3,6 +3,12 @@
     public class LoginResponseDTO
     {
         public string Token { get; set; }
-        public string ValidUntil { get; set; }
+        public UserDTO UserInfo { get; set; }
+
+        public LoginResponseDTO(string token, string userId, string userName, string userEmail)
+        {
+            Token = token;
+            UserInfo = new UserDTO(userId, userName, userEmail, false);
+        }
     }
 }

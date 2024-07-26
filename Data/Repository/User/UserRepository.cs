@@ -2,6 +2,7 @@
 using Data.Interface;
 using Domain;
 using Domain.Entities;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace Data.Repository
 
         public void LoginUser(User user)
         {
+            user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Login, "User Logged", user.Id));
+
             user.LastAcess = DateTime.Now;
             Update(user);
         }

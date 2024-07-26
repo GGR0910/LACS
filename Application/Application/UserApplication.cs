@@ -2,6 +2,7 @@
 using Data.Interface;
 using Domain;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,22 @@ namespace Application.Application
             return Task.FromResult(_repository.UserRepository.GetAll());
         }
 
-        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId)
+        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId)
         {
             User? user = _repository.UserRepository.GetUserByEmail(email).Return;
+            User loggedUser = _repository.UserRepository.GetById(creatorId);
             Result<User> result = new Result<User>();
 
             if (user != null)
                 result.Message = "E-mail already registred";
+            else if(loggedUser.RoleId != (int)RolesEnum.Admin)
+                result.Message = "User not authorized to register new users";
             else
             {
-                user = new User(creatorId, userName, email, password);
+                user = new User(creatorId, userName, email, password, roleId);
+                UserInteraction interaction = new UserInteraction(creatorId, (int)UserInteractionTypeEnum.Register, "Registred new User", user.Id);
+                user.UserInteractions.Add(interaction);
+
                 _repository.UserRepository.Add(user);
                 _repository.SaveChanges();
                 result.Success = true;
@@ -57,6 +64,8 @@ namespace Application.Application
                 result.Message = loginResult.Message;
             else if (password != user.EncryptedPassword)
                 result.Message = "Incorrect password";
+            else if(!user.EmailConfirmed || user.Deleted)
+                result.Message = "User not authorized to login";
             else
             {
                 _repository.UserRepository.LoginUser(user);
@@ -69,14 +78,20 @@ namespace Application.Application
             return result;
         }
 
-        Task<Result<User>> IUserApplication.DeleteUser(string userId)
+        Task<Result<User>> IUserApplication.DeleteUser(string userId, string creatorId)
         {
             Result<User> result = new Result<User>();
             User? user = _repository.UserRepository.GetById(userId);
-            if (user != null)
+            User loggedUser = _repository.UserRepository.GetById(creatorId);
+
+            if(loggedUser.RoleId != (int)RolesEnum.Admin)
+                result.Message = "User not authorized to delete users";
+            else if (user != null)
             {
                 user.Deleted = true;
+                user.UserInteractions.Add(new UserInteraction(creatorId, (int)UserInteractionTypeEnum.Delete, "User Deleted by", user.Id));
                 _repository.UserRepository.Update(user);
+
                 result.Success = true;
                 _repository.SaveChanges();
             }

@@ -9,36 +9,25 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserInteractionConfiguration : IEntityTypeConfiguration<UserInteraction>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.Property(u => u.UserName)
+        public void Configure(EntityTypeBuilder<UserInteraction> builder)
+        { 
+            
+            builder.Property(UI => UI.Description)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(500);
 
-            builder.Property(u => u.Email)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            builder.Property(u => u.EncryptedPassword)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            builder.Property(u => u.Active);
-
-            builder.Property(u => u.LastAcess);
-
-            builder.Property(u => u.EmailConfirmed);
-
-            builder.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
+            builder.Property(UI => UI.TargetId)
+                .HasMaxLength(36);
+            
+            builder.HasOne(UI => UI.User)
+                    .WithMany(U => U.UserInteractions)
+                    .HasForeignKey(UI => UI.UserId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+            
             //Base entity Data
-
 
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id)
@@ -60,8 +49,6 @@ namespace Data.Configuration
             builder.Property(u => u.UpdatedBy)
                 .HasMaxLength(36);
             //End base entity Data
-
-
         }
     }
 }

@@ -5,10 +5,10 @@
         public string Token { get; set; }
         public UserDTO UserInfo { get; set; }
 
-        public LoginResponseDTO(string token, string userId, string userName, string userEmail)
+        public LoginResponseDTO(string token, string userId, string userName, string userEmail, int roleId)
         {
             Token = token;
-            UserInfo = new UserDTO(userId, userName, userEmail, false);
+            UserInfo = new UserDTO(userId, userName, userEmail, false, roleId);
         }
     }
 }

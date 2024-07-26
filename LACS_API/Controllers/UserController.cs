@@ -34,7 +34,7 @@ namespace LACS_API.Controllers
             User user =  result.Return.First().Value;
 
             if (result.Success)
-                return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email));
+                return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email, user.RoleId));
             else
                 return BadRequest(new { message = result.Message });
             
@@ -49,11 +49,11 @@ namespace LACS_API.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid register request. Please check the data." });
 
-            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId);
+            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId);
             User user = result.Return;
 
             if(result.Success)
-                return Ok(new RegisterUserResponseDTO(user.Id, user.Email, user.UserName));
+                return Ok(new RegisterUserResponseDTO(user.Id, user.Email, user.UserName, user.RoleId));
             else
                 return BadRequest(new { message = result.Message });
         }
@@ -67,7 +67,7 @@ namespace LACS_API.Controllers
             List<UserDTO> usersDto = new List<UserDTO>();
             foreach (var user in users)
             {
-                usersDto.Add(new UserDTO(user.Id, user.UserName, user.Email, user.Deleted));   
+                usersDto.Add(new UserDTO(user.Id, user.UserName, user.Email, user.Deleted, user.RoleId));   
             }
 
             if (users.Any())
@@ -78,14 +78,14 @@ namespace LACS_API.Controllers
         
         [HttpDelete]
         [Route("DeleteUser")]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser(string userId, string creatorId)
         {
             Result<User> result = new Result<User>();
 
             if(string.IsNullOrEmpty(userId))
                 return BadRequest(new { message = "Invalid user id." });
 
-            result = await _application.User.DeleteUser(userId);
+            result = await _application.User.DeleteUser(userId, creatorId);
             User user = result.Return;
 
             if(result.Success)

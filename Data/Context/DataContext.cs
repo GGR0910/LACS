@@ -1,4 +1,5 @@
 ﻿using Data.Configuration;
+using Data.Seed;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,9 @@ namespace Data.Context
 
         #region Dbset
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserInteractionType> UserInteractionType { get; set; }
+        public DbSet<UserInteraction> UserInteractions { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -38,6 +42,9 @@ namespace Data.Context
         {
             #region Configurations
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserInteractionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserInteractionConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -47,7 +54,8 @@ namespace Data.Context
         public void Seed(ModelBuilder modelBuilder)
         {
             #region Seeds
-
+            modelBuilder.Entity<Role>().HasData(RoleSeed.GenerateSeed());
+            modelBuilder.Entity<UserInteractionType>().HasData(UserInteractionTypeSeed.GenerateSeed());
             #endregion
 
             GerarBaseAdmin(modelBuilder);
@@ -55,7 +63,9 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            User adminUser = new User(Guid.NewGuid().ToString(),"SystemUser","ggr0910@hotmail.com","Gogoll90@");
+            User adminUser = new User(Guid.NewGuid().ToString(),"SystemUser","ggr0910@hotmail.com","Gogoll90@", 1);
+            adminUser.EmailConfirmed = true;
+
             modelBuilder.Entity<User>().HasData(adminUser);
         }
     }

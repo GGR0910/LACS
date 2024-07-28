@@ -34,7 +34,7 @@ namespace LACS_API.Controllers
             User user =  result.Return.First().Value;
 
             if (result.Success)
-                return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email, user.RoleId));
+                return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email, user.RoleId, user.DepartamentName));
             else
                 return BadRequest(new { message = result.Message });
             
@@ -49,11 +49,11 @@ namespace LACS_API.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid register request. Please check the data." });
 
-            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId);
+            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId, registerRequest.DepartamentName);
             User user = result.Return;
 
             if(result.Success)
-                return Ok(new RegisterUserResponseDTO(user.Id, user.Email, user.UserName, user.RoleId));
+                return Ok(new RegisterUserResponseDTO(user.Id, user.Email, user.UserName, user.RoleId, user.DepartamentName));
             else
                 return BadRequest(new { message = result.Message });
         }
@@ -67,7 +67,7 @@ namespace LACS_API.Controllers
             List<UserDTO> usersDto = new List<UserDTO>();
             foreach (var user in users)
             {
-                usersDto.Add(new UserDTO(user.Id, user.UserName, user.Email, user.Deleted, user.RoleId));   
+                usersDto.Add(new UserDTO(user.Id, user.UserName, user.Email, user.Deleted, user.RoleId, user.DepartamentName));   
             }
 
             if (users.Any())

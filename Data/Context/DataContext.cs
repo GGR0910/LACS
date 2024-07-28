@@ -25,6 +25,10 @@ namespace Data.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserInteractionType> UserInteractionType { get; set; }
         public DbSet<UserInteraction> UserInteractions { get; set; }
+        public DbSet<SolicitationType> SolicitationTypes { get; set; }
+        public DbSet<SampleType> SampleTypes { get; set; }
+        public DbSet<SamplePhisicalState> SamplePhisicalStates { get; set; }
+        public DbSet<AnalisysType> AnalisysTypes { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -45,6 +49,12 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserInteractionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserInteractionConfiguration());
+            modelBuilder.ApplyConfiguration(new SolicitationTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SampleTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SamplePhisicalStateConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SolicitationConfiguration());
+            modelBuilder.ApplyConfiguration(new SampleConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -56,6 +66,10 @@ namespace Data.Context
             #region Seeds
             modelBuilder.Entity<Role>().HasData(RoleSeed.GenerateSeed());
             modelBuilder.Entity<UserInteractionType>().HasData(UserInteractionTypeSeed.GenerateSeed());
+            modelBuilder.Entity<SolicitationType>().HasData(SolicitationTypeSeed.GenerateSeed());   
+            modelBuilder.Entity<SampleType>().HasData(SampleTypeSeed.GenerateSeed());
+            modelBuilder.Entity<SamplePhisicalState>().HasData(SamplePhisicalStateSeed.GenerateSeed());
+            modelBuilder.Entity<AnalisysType>().HasData(AnalisysTypeSeed.GenerateSeed());
             #endregion
 
             GerarBaseAdmin(modelBuilder);
@@ -63,7 +77,7 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            User adminUser = new User(Guid.NewGuid().ToString(),"SystemUser","ggr0910@hotmail.com","Gogoll90@", 1);
+            User adminUser = new User(Guid.NewGuid().ToString(),"SystemUser","ggr0910@hotmail.com","Gogoll90@", 1, "System");
             adminUser.EmailConfirmed = true;
 
             modelBuilder.Entity<User>().HasData(adminUser);

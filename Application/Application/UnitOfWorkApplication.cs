@@ -23,10 +23,14 @@ namespace Application.Application
             _context = new DataContext(_configuration);
             _repository = new UnitOfWorkRepositorio(_context, _configuration);
 
+            Solicitation = new SolicitationApplication(_repository, _configuration);
             User = new UserApplication(_repository, _configuration);
+            Sample = new SampleApplication(_repository, _configuration);
         }
 
         public IUserApplication User { get; private set; }
+        public ISampleApplication Sample { get; private set; }
+        public ISolicitationApplication Solicitation { get; set; }
 
         public void Dispose()
         {

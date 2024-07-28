@@ -11,7 +11,7 @@ namespace Application.Interface
     public interface IUserApplication : IBaseApplication<User>
     {
         Task<Result<Dictionary<string, User>>> UserLogin(string email, string password);
-        Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId);
+        Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId, string departamentName);
         Task<Result<User>> DeleteUser(string userId, string creatorId);
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUserData(string userId);

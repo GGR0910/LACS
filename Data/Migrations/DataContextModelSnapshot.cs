@@ -97,7 +97,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("AnalistyId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -111,14 +110,17 @@ namespace Data.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("SampleAnalysisEndDate")
+                    b.Property<DateTime?>("SampleAnalisysDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("SampleAnalisysDone")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SampleAnalisysExpectedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SampleAnalysisResult")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("SampleAnalysisStartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("SamplePhisicalStateId")
                         .HasColumnType("int");
@@ -419,10 +421,10 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7d22b3ce-a2b3-40a8-bdbc-b6f309f26ca0",
+                            Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
                             Active = true,
-                            CreatedAt = new DateTime(2024, 7, 28, 16, 26, 27, 444, DateTimeKind.Local).AddTicks(3671),
-                            CreatedBy = "56c348a4-786a-41ca-a0e1-37aa20341390",
+                            CreatedAt = new DateTime(2024, 7, 31, 13, 50, 13, 414, DateTimeKind.Local).AddTicks(1414),
+                            CreatedBy = "71280c9d-25b5-4f45-9aed-11af5328440f",
                             Deleted = false,
                             DepartamentName = "System",
                             Email = "ggr0910@hotmail.com",
@@ -552,8 +554,7 @@ namespace Data.Migrations
                     b.HasOne("Domain.Entities.User", "Analisty")
                         .WithMany("Samples")
                         .HasForeignKey("AnalistyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.SamplePhisicalState", "SamplePhisicalState")
                         .WithMany("Samples")

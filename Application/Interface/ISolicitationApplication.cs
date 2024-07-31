@@ -11,5 +11,8 @@ namespace Application.Interface
     public interface ISolicitationApplication : IBaseApplication<Solicitation>
     {
         public Task<Result<Solicitation>> RegisterSolicitation(string requesterId, int soliciationTypeId, string samplesDescription, string analysisGoalDescription, int analisysTypeId, string? desiredMagnefication, bool needsRecobriment, string? recobrimentMaterial, string? specialPrecautions, DateTime desiredDeadline, string deliveryLocation, bool desireToAccompanyAnalysis, string? observations, int sampleAmount, int sampleTypeId, int samplePhisicalStateId);
+        public Task<Result<object>> MarkSamplesRecieved(string solicitationId, string loggedUserId);
+        public Task<Result<List<Solicitation>>> GetSolicitations(string requesterId);
+
     }
 }

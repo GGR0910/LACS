@@ -136,10 +136,11 @@ namespace Data.Migrations
                     SolicitationId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     SampleTypeId = table.Column<int>(type: "int", nullable: false),
                     SamplePhisicalStateId = table.Column<int>(type: "int", nullable: false),
-                    SampleAnalysisStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SampleAnalysisEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SampleAnalisysExpectedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SampleAnalisysDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SampleAnalisysDone = table.Column<bool>(type: "bit", nullable: false),
                     SampleAnalysisResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AnalistyId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    AnalistyId = table.Column<string>(type: "nvarchar(36)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -220,7 +221,7 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Active", "CreatedAt", "CreatedBy", "Deleted", "DepartamentName", "Email", "EmailConfirmed", "EncryptedPassword", "LastAcess", "RoleId", "UpdatedAt", "UpdatedBy", "UserName" },
-                values: new object[] { "7d22b3ce-a2b3-40a8-bdbc-b6f309f26ca0", true, new DateTime(2024, 7, 28, 16, 26, 27, 444, DateTimeKind.Local).AddTicks(3671), "56c348a4-786a-41ca-a0e1-37aa20341390", false, "System", "ggr0910@hotmail.com", true, "Gogoll90@", null, 1, null, null, "SystemUser" });
+                values: new object[] { "c7af4e3e-ff58-4f65-a942-9f5461d65b09", true, new DateTime(2024, 7, 31, 13, 50, 13, 414, DateTimeKind.Local).AddTicks(1414), "71280c9d-25b5-4f45-9aed-11af5328440f", false, "System", "ggr0910@hotmail.com", true, "Gogoll90@", null, 1, null, null, "SystemUser" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sample_AnalistyId",
@@ -282,7 +283,7 @@ namespace Data.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "7d22b3ce-a2b3-40a8-bdbc-b6f309f26ca0");
+                keyValue: "c7af4e3e-ff58-4f65-a942-9f5461d65b09");
 
             migrationBuilder.DropColumn(
                 name: "DepartamentName",

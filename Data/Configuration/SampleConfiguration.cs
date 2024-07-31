@@ -31,8 +31,8 @@ namespace Data.Configuration
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.SampleAnalysisStartDate);
-            builder.Property(u => u.SampleAnalysisEndDate);
+            builder.Property(u => u.SampleAnalisysExpectedDate);
+            builder.Property(u => u.SampleAnalisysDone);
             builder.Property(u => u.SampleAnalysisResult);
 
             builder.HasOne(u => u.Analisty)

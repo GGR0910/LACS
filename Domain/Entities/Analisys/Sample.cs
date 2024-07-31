@@ -14,7 +14,10 @@ namespace Domain.Entities
         }
         public Sample(string solicitationId, int sampleTypeId, int samplePhisicalStateId, string requesterId) : base(requesterId)
         {
-            
+            SolicitationId = solicitationId;
+            SampleTypeId = sampleTypeId;
+            SamplePhisicalStateId = samplePhisicalStateId;
+            SampleAnalisysExpectedDate = new DateTime();
         }
         public string SolicitationId { get; set; }
         public virtual Solicitation Solicitation { get; set; }
@@ -22,8 +25,9 @@ namespace Domain.Entities
         public virtual SampleType SampleType { get; set; }
         public int SamplePhisicalStateId { get; set; }
         public virtual SamplePhisicalState SamplePhisicalState { get; set; }
-        public DateTime? SampleAnalysisStartDate { get; set; }
-        public DateTime? SampleAnalysisEndDate { get; set; }
+        public DateTime SampleAnalisysExpectedDate { get; set; }
+        public DateTime? SampleAnalisysDate { get; set; }
+        public bool SampleAnalisysDone { get; set; }
         public string? SampleAnalysisResult { get; set; }
         public string? AnalistyId { get; set; }
         public virtual User Analisty { get; set; }

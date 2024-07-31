@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
 
-namespace Domain.Entities
+namespace LACS_API.DTO.Analisys
 {
-    public class Solicitation : BaseEntity
+    public class SolicitationDTO
     {
-        public Solicitation()
+        public SolicitationDTO()
         {
             
         }
-        public Solicitation(string requesterId, int solicitationTypeId, string samplesDescription, string analysisGoalDescription,
-            int analisysTypeId, string? desiredMagnefication, bool needsRecobriment, string? recobrimentMaterial, string? specialPrecautions
-            , DateTime desiredDeadLine, string deliveryLocation, bool desireToAccompanyAnalisys, string? observations) : base(requesterId) 
+        public SolicitationDTO(UserDTO requester, SolicitationType solicitationType, AnalisysType analisysType, List<SampleDTO> samples, string samplesDescription, string analysisGoalDescription,
+            string? desiredMagnefication, bool needsRecobriment, string? recobrimentMaterial, string? specialPrecautions
+           , DateTime desiredDeadLine, string deliveryLocation, bool desireToAccompanyAnalisys, string? observations)
         {
-            RequesterId = requesterId;
-            SoliciationTypeId = solicitationTypeId;
+            Requester = requester;
+            SolicitationType = solicitationType;
+            AnalisysType = analisysType;
             SamplesDescription = samplesDescription;
             AnalysisGoalDescription = analysisGoalDescription;
-            AnalisysTypeId = analisysTypeId;
             DesiredMagnefication = desiredMagnefication;
             NeedsRecobriment = needsRecobriment;
             RecobrimentMaterial = recobrimentMaterial;
@@ -29,17 +25,15 @@ namespace Domain.Entities
             DeliveryLocation = deliveryLocation;
             DesireToAccompanyAnalysis = desireToAccompanyAnalisys;
             Observations = observations;
-            Samples = new List<Sample>();
+            Samples = samples;
             ResultsDelivered = false;
         }
-        //Basic solicitation information
-        public string RequesterId { get; set; }
-        public virtual User Requester { get; set; }
-        public int SoliciationTypeId { get; set; }
-        public virtual SolicitationType SolicitationType { get; set; }
+        public string Id { get; set; }
+        public  UserDTO Requester { get; set; }
+        public  SolicitationType SolicitationType { get; set; }
         public string SamplesDescription { get; set; }
         public string AnalysisGoalDescription { get; set; }
-   
+        public  AnalisysType AnalisysType { get; set; }
         public string? DesiredMagnefication { get; set; }
         public bool NeedsRecobriment { get; set; }
         public string? RecobrimentMaterial { get; set; }
@@ -52,11 +46,7 @@ namespace Domain.Entities
         public DateTime? ExpectedCompletionDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public bool ResultsDelivered { get; set; }
-        public int SampleAmount { get { return Samples.Count(); } }
-        public virtual ICollection<Sample> Samples { get; set; }
-
-        //Specific solicitation information
-        public int AnalisysTypeId { get; set; }
-        public virtual AnalisysType AnalisysType { get; set; }
+        public int SampleAmount { get; set; }
+        public virtual ICollection<SampleDTO> Samples { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace Data.Interface.Analisys
 {
     public interface ISolicitationRepository : IBaseRepository<Solicitation>
     {
-
+        public Solicitation? GetSolicitation(string solicitationId);
+        public List<Solicitation> GetSolicitations();
     }
 }

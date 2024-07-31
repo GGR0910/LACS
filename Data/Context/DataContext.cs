@@ -29,6 +29,8 @@ namespace Data.Context
         public DbSet<SampleType> SampleTypes { get; set; }
         public DbSet<SamplePhisicalState> SamplePhisicalStates { get; set; }
         public DbSet<AnalisysType> AnalisysTypes { get; set; }
+        public DbSet<Sample> Sample { get; set; }
+        public DbSet<Solicitation> Solicitation { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -77,7 +79,7 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            User adminUser = new User(Guid.NewGuid().ToString(),"SystemUser","ggr0910@hotmail.com","Gogoll90@", 1, "System");
+            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser","ggr0910@hotmail.com","Gogoll90@", 1, "System");
             adminUser.EmailConfirmed = true;
 
             modelBuilder.Entity<User>().HasData(adminUser);

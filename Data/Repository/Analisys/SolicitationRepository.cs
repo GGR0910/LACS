@@ -2,11 +2,13 @@
 using Data.Interface.Analisys;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Domain.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
 
 namespace Data.Repository.Analisys
 {
@@ -17,33 +19,77 @@ namespace Data.Repository.Analisys
 
         }
 
-        public Solicitation? GetSolicitation(string solicitationId)
+        public Result<Solicitation> GetSolicitation(string solicitationId)
         {
-            return _context.Solicitation.Include(s => s.Samples)
-                 .ThenInclude(sa => sa.SamplePhisicalState)
-                 .Include(s => s.Samples)
-                 .ThenInclude(sa => sa.SampleType)
-                 .Include(s => s.AnalisysType).FirstOrDefault(s => s.Id == solicitationId);
-        }
-
-        public List<Solicitation> GetSolicitations()
-        {
-            List<Solicitation> solicitations = _context.Solicitation.Where(s => !s.Deleted && s.ExpectedCompletionDate == null).ToList();
-            List<User> users = _context.Users.ToList();
-            List<Sample> samples = _context.Sample.ToList();
-            List<SolicitationType> solicitationTypes = _context.SolicitationTypes.ToList();
-            List<AnalisysType> analisysTypes = _context.AnalisysTypes.ToList();
-
-            foreach (var solicitation in solicitations)
+            Result<Solicitation> result = new Result<Solicitation>();
+            Solicitation? solicitation = _context.Solicitation
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.Analisty)
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.SampleType)
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.SamplePhisicalState)
+                .Include(s => s.Requester)
+                .Include(s => s.AnalisysType)
+                .Include(s => s.SolicitationType)
+                .FirstOrDefault(x => x.Id == solicitationId);
+            
+          
+            if(solicitation == null)
+                result.Message = "Solicitation not found.";
+            else
             {
-                solicitation.Samples = samples.Where(s => s.SolicitationId == solicitation.Id).ToList();
-                solicitation.Requester = users.FirstOrDefault(u => u.Id == solicitation.RequesterId);
-                solicitation.AnalisysType = analisysTypes.FirstOrDefault(a => a.Id == solicitation.AnalisysTypeId);
-                solicitation.SolicitationType = solicitationTypes.FirstOrDefault(st => st.Id == solicitation.SoliciationTypeId);
+                result.Return = solicitation;
+                result.Success = true;
             }
 
+            return result;
+        }
 
-            return solicitations;
+        public Task<DataTableReturn<Solicitation>> GetSolicitations(int page, int pageSize, string? requesterId, int? solicitationTypeId, int? analisysTypeId, bool? resultsDelivered, DateTime? initialDate, DateTime? finalDate)
+        {
+            IQueryable<Solicitation> solicitations = _context.Solicitation
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.Analisty)
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.SampleType)
+                .Include(s => s.Samples)
+                .ThenInclude(s => s.SamplePhisicalState)
+                .Include(s => s.Requester)
+                .Include(s => s.AnalisysType)
+                .Include(s => s.SolicitationType)
+                .Where(s => !s.Deleted && s.ExpectedCompletionDate == null);
+          
+            int recordsTotal = solicitations.Count();
+
+            if (!string.IsNullOrEmpty(requesterId))
+                solicitations = solicitations.Where(s => s.RequesterId == requesterId);
+
+            if (solicitationTypeId.HasValue)
+                solicitations = solicitations.Where(s => s.SoliciationTypeId == solicitationTypeId);
+
+            if (analisysTypeId.HasValue)
+                solicitations = solicitations.Where(s => s.AnalisysTypeId == analisysTypeId);
+            
+            if (resultsDelivered.HasValue)
+                solicitations = solicitations.Where(s => s.ResultsDelivered == resultsDelivered);
+            
+            if (initialDate.HasValue)
+                solicitations = solicitations.Where(s => s.CreatedAt >= initialDate);
+            
+            if (finalDate.HasValue)
+                solicitations = solicitations.Where(s => s.CreatedAt <= finalDate);
+
+            solicitations = solicitations.OrderBy(s => s.ExpectedCompletionDate).Skip((page - 1) * pageSize).Take(pageSize);
+
+            DataTableReturn<Solicitation> dataTableReturn = new DataTableReturn<Solicitation>()
+            {
+                Data = solicitations.ToList(),
+                RecordsTotal = recordsTotal,
+                RecordsFiltered = solicitations.Count()
+            };
+
+            return Task.FromResult(dataTableReturn);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LACS_API.DTO
+﻿
+
+namespace LACS_API.DTO
 {
     public class UserDTO
     {

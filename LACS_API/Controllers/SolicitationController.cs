@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Entities;
+using Domain.Util;
 using LACS_API.DTO;
 using LACS_API.DTO.Analisys;
 using LACS_API.DTO.Analisys.Requests;
@@ -27,6 +28,9 @@ namespace LACS_API.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid solicitation request. Please check the data." });
+            if (request.SampleAmaunt < 1)
+                return BadRequest(new { message = "Invalid sample amount." });
+
 
             result = await _application.Solicitation.RegisterSolicitation(request.RequesterId, request.SoliciationTypeId, request.SamplesDescription, request.AnalysisGoalDescription, request.AnalisysTypeId, request.DesiredMagnefication,
                 request.NeedsRecobriment, request.RecobrimentMaterial, request.SpecialPrecautions, request.DesiredDeadline, request.DeliveryLocation, request.DesireToAccompanyAnalysis, request.Observations, 
@@ -38,21 +42,24 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = result.Message });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetSolicitations")]
-        public async Task<IActionResult> GetSolicitations(string requesterId)
+        public async Task<IActionResult> GetSolicitations([FromBody]SolicitationListPaginationRequestDTO request)
         {
-            Result<List<Solicitation>> result = new Result<List<Solicitation>>();
+            Result<DataTableReturn<SolicitationListDTO>> result = new Result<DataTableReturn<SolicitationListDTO>>();
 
-            result = await _application.Solicitation.GetSolicitations(requesterId);
+            var datatableReturnResult = await _application.Solicitation.GetSolicitations(request.Page,request.PageSize, request.LoggedUserId, request.RequesterId ,request.SolicitationTypeId, request.AnalisysTypeId, request.ResultsDelivered, request.InitialDate, request.FinalDate);
             List<SolicitationListDTO> solicitations = new List<SolicitationListDTO>();
-            foreach (var solicitation in result.Return)
-            {
-                solicitations.Add(new SolicitationListDTO(solicitation));
-            }
 
-            if (result.Success)
-                return Ok(new { solicitations = solicitations });
+            if (datatableReturnResult.Success)
+            {
+                foreach (var solicitation in datatableReturnResult.Return.Data)
+                {
+                    solicitations.Add(new SolicitationListDTO(solicitation));
+                }
+
+                return Ok(new DataTableReturn<SolicitationListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = solicitations });
+            }
             else
                 return BadRequest(new { message = result.Message });
         }
@@ -61,7 +68,7 @@ namespace LACS_API.Controllers
         [Route("MarkSamplesRecieved")]
         public async Task<IActionResult> MarkSamplesRecieved([FromBody] MarkSamplesRecievedRequestDTO request)
         {
-            Result<object> result = new Result<object>();
+            Result<Solicitation> result = new Result<Solicitation>();
 
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid request. Please check the data." });
@@ -70,6 +77,23 @@ namespace LACS_API.Controllers
 
             if (result.Success)
                 return Ok();
+            else
+                return BadRequest(new { message = result.Message });
+        }
+
+        [HttpGet]
+        [Route("SolicitationDetails")]
+        public async Task<IActionResult> SolicitationDetails(string solicitationId)
+        {
+            Result<Solicitation> result = new Result<Solicitation>();
+
+            if (string.IsNullOrEmpty(solicitationId))
+                return BadRequest(new { message = "Invalid solicitation id." });
+
+            result = await _application.Solicitation.GetSolicitationDetails(solicitationId);
+
+            if (result.Success)
+                return Ok(new SolicitationDTO(result.Return));
             else
                 return BadRequest(new { message = result.Message });
         }

@@ -4,6 +4,7 @@ using Data.Interface;
 using Domain;
 using Domain.Entities;
 using Domain.Enum;
+using Domain.Util;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -52,20 +53,21 @@ namespace Application.Application
             return Task.FromResult(result);
         }
  
-        public Task<Result<object>> MarkSamplesRecieved(string solicitationId, string loggedUserId)
+        public Task<Result<Solicitation>> MarkSamplesRecieved(string solicitationId, string loggedUserId)
         {
-            Result<object> result = new Result<object>();
+            Result<Solicitation> result = new Result<Solicitation>();
             User? user = _repository.UserRepository.GetById(loggedUserId);
-            Solicitation? solicitation = _repository.SolicitationRepository.GetSolicitation(solicitationId);
+            result = _repository.SolicitationRepository.GetSolicitation(solicitationId);
 
-            if (user == null)
-                result.Message = "User not found.";
-            else if(user?.RoleId == (int)RolesEnum.User)
-                result.Message = "User not authorized to mark samples as received.";
-            else if (solicitation == null)
+            if(!result.Success)
                 result.Message = "Solicitation not found.";
+            else if (user == null)
+                result.Message += "User not found.";
+            else if(user?.RoleId == (int)RolesEnum.User)
+                result.Message += "User not authorized to mark samples as received.";
             else
             {
+                Solicitation solicitation = result.Return;
                 solicitation.SamplesReceivedDate = DateTime.Now;
                 DefineExpectedDeliverDate(ref solicitation);
                 solicitation.ExpectedCompletionDate = solicitation.Samples.Max(s => s.SampleAnalisysExpectedDate).AddDays(1);
@@ -128,10 +130,10 @@ namespace Application.Application
             }
         }
 
-        public Task<Result<List<Solicitation>>> GetSolicitations(string requesterId)
+        public async Task<Result<DataTableReturn<Solicitation>>> GetSolicitations(int page, int pageSize, string loggedUserId, string? requesterId, int? solicitationTypeId, int? analisysTypeId, bool? resultsDelivered, DateTime? initialDate, DateTime? finalDate)
         {
-            Result<List<Solicitation>> result = new Result<List<Solicitation>>();
-            User? user = _repository.UserRepository.GetById(requesterId);
+            Result<DataTableReturn<Solicitation>> result = new Result<DataTableReturn<Solicitation>>();
+            User? user = _repository.UserRepository.GetById(loggedUserId);
 
             if (user == null)
                 result.Message = "User not found.";
@@ -139,11 +141,16 @@ namespace Application.Application
                 result.Message = "User not authorized to mark samples as received.";
             else
             {
-                result.Return = _repository.SolicitationRepository.GetSolicitations();
+                result.Return = await _repository.SolicitationRepository.GetSolicitations(page, pageSize, requesterId, solicitationTypeId, analisysTypeId, resultsDelivered, initialDate, finalDate);
                 result.Success = true;
             }
 
-            return Task.FromResult(result);
+            return result;
+        }
+
+        public Task<Result<Solicitation>> GetSolicitationDetails(string solicitationId)
+        {
+            return Task.FromResult(_repository.SolicitationRepository.GetSolicitation(solicitationId));
         }
     }
 }

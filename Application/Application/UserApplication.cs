@@ -28,7 +28,7 @@ namespace Application.Application
             return Task.FromResult(_repository.UserRepository.GetAll());
         }
 
-        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId)
+        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId, string departamentName)
         {
             User? user = _repository.UserRepository.GetUserByEmail(email).Return;
             User loggedUser = _repository.UserRepository.GetById(creatorId);
@@ -40,7 +40,7 @@ namespace Application.Application
                 result.Message = "User not authorized to register new users";
             else
             {
-                user = new User(creatorId, userName, email, password, roleId);
+                user = new User(creatorId, userName, email, password, roleId,departamentName);
                 UserInteraction interaction = new UserInteraction(creatorId, (int)UserInteractionTypeEnum.Register, "Registred new User", user.Id);
                 user.UserInteractions.Add(interaction);
 

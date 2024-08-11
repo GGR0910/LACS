@@ -13,6 +13,8 @@ namespace Application.Interface
         #region Interfaces
 
         IUserApplication User { get; }
+        ISampleApplication Sample { get; }
+        ISolicitationApplication Solicitation { get; }
 
         #endregion
     }

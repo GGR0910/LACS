@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Interface.Analisys;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace Data.Interface
 
         IBaseRepository<TEntity> Repository<TEntity>() where TEntity : class;
         IUserRepository UserRepository { get; }
+        ISampleRepository SampleRepository { get; }
+        ISolicitationRepository SolicitationRepository { get; }
 
         #endregion
 

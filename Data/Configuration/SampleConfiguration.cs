@@ -9,30 +9,35 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class SampleConfiguration : IEntityTypeConfiguration<Sample>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<Sample> builder)
         {
-            builder.Property(u => u.UserName)
+           builder.HasOne(u => u.Solicitation)
+                .WithMany(s => s.Samples)
+                .HasForeignKey(u => u.SolicitationId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.Email)
+            builder.HasOne(u => u.SampleType)
+                .WithMany(s => s.Samples)
+                .HasForeignKey(u => u.SampleTypeId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.EncryptedPassword)
+            builder.HasOne(u => u.SamplePhisicalState)
+                .WithMany(s => s.Samples)
+                .HasForeignKey(u => u.SamplePhisicalStateId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.LastAcess);
+            builder.Property(u => u.SampleAnalisysExpectedDate);
+            builder.Property(u => u.SampleAnalisysDone);
+            builder.Property(u => u.SampleAnalysisResult);
 
-            builder.Property(u => u.EmailConfirmed);
-
-            builder.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .IsRequired()
+            builder.HasOne(u => u.Analist)
+                .WithMany(s => s.Samples)
+                .HasForeignKey(u => u.AnalistId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data

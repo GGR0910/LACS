@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240731165013_SampleSolicitation")]
+    partial class SampleSolicitation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +99,7 @@ namespace Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("AnalistId")
+                    b.Property<string>("AnalistyId")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -141,7 +144,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnalistId");
+                    b.HasIndex("AnalistyId");
 
                     b.HasIndex("SamplePhisicalStateId");
 
@@ -421,10 +424,10 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0dc496e6-85f0-408c-9564-6225232130b3",
+                            Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
                             Active = true,
-                            CreatedAt = new DateTime(2024, 8, 11, 11, 7, 29, 970, DateTimeKind.Local).AddTicks(6499),
-                            CreatedBy = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
+                            CreatedAt = new DateTime(2024, 7, 31, 13, 50, 13, 414, DateTimeKind.Local).AddTicks(1414),
+                            CreatedBy = "71280c9d-25b5-4f45-9aed-11af5328440f",
                             Deleted = false,
                             DepartamentName = "System",
                             Email = "ggr0910@hotmail.com",
@@ -551,9 +554,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Sample", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "Analist")
+                    b.HasOne("Domain.Entities.User", "Analisty")
                         .WithMany("Samples")
-                        .HasForeignKey("AnalistId")
+                        .HasForeignKey("AnalistyId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.SamplePhisicalState", "SamplePhisicalState")
@@ -574,7 +577,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Analist");
+                    b.Navigation("Analisty");
 
                     b.Navigation("SamplePhisicalState");
 

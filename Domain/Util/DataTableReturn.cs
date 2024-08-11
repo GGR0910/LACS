@@ -11,5 +11,6 @@ namespace Domain.Util
         public int RecordsTotal { get; set; }
         public int RecordsFiltered { get; set; }
         public List<T> Data { get; set; }
+        public int Page { get; set; }
     }
 }

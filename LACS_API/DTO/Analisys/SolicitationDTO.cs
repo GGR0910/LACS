@@ -45,7 +45,7 @@ namespace LACS_API.DTO.Analisys
                 Id = solicitation.Requester.Id,
                 UserName = solicitation.Requester.UserName,
                 Email = solicitation.Requester.Email,
-                IsActive = solicitation.Requester.Deleted,
+                Deleted = solicitation.Requester.Deleted,
                 DepartamentName = solicitation.Requester.DepartamentName
             };
             Samples = solicitation.Samples.Select(s => new SampleDTO()
@@ -65,7 +65,7 @@ namespace LACS_API.DTO.Analisys
                     Id = s.SampleType.Id,
                     Name = s.SampleType.Name
                 },
-                Analisty = s.AnalistyId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistyId, UserName = s.Analisty.UserName }
+                Analisty = s.AnalistId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistId, UserName = s.Analist.UserName }
             }).ToList();
         }
         public string Id { get; set; }

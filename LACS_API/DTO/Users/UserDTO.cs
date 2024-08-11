@@ -13,7 +13,7 @@ namespace LACS_API.DTO
             Id = id;
             UserName = userName;
             Email = email;
-            IsActive=isActive;
+            Deleted=isActive;
             RoleId=roleId;
             DepartamentName=departamentName;
         }
@@ -21,7 +21,7 @@ namespace LACS_API.DTO
         public string Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public bool IsActive { get; set; }
+        public bool Deleted { get; set; }
         public int? RoleId { get; set; }
         public string DepartamentName { get; set; }
     }

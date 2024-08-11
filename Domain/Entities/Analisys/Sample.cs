@@ -29,7 +29,7 @@ namespace Domain.Entities
         public DateTime? SampleAnalisysDate { get; set; }
         public bool SampleAnalisysDone { get; set; }
         public string? SampleAnalysisResult { get; set; }
-        public string? AnalistyId { get; set; }
-        public virtual User Analisty { get; set; }
+        public string? AnalistId { get; set; }
+        public virtual User Analist { get; set; }
     }
 }

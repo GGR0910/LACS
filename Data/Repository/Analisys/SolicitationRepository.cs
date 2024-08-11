@@ -24,7 +24,7 @@ namespace Data.Repository.Analisys
             Result<Solicitation> result = new Result<Solicitation>();
             Solicitation? solicitation = _context.Solicitation
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.Analisty)
+                .ThenInclude(s => s.Analist)
                 .Include(s => s.Samples)
                 .ThenInclude(s => s.SampleType)
                 .Include(s => s.Samples)
@@ -50,7 +50,7 @@ namespace Data.Repository.Analisys
         {
             IQueryable<Solicitation> solicitations = _context.Solicitation
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.Analisty)
+                .ThenInclude(s => s.Analist)
                 .Include(s => s.Samples)
                 .ThenInclude(s => s.SampleType)
                 .Include(s => s.Samples)
@@ -86,7 +86,8 @@ namespace Data.Repository.Analisys
             {
                 Data = solicitations.ToList(),
                 RecordsTotal = recordsTotal,
-                RecordsFiltered = solicitations.Count()
+                RecordsFiltered = solicitations.Count(),
+                Page = page
             };
 
             return Task.FromResult(dataTableReturn);

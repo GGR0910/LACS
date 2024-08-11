@@ -25,8 +25,6 @@ namespace Data.Configuration
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(u => u.Active);
-
             builder.Property(u => u.LastAcess);
 
             builder.Property(u => u.EmailConfirmed);

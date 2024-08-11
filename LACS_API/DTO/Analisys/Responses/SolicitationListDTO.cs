@@ -21,16 +21,17 @@ namespace LACS_API.DTO.Analisys.Responses
                 Id = solicitation.Requester.Id,
                 UserName = solicitation.Requester.UserName,
                 Email = solicitation.Requester.Email,
-                IsActive = solicitation.Requester.Deleted,
+                Deleted = solicitation.Requester.Deleted,
                 DepartamentName = solicitation.Requester.DepartamentName
             };
-            Samples = solicitation.Samples.Select(s => new SolicitationListSampleDTO()
+            Samples = solicitation.Samples.Select(s => new SampleListDTO()
             {
                 Id = s.Id,
                 SampleAnalisysExpectedDate = s.SampleAnalisysExpectedDate,
                 SampleAnalisysDate = s.SampleAnalisysDate,
                 SampleAnalisysDone = s.SampleAnalisysDone,
-                Analisty = s.AnalistyId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistyId, UserName = s.Analisty.UserName }
+                Requester = new UserDTO() { Id = s.Solicitation.RequesterId, UserName = s.Solicitation.Requester.UserName, Email = s.Solicitation.Requester.Email, Deleted = s.Solicitation.Requester.Deleted, DepartamentName= s.Solicitation.Requester.DepartamentName },
+                Analist = s.AnalistId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistId, UserName = s.Analist.UserName, Email = s.Analist.Email, Deleted = s.Analist.Deleted, DepartamentName = s.Analist.DepartamentName }
             }).ToList();
         }
 
@@ -44,15 +45,6 @@ namespace LACS_API.DTO.Analisys.Responses
         public DateTime? CompletionDate { get; set; }
         public bool ResultsDelivered { get; set; }
         public int SampleAmount { get; set; }
-        public virtual ICollection<SolicitationListSampleDTO> Samples { get; set; }
-    }
-
-    public class SolicitationListSampleDTO
-    {
-        public string Id { get; set; }
-        public DateTime SampleAnalisysExpectedDate { get; set; }
-        public DateTime? SampleAnalisysDate { get; set; }
-        public bool SampleAnalisysDone { get; set; }
-        public UserDTO Analisty { get; set; }
+        public virtual ICollection<SampleListDTO> Samples { get; set; }
     }
 }

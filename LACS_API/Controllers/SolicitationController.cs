@@ -58,7 +58,7 @@ namespace LACS_API.Controllers
                     solicitations.Add(new SolicitationListDTO(solicitation));
                 }
 
-                return Ok(new DataTableReturn<SolicitationListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = solicitations });
+                return Ok(new DataTableReturn<SolicitationListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = solicitations, Page = datatableReturnResult.Return.Page });
             }
             else
                 return BadRequest(new { message = result.Message });

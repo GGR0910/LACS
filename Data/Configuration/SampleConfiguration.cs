@@ -35,9 +35,9 @@ namespace Data.Configuration
             builder.Property(u => u.SampleAnalisysDone);
             builder.Property(u => u.SampleAnalysisResult);
 
-            builder.HasOne(u => u.Analisty)
+            builder.HasOne(u => u.Analist)
                 .WithMany(s => s.Samples)
-                .HasForeignKey(u => u.AnalistyId)
+                .HasForeignKey(u => u.AnalistId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data

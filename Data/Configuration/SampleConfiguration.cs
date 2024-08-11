@@ -19,26 +19,15 @@ namespace Data.Configuration
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(u => u.SampleType)
+            builder.HasOne(u => u.Analist)
                 .WithMany(s => s.Samples)
-                .HasForeignKey(u => u.SampleTypeId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(u => u.SamplePhisicalState)
-                .WithMany(s => s.Samples)
-                .HasForeignKey(u => u.SamplePhisicalStateId)
+                .HasForeignKey(u => u.AnalistId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(u => u.SampleAnalisysExpectedDate);
             builder.Property(u => u.SampleAnalisysDone);
             builder.Property(u => u.SampleAnalysisResult);
-
-            builder.HasOne(u => u.Analist)
-                .WithMany(s => s.Samples)
-                .HasForeignKey(u => u.AnalistId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
 

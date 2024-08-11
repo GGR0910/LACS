@@ -9,25 +9,26 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class SolicitationConfiguration : IEntityTypeConfiguration<Solicitation>
+    public class AnalisysConfiguration : IEntityTypeConfiguration<Analisys>
     {
-        public void Configure(EntityTypeBuilder<Solicitation> builder)
+        public void Configure(EntityTypeBuilder<Analisys> builder)
         {
-            builder.HasOne(u => u.SolicitationType)
-                .WithMany(s => s.Solicitations)
-                .HasForeignKey(u => u.SoliciationTypeId)
+           builder.Property(u => u.Name)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasMaxLength(200);
 
-            builder.Property(u => u.SamplesReceivedDate);
-            
-            builder.Property(u => u.ExpectedCompletionDate);
+            builder.Property(u => u.Description)
+                .IsRequired()
+                .HasMaxLength(200);
 
-            builder.Property(u => u.CompletionDate);
-
-            builder.Property(u => u.ResultsDelivered)
+            builder.Property(u => u.AmountDonePerDay)
                 .IsRequired();
 
+            builder.HasOne(u => u.Environment)
+                .WithMany(s => s.Analisys)
+                .HasForeignKey(u => u.EnvironmentId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
 

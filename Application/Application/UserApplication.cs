@@ -28,19 +28,26 @@ namespace Application.Application
             return Task.FromResult(_repository.UserRepository.GetAll());
         }
 
-        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId, string departamentName)
+        public async Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId, string departamentName, string environmentId)
         {
             User? user = _repository.UserRepository.GetUserByEmail(email).Return;
             User loggedUser = _repository.UserRepository.GetById(creatorId);
             Result<User> result = new Result<User>();
 
-            if (user != null)
-                result.Message = "E-mail already registred";
+
+            if(loggedUser == null)
+                result.Message = "User not found";
             else if(loggedUser.RoleId != (int)RolesEnum.Admin)
                 result.Message = "User not authorized to register new users";
+            else if(!Enum.IsDefined(typeof(RolesEnum),roleId))
+                result.Message = "Invalid Role";
+            else if((int)RolesEnum.User != roleId && string.IsNullOrEmpty(environmentId))
+                result.Message = "EnvironmentId is required for this role";
+            else if (user != null)
+                result.Message = "E-mail already registred";
             else
             {
-                user = new User(creatorId, userName, email, password, roleId,departamentName);
+                user = new User(loggedUser.Id, userName, email, password,departamentName, roleId,environmentId);
                 UserInteraction interaction = new UserInteraction(creatorId, (int)UserInteractionTypeEnum.Register, "Registred new User", user.Id);
                 user.UserInteractions.Add(interaction);
 

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class AnalisysType
+    public class AnalisysFormQuestionType
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Solicitation> Solicitations { get; set; }
+        public virtual IEnumerable<AnalisysFormQuestion> Questions { get; set; }
     }
 }

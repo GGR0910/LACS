@@ -15,7 +15,7 @@ namespace LACS_API.Controllers
     {
         public SampleController(IConfiguration configuration) : base(configuration)
         {
-            
+
         }
 
         [HttpPost("AssignSampleToAnalist")]
@@ -43,7 +43,7 @@ namespace LACS_API.Controllers
         {
             List<SampleListDTO> samples = new List<SampleListDTO>();
 
-            var datatableReturnResult =  await _application.Sample.GetSamplesAsync(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SampleTypeId, request.SamplePhisicalStateId, request.Analized, request.InitialDate, request.FinalDate);
+            var datatableReturnResult = await _application.Sample.GetSamplesAsync(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SampleTypeId, request.SamplePhisicalStateId, request.Analized, request.InitialDate, request.FinalDate);
 
             if (datatableReturnResult.Success)
             {
@@ -52,12 +52,29 @@ namespace LACS_API.Controllers
                     samples.Add(new SampleListDTO(sample));
                 }
             }
-            
+
 
             if (datatableReturnResult.Success)
-                return Ok(new DataTableReturn<SampleListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = samples, Page = datatableReturnResult.Return.Page});
+                return Ok(new DataTableReturn<SampleListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = samples, Page = datatableReturnResult.Return.Page });
             else
                 return BadRequest(new { message = datatableReturnResult.Message });
+        }
+
+        [HttpPost]
+        [Route("MarkSamplesRecieved")]
+        public async Task<IActionResult> MarkSamplesRecieved([FromBody] MarkSamplesRecievedRequestDTO request)
+        {
+            Result<Solicitation> result = new Result<Solicitation>();
+
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Invalid request. Please check the data." });
+
+            result = await _application.Solicitation.MarkSamplesRecieved(request.SolicitationId, request.LoggedUserId);
+
+            if (result.Success)
+                return Ok();
+            else
+                return BadRequest(new { message = result.Message });
         }
     }
 }

@@ -21,34 +21,12 @@ namespace LACS_API.Controllers
         }
 
         [HttpPost]
-        [Route("RegisterSolicitation")]
-        public async Task<IActionResult> RegisterSolicitation([FromBody] AnalisysSolicitationRequestDTO request)
-        {
-            Result<Solicitation> result = new Result<Solicitation>();
-
-            if (!ModelState.IsValid)
-                return BadRequest(new { message = "Invalid solicitation request. Please check the data." });
-            if (request.SampleAmaunt < 1)
-                return BadRequest(new { message = "Invalid sample amount." });
-
-
-            result = await _application.Solicitation.RegisterSolicitation(request.RequesterId, request.SoliciationTypeId, request.SamplesDescription, request.AnalysisGoalDescription, request.AnalisysTypeId, request.DesiredMagnefication,
-                request.NeedsRecobriment, request.RecobrimentMaterial, request.SpecialPrecautions, request.DesiredDeadline, request.DeliveryLocation, request.DesireToAccompanyAnalysis, request.Observations, 
-                request.SampleAmaunt,request.SampleTypeId,request.SamplePhisicalStateId);
-
-            if (result.Success)
-                return Ok();
-            else
-                return BadRequest(new { message = result.Message });
-        }
-
-        [HttpPost]
         [Route("GetSolicitations")]
-        public async Task<IActionResult> GetSolicitations([FromBody]SolicitationListPaginationRequestDTO request)
+        public async Task<IActionResult> GetSolicitations([FromBody] SolicitationListPaginationRequestDTO request)
         {
             Result<DataTableReturn<SolicitationListDTO>> result = new Result<DataTableReturn<SolicitationListDTO>>();
 
-            var datatableReturnResult = await _application.Solicitation.GetSolicitations(request.Page,request.PageSize, request.LoggedUserId, request.RequesterId ,request.SolicitationTypeId, request.AnalisysTypeId, request.ResultsDelivered, request.InitialDate, request.FinalDate);
+            var datatableReturnResult = await _application.Solicitation.GetSolicitations(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SolicitationTypeId, request.AnalisysTypeId, request.ResultsDelivered, request.InitialDate, request.FinalDate);
             List<SolicitationListDTO> solicitations = new List<SolicitationListDTO>();
 
             if (datatableReturnResult.Success)
@@ -64,22 +42,6 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = result.Message });
         }
 
-        [HttpPost]
-        [Route("MarkSamplesRecieved")]
-        public async Task<IActionResult> MarkSamplesRecieved([FromBody] MarkSamplesRecievedRequestDTO request)
-        {
-            Result<Solicitation> result = new Result<Solicitation>();
-
-            if (!ModelState.IsValid)
-                return BadRequest(new { message = "Invalid request. Please check the data." });
-
-            result = await _application.Solicitation.MarkSamplesRecieved(request.SolicitationId, request.LoggedUserId);
-
-            if (result.Success)
-                return Ok();
-            else
-                return BadRequest(new { message = result.Message });
-        }
 
         [HttpGet]
         [Route("SolicitationDetails")]

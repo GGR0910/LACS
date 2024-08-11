@@ -22,21 +22,10 @@ namespace Data.Repository.Analisys
         {
             IQueryable<Sample> samples = _context.Sample
                 .Include(s => s.Solicitation)
-                .Include(s => s.Analist)
-                .Include(s => s.SampleType)
-                .Include(s => s.SamplePhisicalState);
+                .Include(s => s.Analist);
 
 
             int recordsTotal = samples.Count();
-
-            if (!string.IsNullOrEmpty(requesterId))
-                samples = samples.Where(s => s.Solicitation.RequesterId == requesterId);
-
-            if (sampleTypeId.HasValue)
-                samples = samples.Where(s => s.SampleTypeId == sampleTypeId);
-
-            if (samplePhisicalStateId.HasValue)
-                samples = samples.Where(s => s.SamplePhisicalStateId == samplePhisicalStateId);
 
             if (analized.HasValue)
                 samples = samples.Where(s => s.SampleAnalisysDate != null);

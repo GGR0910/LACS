@@ -25,19 +25,19 @@ namespace LACS_API.Controllers
         [Route("UserLogin")]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequest)
         {
-            Result<Dictionary<string,User>> result = new Result<Dictionary<string, User>>();
+            Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid login request. Please check your email and password." });
 
             result = await _application.User.UserLogin(loginRequest.Email, loginRequest.Password);
-            User user =  result.Return.First().Value;
+            User user = result.Return.First().Value;
 
             if (result.Success)
                 return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email, user.RoleId, user.DepartamentName));
             else
                 return BadRequest(new { message = result.Message });
-            
+
         }
 
         [HttpPost]
@@ -46,14 +46,14 @@ namespace LACS_API.Controllers
         {
             Result<User> result = new Result<User>();
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid register request. Please check the data." });
 
-            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId, registerRequest.DepartamentName);
+            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId, registerRequest.DepartamentName, registerRequest.EnvironmentId);
             User user = result.Return;
 
-            if(result.Success)
-                return Ok(new RegisterUserResponseDTO(user.Id, user.Email, user.UserName, user.RoleId, user.DepartamentName));
+            if (result.Success)
+                return Ok();
             else
                 return BadRequest(new { message = result.Message });
         }
@@ -67,7 +67,7 @@ namespace LACS_API.Controllers
             List<UserDTO> usersDto = new List<UserDTO>();
             foreach (var user in users)
             {
-                usersDto.Add(new UserDTO(user.Id, user.UserName, user.Email, user.Deleted, user.RoleId, user.DepartamentName));   
+                //usersDto.Add();
             }
 
             if (users.Any())
@@ -75,20 +75,20 @@ namespace LACS_API.Controllers
             else
                 return NotFound(new { message = "No users found." });
         }
-        
+
         [HttpDelete]
         [Route("DeleteUser")]
         public async Task<IActionResult> DeleteUser(string userId, string creatorId)
         {
             Result<User> result = new Result<User>();
 
-            if(string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
                 return BadRequest(new { message = "Invalid user id." });
 
             result = await _application.User.DeleteUser(userId, creatorId);
             User user = result.Return;
 
-            if(result.Success)
+            if (result.Success)
                 return Ok();
             else
                 return BadRequest(new { message = result.Message });
@@ -100,7 +100,7 @@ namespace LACS_API.Controllers
         {
             User user = await _application.User.GetUserData(userId);
 
-            if(user != null)
+            if (user != null)
                 return Ok(user);
             else
                 return NotFound(new { message = "User not found." });

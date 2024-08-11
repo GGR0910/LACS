@@ -9,30 +9,11 @@ namespace LACS_API.DTO.Analisys.Responses
         {
             Id = solicitation.Id;
             DesiredDeadline = solicitation.DesiredDeadline;
-            DesireToAccompanyAnalysis = solicitation.DesireToAccompanyAnalysis;
             SamplesReceivedDate = solicitation.SamplesReceivedDate;
             ExpectedCompletionDate = solicitation.ExpectedCompletionDate;
             CompletionDate = solicitation.CompletionDate;
             ResultsDelivered = solicitation.ResultsDelivered;
             SampleAmount = solicitation.SampleAmount;
-            AnalisysTypeId = solicitation.AnalisysTypeId;
-            Requester = new UserDTO()
-            {
-                Id = solicitation.Requester.Id,
-                UserName = solicitation.Requester.UserName,
-                Email = solicitation.Requester.Email,
-                Deleted = solicitation.Requester.Deleted,
-                DepartamentName = solicitation.Requester.DepartamentName
-            };
-            Samples = solicitation.Samples.Select(s => new SampleListDTO()
-            {
-                Id = s.Id,
-                SampleAnalisysExpectedDate = s.SampleAnalisysExpectedDate,
-                SampleAnalisysDate = s.SampleAnalisysDate,
-                SampleAnalisysDone = s.SampleAnalisysDone,
-                Requester = new UserDTO() { Id = s.Solicitation.RequesterId, UserName = s.Solicitation.Requester.UserName, Email = s.Solicitation.Requester.Email, Deleted = s.Solicitation.Requester.Deleted, DepartamentName= s.Solicitation.Requester.DepartamentName },
-                Analist = s.AnalistId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistId, UserName = s.Analist.UserName, Email = s.Analist.Email, Deleted = s.Analist.Deleted, DepartamentName = s.Analist.DepartamentName }
-            }).ToList();
         }
 
         public string Id { get; set; }

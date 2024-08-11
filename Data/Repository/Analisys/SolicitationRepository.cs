@@ -26,11 +26,7 @@ namespace Data.Repository.Analisys
                 .Include(s => s.Samples)
                 .ThenInclude(s => s.Analist)
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.SampleType)
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.SamplePhisicalState)
-                .Include(s => s.Requester)
-                .Include(s => s.AnalisysType)
                 .Include(s => s.SolicitationType)
                 .FirstOrDefault(x => x.Id == solicitationId);
             
@@ -52,24 +48,16 @@ namespace Data.Repository.Analisys
                 .Include(s => s.Samples)
                 .ThenInclude(s => s.Analist)
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.SampleType)
                 .Include(s => s.Samples)
-                .ThenInclude(s => s.SamplePhisicalState)
-                .Include(s => s.Requester)
-                .Include(s => s.AnalisysType)
                 .Include(s => s.SolicitationType)
                 .Where(s => !s.Deleted && s.ExpectedCompletionDate == null);
           
             int recordsTotal = solicitations.Count();
 
-            if (!string.IsNullOrEmpty(requesterId))
-                solicitations = solicitations.Where(s => s.RequesterId == requesterId);
 
             if (solicitationTypeId.HasValue)
                 solicitations = solicitations.Where(s => s.SoliciationTypeId == solicitationTypeId);
 
-            if (analisysTypeId.HasValue)
-                solicitations = solicitations.Where(s => s.AnalisysTypeId == analisysTypeId);
             
             if (resultsDelivered.HasValue)
                 solicitations = solicitations.Where(s => s.ResultsDelivered == resultsDelivered);

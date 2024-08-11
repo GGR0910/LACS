@@ -9,25 +9,26 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class SolicitationConfiguration : IEntityTypeConfiguration<Solicitation>
+    public class AnalisysFormQuestionOptionConfiguration : IEntityTypeConfiguration<AnalisysFormQuestionOption>
     {
-        public void Configure(EntityTypeBuilder<Solicitation> builder)
+        public void Configure(EntityTypeBuilder<AnalisysFormQuestionOption> builder)
         {
-            builder.HasOne(u => u.SolicitationType)
-                .WithMany(s => s.Solicitations)
-                .HasForeignKey(u => u.SoliciationTypeId)
+           builder.Property(u => u.Option)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasMaxLength(200);
 
-            builder.Property(u => u.SamplesReceivedDate);
-            
-            builder.Property(u => u.ExpectedCompletionDate);
+            builder.Property(u => u.OptionName)
+                .IsRequired()
+                .HasMaxLength(200);
 
-            builder.Property(u => u.CompletionDate);
-
-            builder.Property(u => u.ResultsDelivered)
+            builder.Property(u => u.Enabled)
                 .IsRequired();
 
+            builder.HasOne(u => u.Question)
+                .WithMany(s => s.Options)
+                .HasForeignKey(u => u.QuestionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
 

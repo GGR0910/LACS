@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class SamplePhisicalStateConfiguration : IEntityTypeConfiguration<SamplePhisicalState>
+    public class AnalisysFormQuestionTypeConfiguration : IEntityTypeConfiguration<AnalisysFormQuestionType>
     {
-        public void Configure(EntityTypeBuilder<SamplePhisicalState> builder)
+        public void Configure(EntityTypeBuilder<AnalisysFormQuestionType> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id);

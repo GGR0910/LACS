@@ -12,6 +12,9 @@ namespace LACS_API.DTO
         public string Password { get; set; }
         [Required]
         public int RoleId { get; set; }
+        [Required]
         public string DepartamentName { get; set; }
+        [Required]
+        public string EnvironmentId { get; set; }
     }
 }

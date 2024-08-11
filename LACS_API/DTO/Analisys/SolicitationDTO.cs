@@ -15,7 +15,7 @@ namespace LACS_API.DTO.Analisys
         {
             Id = solicitation.Id;
             DesiredDeadline = solicitation.DesiredDeadline;
-            DesireToAccompanyAnalysis = solicitation.DesireToAccompanyAnalysis;
+
             SamplesReceivedDate = solicitation.SamplesReceivedDate;
             ExpectedCompletionDate = solicitation.ExpectedCompletionDate;
             CompletionDate = solicitation.CompletionDate;
@@ -26,47 +26,7 @@ namespace LACS_API.DTO.Analisys
                 Id = solicitation.SolicitationType.Id,
                 Name = solicitation.SolicitationType.Name
             };
-            SamplesDescription = solicitation.SamplesDescription;
-            AnalysisGoalDescription = solicitation.AnalysisGoalDescription;
-            AnalisysType = new AnalisysTypeDTO() 
-            {
-                Id = solicitation.AnalisysType.Id,
-                Name = solicitation.AnalisysType.Name
-            };
-            DesiredMagnefication = solicitation.DesiredMagnefication;
-            NeedsRecobriment = solicitation.NeedsRecobriment;
-            RecobrimentMaterial = solicitation.RecobrimentMaterial;
-            SpecialPrecautions = solicitation.SpecialPrecautions;
-            DeliveryLocation = solicitation.DeliveryLocation;
-            Observations = solicitation.Observations;
-            SampleAmount = solicitation.SampleAmount;
-            Requester = new UserDTO()
-            {
-                Id = solicitation.Requester.Id,
-                UserName = solicitation.Requester.UserName,
-                Email = solicitation.Requester.Email,
-                Deleted = solicitation.Requester.Deleted,
-                DepartamentName = solicitation.Requester.DepartamentName
-            };
-            Samples = solicitation.Samples.Select(s => new SampleDTO()
-            {
-                Id = s.Id,
-                SampleAnalisysExpectedDate = s.SampleAnalisysExpectedDate,
-                SampleAnalisysDate = s.SampleAnalisysDate,
-                SampleAnalisysDone = s.SampleAnalisysDone,
-                SampleAnalysisResult = s.SampleAnalysisResult,
-                SamplePhisicalState = new SamplePhisicalStateDTO()
-                {
-                    Id = s.SamplePhisicalState.Id,
-                    Name = s.SamplePhisicalState.Name
-                },
-                SampleType = new SampleTypeDTO()
-                {
-                    Id = s.SampleType.Id,
-                    Name = s.SampleType.Name
-                },
-                Analisty = s.AnalistId.IsNullOrEmpty() ? null : new UserDTO() { Id = s.AnalistId, UserName = s.Analist.UserName }
-            }).ToList();
+           
         }
         public string Id { get; set; }
         public  UserDTO Requester { get; set; }

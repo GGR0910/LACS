@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using Environment = Domain.Entities.Environment;
 
 namespace Data.Context
 {
@@ -26,11 +27,17 @@ namespace Data.Context
         public DbSet<UserInteractionType> UserInteractionType { get; set; }
         public DbSet<UserInteraction> UserInteractions { get; set; }
         public DbSet<SolicitationType> SolicitationTypes { get; set; }
-        public DbSet<SampleType> SampleTypes { get; set; }
-        public DbSet<SamplePhisicalState> SamplePhisicalStates { get; set; }
-        public DbSet<AnalisysType> AnalisysTypes { get; set; }
         public DbSet<Sample> Sample { get; set; }
         public DbSet<Solicitation> Solicitation { get; set; }
+        public DbSet<Environment> Environment { get; set; }
+        public DbSet<Analisys> Analisys { get; set; }
+        public DbSet<AnalisysForm> AnalisysForm { get; set; }
+        public DbSet<AnalisysFormQuestion> AnalisysFormQuestion { get; set; }
+        public DbSet<AnalisysFormQuestionType> AnalisysFormQuestionType { get; set; }
+        public DbSet<AnalisysFormQuestionOption> AnalisysFormQuestionOption { get; set; }
+        public DbSet<AnalisysFormAnswer> AnalisysFormAnswer { get; set; }
+        public DbSet<AnalisysFormSubmit> AnalisysFormSubmit { get; set; }
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -52,11 +59,16 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new UserInteractionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserInteractionConfiguration());
             modelBuilder.ApplyConfiguration(new SolicitationTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new SampleTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new SamplePhisicalStateConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SolicitationConfiguration());
             modelBuilder.ApplyConfiguration(new SampleConfiguration());
+            modelBuilder.ApplyConfiguration(new EnvironmentConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormAnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormSubmitConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -69,9 +81,7 @@ namespace Data.Context
             modelBuilder.Entity<Role>().HasData(RoleSeed.GenerateSeed());
             modelBuilder.Entity<UserInteractionType>().HasData(UserInteractionTypeSeed.GenerateSeed());
             modelBuilder.Entity<SolicitationType>().HasData(SolicitationTypeSeed.GenerateSeed());   
-            modelBuilder.Entity<SampleType>().HasData(SampleTypeSeed.GenerateSeed());
-            modelBuilder.Entity<SamplePhisicalState>().HasData(SamplePhisicalStateSeed.GenerateSeed());
-            modelBuilder.Entity<AnalisysType>().HasData(AnalisysTypeSeed.GenerateSeed());
+            modelBuilder.Entity<AnalisysFormQuestionType>().HasData(AnalisysFormQuestionTypeSeed.GenerateSeed());
             #endregion
 
             GerarBaseAdmin(modelBuilder);
@@ -79,10 +89,14 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser","ggr0910@hotmail.com","Gogoll90@", 1, "System");
-            adminUser.EmailConfirmed = true;
+            Environment environment = new Environment("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "System Environment", "NA", "NA", "NA", "NA", "NA", "NA", "Gabriel");
+            modelBuilder.Entity<Environment>().HasData(environment);
 
+
+            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", 1, environment.Id);
+            adminUser.EmailConfirmed = true;
             modelBuilder.Entity<User>().HasData(adminUser);
+
         }
     }
 }

@@ -18,7 +18,7 @@ namespace LACS_API.Controllers
         public BaseController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _application= new UnitOfWorkApplication(configuration);
+            _application = new UnitOfWorkApplication(configuration);
         }
     }
 }

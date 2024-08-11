@@ -35,12 +35,10 @@ namespace Application.Application
                 result.Message = "Invalid desired deadline.";
             else
             {
-                Solicitation solicitation = new Solicitation(requesterId, soliciationTypeId, samplesDescription, analysisGoalDescription, 
-                    analisysTypeId, desiredMagnefication, needsRecobriment, recobrimentMaterial, specialPrecautions, 
-                    desiredDeadline, deliveryLocation, desireToAccompanyAnalysis, observations);
+                Solicitation solicitation = new Solicitation(requesterId, soliciationTypeId, desiredDeadline, "");
                 
                 foreach (var sample in Enumerable.Range(0, sampleAmount))
-                    solicitation.Samples.Add(new Sample(solicitation.Id, sampleTypeId, samplePhisicalStateId, requesterId));
+                    solicitation.Samples.Add(new Sample(solicitation.Id, requesterId));
 
                 _repository.SolicitationRepository.Add(solicitation);
                 _repository.SaveChanges();
@@ -141,7 +139,7 @@ namespace Application.Application
                 result.Message = "User not authorized to mark samples as received.";
             else
             {
-                result.Return = await _repository.SolicitationRepository.GetSolicitations(page, pageSize, requesterId, solicitationTypeId, analisysTypeId, resultsDelivered, initialDate, finalDate);
+                //result.Return = await _repository.SolicitationRepository.GetSolicitations(page, pageSize, requesterId, solicitationTypeId, analisysTypeId, resultsDelivered, initialDate, finalDate);
                 result.Success = true;
             }
 
@@ -150,7 +148,8 @@ namespace Application.Application
 
         public Task<Result<Solicitation>> GetSolicitationDetails(string solicitationId)
         {
-            return Task.FromResult(_repository.SolicitationRepository.GetSolicitation(solicitationId));
+            //return Task.FromResult(_repository.SolicitationRepository.GetSolicitation(solicitationId));
+            throw new NotImplementedException();
         }
     }
 }

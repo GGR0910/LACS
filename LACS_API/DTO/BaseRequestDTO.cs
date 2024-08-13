@@ -2,6 +2,6 @@
 {
     public class BaseRequestDTO
     {
-        public string LoggedUserId { get; set; }
+        
     }
 }

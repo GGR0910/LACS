@@ -15,7 +15,9 @@ namespace Data.Seed
             {
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "Analist" },
-                new Role { Id = 3, Name = "User" }
+                new Role { Id = 3, Name = "User" },
+                new Role { Id = 4, Name = "Guest"},
+                new Role { Id = 5, Name = "SuperAdmin"}
             };
         }
     }

@@ -1,14 +1,16 @@
-﻿namespace LACS_API.DTO.User.Responses
+﻿using Domain.Entities;
+
+namespace LACS_API.DTO
 {
     public class LoginResponseDTO
     {
         public string Token { get; set; }
         public UserDTO UserInfo { get; set; }
 
-        public LoginResponseDTO(string token, string userId, string userName, string userEmail, int roleId, string departamentName)
+        public LoginResponseDTO(string token, User user)
         {
             Token = token;
-            UserInfo = new UserDTO(userId, userName, userEmail, false, roleId, departamentName);
+            UserInfo = new UserDTO(user);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Data.Configuration;
 using Data.Seed;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -93,8 +94,9 @@ namespace Data.Context
             modelBuilder.Entity<Environment>().HasData(environment);
 
 
-            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", 1, environment.Id);
+            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", (int)RolesEnum.SuperAdmin, environment.Id);
             adminUser.EmailConfirmed = true;
+            adminUser.Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09";
             modelBuilder.Entity<User>().HasData(adminUser);
 
         }

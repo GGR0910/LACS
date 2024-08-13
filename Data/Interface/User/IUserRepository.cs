@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Entities;
+using Domain.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Data.Interface
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Result<User> GetUserByEmail(string email);
+        User? GetUserByEmail(string email);
+        DataTableReturn<User> GetUsers(int page, int pageLength, string environmentId, string? userName, string? email, int? roleId, string? departamentName);
         void LoginUser(User user);
     }
 }

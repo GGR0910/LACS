@@ -15,6 +15,7 @@ namespace Domain.Entities
         public virtual AnalisysFormQuestionType QuestionType { get; set; }
         public bool HasOptions { get; set; }
         public int Order { get; set; }
+        public bool IsRequired { get; set; }
         public virtual ICollection<AnalisysFormQuestionOption> Options { get; set; }
         public virtual ICollection<AnalisysFormAnswer> Answers { get; set; }
     }

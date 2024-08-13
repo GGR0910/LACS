@@ -11,10 +11,9 @@ namespace LACS_API.DTO
         [Required]
         public string Password { get; set; }
         [Required]
+        [Range(1, 4, ErrorMessage = "Invalid RoleId")]
         public int RoleId { get; set; }
         [Required]
         public string DepartamentName { get; set; }
-        [Required]
-        public string EnvironmentId { get; set; }
     }
 }

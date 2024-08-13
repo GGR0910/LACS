@@ -1,10 +1,8 @@
 ﻿using Data.Interface;
 using Domain;
 using Domain.Entities;
+using Domain.Util;
 using LACS_API.DTO;
-using LACS_API.DTO.User;
-using LACS_API.DTO.User.Requests;
-using LACS_API.DTO.User.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +20,7 @@ namespace LACS_API.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("UserLogin")]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequest)
         {
             Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
@@ -30,11 +28,14 @@ namespace LACS_API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid login request. Please check your email and password." });
 
-            result = await _application.User.UserLogin(loginRequest.Email, loginRequest.Password);
+            result = await _application.User.Login(loginRequest.Email, loginRequest.Password);
             User user = result.Return.First().Value;
 
             if (result.Success)
-                return Ok(new LoginResponseDTO(result.Return.First().Key, user.Id, user.UserName, user.Email, user.RoleId, user.DepartamentName));
+            {
+                _application.SaveChanges();
+                return Ok(new LoginResponseDTO(result.Return.First().Key, user));
+            }
             else
                 return BadRequest(new { message = result.Message });
 
@@ -44,66 +45,97 @@ namespace LACS_API.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterUserRequestDTO registerRequest)
         {
-            Result<User> result = new Result<User>();
 
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid register request. Please check the data." });
 
-            result = await _application.User.RegisterUser(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.LoggedUserId, registerRequest.RoleId, registerRequest.DepartamentName, registerRequest.EnvironmentId);
-            User user = result.Return;
-
-            if (result.Success)
-                return Ok();
-            else
-                return BadRequest(new { message = result.Message });
-        }
-
-        [HttpGet]
-        [Route("GetAllUsers")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            IEnumerable<User> users = await _application.User.GetUsers();
-
-            List<UserDTO> usersDto = new List<UserDTO>();
-            foreach (var user in users)
+            Result<User> resultRegister = await _application.User.Register(registerRequest.UserName, registerRequest.Email, registerRequest.Password, registerRequest.RoleId, registerRequest.DepartamentName, LoggedUser);
+           
+            if (resultRegister.Success)
             {
-                //usersDto.Add();
+                _application.SaveChanges();
+                return Ok(new Result<UserDTO>() { Success = true, Return = new UserDTO(resultRegister.Return)});
             }
-
-            if (users.Any())
-                return Ok(usersDto);
             else
-                return NotFound(new { message = "No users found." });
+                return BadRequest(new { message = resultRegister.Message });
         }
 
         [HttpDelete]
-        [Route("DeleteUser")]
-        public async Task<IActionResult> DeleteUser(string userId, string creatorId)
+        [Route("Delete")]
+        public async Task<IActionResult> Delete(string userId)
         {
-            Result<User> result = new Result<User>();
+            Result<object> result = new Result<object>();
 
             if (string.IsNullOrEmpty(userId))
                 return BadRequest(new { message = "Invalid user id." });
 
-            result = await _application.User.DeleteUser(userId, creatorId);
-            User user = result.Return;
+            result = await _application.User.Delete(userId, LoggedUser);
 
             if (result.Success)
-                return Ok();
+            {
+                _application.SaveChanges();
+                return Ok(result);
+            }
             else
                 return BadRequest(new { message = result.Message });
         }
 
         [HttpGet]
-        [Route("GetUserData")]
-        public async Task<IActionResult> GetUserData(string userId)
+        [Route("Details")]
+        public async Task<IActionResult> Details(string userId)
         {
-            User user = await _application.User.GetUserData(userId);
+            User user = await _application.User.GetDetails(userId);
 
             if (user != null)
                 return Ok(user);
             else
                 return NotFound(new { message = "User not found." });
+        }
+        
+        [HttpPost]
+        [Route("UserList")]
+        public async Task<IActionResult> UserList(UserPaginationListRequest listRequest) 
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Invalid edit request. Please check the data." });
+
+            ICollection<UserDTO> users = new List<UserDTO>();
+            var datatableReturnResult = await _application.User.GetUsersAsync(listRequest.Page, listRequest.PageSize, LoggedUser, listRequest.UserName, listRequest.Email, listRequest.RoleId, listRequest.DepartamentName);
+
+            if (datatableReturnResult.Success)
+            {
+                foreach (var user in datatableReturnResult.Return.Data)
+                {
+                    users.Add(new UserDTO(user));
+                }
+            }
+
+            if (datatableReturnResult.Success)
+                return Ok(new DataTableReturn<UserDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = users, Page = datatableReturnResult.Return.Page });
+            else
+                return BadRequest(new { message = datatableReturnResult.Message });
+
+        }
+
+        [HttpPost]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(UserEditRequestDTO editRequest)
+        {
+            Result<User> result = new Result<User>();
+
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Invalid edit request. Please check the data." });
+
+            result = await _application.User.Edit(editRequest.Id, editRequest.UserName, editRequest.Email, editRequest.RoleId, editRequest.DepartamentName, LoggedUser);
+
+            if (result.Success)
+            {
+                _application.SaveChanges();
+                return Ok(new Result<UserDTO>() { Success = true, Return = new UserDTO(result.Return) });
+            }
+            else
+                return BadRequest(new { message = result.Message });
         }
     }
 }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,11 +28,13 @@ namespace Application.Application
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new List<Claim>(){new Claim(ClaimTypes.UserData, user.Id.ToString())};
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["AppSettings:Issuer"],
                 audience: _configuration["AppSettings:Audience"],
-                expires: DateTime.UtcNow.AddHours(3), // Set an appropriate token expiration time
+                expires: DateTime.UtcNow.AddHours(3),
+                claims: claims,
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

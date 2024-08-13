@@ -26,20 +26,21 @@ namespace LACS_API.Controllers
         {
             Result<DataTableReturn<SolicitationListDTO>> result = new Result<DataTableReturn<SolicitationListDTO>>();
 
-            var datatableReturnResult = await _application.Solicitation.GetSolicitations(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SolicitationTypeId, request.AnalisysTypeId, request.ResultsDelivered, request.InitialDate, request.FinalDate);
-            List<SolicitationListDTO> solicitations = new List<SolicitationListDTO>();
+           // var datatableReturnResult = await _application.Solicitation.GetSolicitations(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SolicitationTypeId, request.AnalisysTypeId, request.ResultsDelivered, request.InitialDate, request.FinalDate);
+            //List<SolicitationListDTO> solicitations = new List<SolicitationListDTO>();
 
-            if (datatableReturnResult.Success)
-            {
-                foreach (var solicitation in datatableReturnResult.Return.Data)
-                {
-                    solicitations.Add(new SolicitationListDTO(solicitation));
-                }
+            //if (datatableReturnResult.Success)
+            //{
+            //    foreach (var solicitation in datatableReturnResult.Return.Data)
+            //    {
+            //        solicitations.Add(new SolicitationListDTO(solicitation));
+            //    }
 
-                return Ok(new DataTableReturn<SolicitationListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = solicitations, Page = datatableReturnResult.Return.Page });
-            }
-            else
-                return BadRequest(new { message = result.Message });
+            //    return Ok(new DataTableReturn<SolicitationListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = solicitations, Page = datatableReturnResult.Return.Page });
+            //}
+            //else
+            //    return BadRequest(new { message = result.Message });
+            return Ok();
         }
 
 

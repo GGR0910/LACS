@@ -1,5 +1,7 @@
 ﻿
 
+using Domain.Entities;
+
 namespace LACS_API.DTO
 {
     public class UserDTO
@@ -8,15 +10,17 @@ namespace LACS_API.DTO
         {
             
         }
-        public UserDTO(string id, string userName, string email, bool isActive, int roleId, string departamentName)
+        public UserDTO(User user)
         {
-            Id = id;
-            UserName = userName;
-            Email = email;
-            Deleted=isActive;
-            RoleId=roleId;
-            DepartamentName=departamentName;
+            Id = user.Id;
+            UserName = user.UserName;
+            Email = user.Email;
+            Deleted= user.Deleted;
+            RoleId=user.RoleId;
+            DepartamentName=user.DepartamentName;
         }
+
+
 
         public string Id { get; set; }
         public string UserName { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Entities;
+using Domain.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace Application.Interface
 {
     public interface IUserApplication : IBaseApplication<User>
     {
-        Task<Result<Dictionary<string, User>>> UserLogin(string email, string password);
-        Task<Result<User>> RegisterUser(string userName, string email, string password, string creatorId, int roleId, string departamentName, string EnvironmentId);
-        Task<Result<User>> DeleteUser(string userId, string creatorId);
-        Task<IEnumerable<User>> GetUsers();
-        Task<User> GetUserData(string userId);
+        Task<Result<Dictionary<string, User>>> Login(string email, string password);
+        Task<Result<User>> Register(string userName, string email, string password, int roleId, string departamentName, User loggedUser);
+        Task<Result<object>> Delete(string userId, User loggedUser);
+        Task<User> GetDetails(string userId);
+        Task<Result<DataTableReturn<User>>> GetUsersAsync(int page, int pageLength, User loggedUser, string? userName, string? email, int? roleId, string? departamentName);
+        Task<Result<User>> Edit(string id, string userName, string email, int roleId, string departamentName, User loggedUser);
     }
 }

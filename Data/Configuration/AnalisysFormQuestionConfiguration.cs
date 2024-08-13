@@ -23,6 +23,9 @@ namespace Data.Configuration
             builder.Property(u => u.Order)
                 .IsRequired();
 
+            builder.Property(u => u.IsRequired)
+                .IsRequired();
+
             builder.HasOne(u => u.AnalisysForm)
                 .WithMany(s => s.Questions)
                 .HasForeignKey(u => u.AnalisysFormId)

@@ -22,19 +22,21 @@ namespace LACS_API.Controllers
         public async Task<IActionResult> AssignSampleToAnalist([FromBody] AssignSampleToAnalistRequestDTO request)
         {
 
-            Result<object> result = new Result<object>();
+            //Result<object> result = new Result<object>();
 
-            if (!ModelState.IsValid)
-                return BadRequest(new { message = "Invalid solicitation request. Please check the data." });
-            if (request.SampleIds.Count() < 1)
-                return BadRequest(new { message = "No samples located" });
+            //if (!ModelState.IsValid)
+            //    return BadRequest(new { message = "Invalid solicitation request. Please check the data." });
+            //if (request.SampleIds.Count() < 1)
+            //    return BadRequest(new { message = "No samples located" });
 
-            result = _application.Sample.AssignSampleToAnalist(request.SampleIds, request.AnalistId, request.LoggedUserId, request.AreSamplesAnalised);
+            //result = _application.Sample.AssignSampleToAnalist(request.SampleIds, request.AnalistId, request.LoggedUserId, request.AreSamplesAnalised);
 
-            if (result.Success)
-                return Ok();
-            else
-                return BadRequest(new { message = result.Message });
+            //if (result.Success)
+            //    return Ok();
+            //else
+            //    return BadRequest(new { message = result.Message });
+
+            return Ok();
 
         }
 
@@ -43,21 +45,22 @@ namespace LACS_API.Controllers
         {
             List<SampleListDTO> samples = new List<SampleListDTO>();
 
-            var datatableReturnResult = await _application.Sample.GetSamplesAsync(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SampleTypeId, request.SamplePhisicalStateId, request.Analized, request.InitialDate, request.FinalDate);
+            //var datatableReturnResult = await _application.Sample.GetSamplesAsync(request.Page, request.PageSize, request.LoggedUserId, request.RequesterId, request.SampleTypeId, request.SamplePhisicalStateId, request.Analized, request.InitialDate, request.FinalDate);
 
-            if (datatableReturnResult.Success)
-            {
-                foreach (var sample in datatableReturnResult.Return.Data)
-                {
-                    samples.Add(new SampleListDTO(sample));
-                }
-            }
+            //if (datatableReturnResult.Success)
+            //{
+            //    foreach (var sample in datatableReturnResult.Return.Data)
+            //    {
+            //        samples.Add(new SampleListDTO(sample));
+            //    }
+            //}
 
 
-            if (datatableReturnResult.Success)
-                return Ok(new DataTableReturn<SampleListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = samples, Page = datatableReturnResult.Return.Page });
-            else
-                return BadRequest(new { message = datatableReturnResult.Message });
+            //if (datatableReturnResult.Success)
+            //    return Ok(new DataTableReturn<SampleListDTO>() { RecordsFiltered = datatableReturnResult.Return.RecordsFiltered, RecordsTotal = datatableReturnResult.Return.RecordsTotal, Data = samples, Page = datatableReturnResult.Return.Page });
+            //else
+            // return BadRequest(new { message = datatableReturnResult.Message });
+            return Ok();
         }
 
         [HttpPost]
@@ -69,7 +72,7 @@ namespace LACS_API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid request. Please check the data." });
 
-            result = await _application.Solicitation.MarkSamplesRecieved(request.SolicitationId, request.LoggedUserId);
+            //result = await _application.Solicitation.MarkSamplesRecieved(request.SolicitationId, );
 
             if (result.Success)
                 return Ok();

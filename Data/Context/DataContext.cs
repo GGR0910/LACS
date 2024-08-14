@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using Environment = Domain.Entities.Environment;
+using Laboratory = Domain.Entities.Laboratory;
 
 namespace Data.Context
 {
@@ -30,7 +30,7 @@ namespace Data.Context
         public DbSet<SolicitationType> SolicitationTypes { get; set; }
         public DbSet<Sample> Sample { get; set; }
         public DbSet<Solicitation> Solicitation { get; set; }
-        public DbSet<Environment> Environment { get; set; }
+        public DbSet<Laboratory> Laboratory { get; set; }
         public DbSet<Analisys> Analisys { get; set; }
         public DbSet<AnalisysForm> AnalisysForm { get; set; }
         public DbSet<AnalisysFormQuestion> AnalisysFormQuestion { get; set; }
@@ -62,7 +62,7 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new SolicitationTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SolicitationConfiguration());
             modelBuilder.ApplyConfiguration(new SampleConfiguration());
-            modelBuilder.ApplyConfiguration(new EnvironmentConfiguration());
+            modelBuilder.ApplyConfiguration(new LaboratoryConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysFormConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysFormQuestionConfiguration());
@@ -90,8 +90,8 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            Environment environment = new Environment("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "System Environment", "NA", "NA", "NA", "NA", "NA", "NA", "Gabriel");
-            modelBuilder.Entity<Environment>().HasData(environment);
+            Laboratory environment = new Laboratory("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "System Environment", "NA", "NA", "NA", "NA", "NA", "NA", "Gabriel");
+            modelBuilder.Entity<Laboratory>().HasData(environment);
 
 
             User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", (int)RolesEnum.SuperAdmin, environment.Id);

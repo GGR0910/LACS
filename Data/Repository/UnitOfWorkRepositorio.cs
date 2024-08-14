@@ -1,17 +1,9 @@
 ﻿using Data.Context;
 using Data.Interface;
 using Data.Repository.Analisys;
-using Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Data.Repository
 {
@@ -27,7 +19,7 @@ namespace Data.Repository
             UserRepository = new UserRepository(_context);
             SampleRepository = new SampleRepository(_context);
             SolicitationRepository = new SolicitationRepository(_context);
-            EnvironmentRepository = new EnvironmentRepository(_context);
+            LaboratoryRepository = new LaboratoryRepository(_context);
         }
 
         #region Repositories
@@ -39,7 +31,7 @@ namespace Data.Repository
         public IUserRepository UserRepository { get; private set; }
         public ISampleRepository SampleRepository { get; private set; }
         public ISolicitationRepository SolicitationRepository { get; private set; }
-        public IEnvironmentRepository EnvironmentRepository { get; private set; }
+        public ILaboratoryRepository LaboratoryRepository { get; private set; }
 
         #endregion
 

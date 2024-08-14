@@ -35,6 +35,11 @@ namespace Data.Configuration
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(u => u.Laboratory)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.LaboratoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Base entity Data
 
 

@@ -16,7 +16,7 @@ namespace Data.Interface
         IUserRepository UserRepository { get; }
         ISampleRepository SampleRepository { get; }
         ISolicitationRepository SolicitationRepository { get; }
-        IEnvironmentRepository EnvironmentRepository { get; }
+        ILaboratoryRepository LaboratoryRepository { get; }
 
         #endregion
 

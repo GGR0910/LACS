@@ -16,7 +16,7 @@ namespace Domain.Entities
             Submissions = new List<AnalisysFormSubmit>();
         }
 
-        public User(string creatorId, string username, string email, string encryptedPassword, string departamentName, int roleId, string environmentId) : base(creatorId)
+        public User(string creatorId, string username, string email, string encryptedPassword, string departamentName, int roleId, string laboratoryId) : base(creatorId)
         {
             UserInteractions = new List<UserInteraction>();
             Samples = new List<Sample>();
@@ -27,7 +27,7 @@ namespace Domain.Entities
             EmailConfirmed = false;
             DepartamentName=departamentName;
             RoleId = roleId;
-            EnvironmentId=environmentId;
+            LaboratoryId=laboratoryId;
         }
 
         public string DepartamentName { get; set; }
@@ -38,8 +38,8 @@ namespace Domain.Entities
         public bool EmailConfirmed { get; set; }
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
-        public string EnvironmentId { get; set; }
-        public virtual Environment Environment { get; set; }
+        public string? LaboratoryId { get; set; }
+        public virtual Laboratory? Laboratory { get; set; }
         public virtual ICollection<UserInteraction> UserInteractions { get; set; }
         public virtual ICollection<AnalisysFormSubmit> Submissions { get; set; }
         public virtual ICollection<Sample> Samples { get; set; }

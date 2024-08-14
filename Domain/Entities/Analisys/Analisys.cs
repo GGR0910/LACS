@@ -11,9 +11,9 @@ namespace Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public int AmountDonePerDay { get; set; }
-        public string EnvironmentId { get; set; }
-        public virtual Environment Environment { get; set; }
-
+        public string LaboratoryId { get; set; }
+        public virtual Laboratory Laboratory { get; set; }
+        public string SampleDeliverObservations { get; set; }
         public virtual AnalisysForm AnalisysForm { get; set; }
         public virtual IEnumerable<Solicitation> Solicitations { get; set; }
 

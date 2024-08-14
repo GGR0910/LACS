@@ -1,6 +1,6 @@
 ﻿namespace LACS_API.DTO
 {
-    public class EnvironmentListRequestDTO : Pagination
+    public class LaboratoryListRequestDTO : Pagination
     {
         public string? Name { get; set; }
         public string? Document { get; set; }

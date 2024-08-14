@@ -5,20 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Environment = Domain.Entities.Environment;
+using Laboratory = Domain.Entities.Laboratory;
 
 namespace Data.Configuration
 {
-    public class EnvironmentConfiguration : IEntityTypeConfiguration<Environment>
+    public class LaboratoryConfiguration : IEntityTypeConfiguration<Laboratory>
     {
-        public void Configure(EntityTypeBuilder<Environment> builder)
+        public void Configure(EntityTypeBuilder<Laboratory> builder)
         {
             
             builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(u => u.Document)
+            builder.Property(u => u.ResponsibleDocument)
                 .IsRequired()
                 .HasMaxLength(200);
 

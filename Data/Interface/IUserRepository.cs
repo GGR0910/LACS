@@ -12,7 +12,7 @@ namespace Data.Interface
     public interface IUserRepository : IBaseRepository<User>
     {
         User? GetUserByEmail(string email);
-        DataTableReturn<User> GetUsers(int page, int pageLength, string environmentId, string? userName, string? email, int? roleId, string? departamentName);
+        DataTableReturn<User> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName);
         void LoginUser(User user);
     }
 }

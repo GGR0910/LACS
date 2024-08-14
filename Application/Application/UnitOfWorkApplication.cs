@@ -26,13 +26,13 @@ namespace Application.Application
             Solicitation = new SolicitationApplication(_repository, _configuration);
             User = new UserApplication(_repository, _configuration);
             Sample = new SampleApplication(_repository, _configuration);
-            Environment = new EnvironmentApplication(_repository, _configuration);
+            Laboratory = new LaboratoryApplication(_repository, _configuration);
         }
 
         public IUserApplication User { get; private set; }
         public ISampleApplication Sample { get; private set; }
         public ISolicitationApplication Solicitation { get; private set; }
-        public IEnvironmentApplication Environment { get; private set; }
+        public ILaboratoryApplication Laboratory { get; private set; }
 
         public void Dispose()
         {

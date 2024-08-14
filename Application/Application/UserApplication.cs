@@ -40,9 +40,9 @@ namespace Application.Application
                 result.Message = "E-mail already registred";
             else
             {
-                user = new User(loggedUser.Id, userName, email, password,departamentName, roleId, loggedUser.EnvironmentId);
-                UserInteraction interaction = new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Register, "Registred new User", user.Id);
-                user.UserInteractions.Add(interaction);
+                user = new User(loggedUser.Id, userName, email, password,departamentName, roleId, loggedUser.LaboratoryId);
+                UserInteraction interaction = new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.LaboratoryId);
+                loggedUser.UserInteractions.Add(interaction);
                 _repository.UserRepository.Add(user);
 
                 //Enviar email de confirmação e de boas vindas pro usuário
@@ -68,6 +68,7 @@ namespace Application.Application
                 result.Message = "User not authorized to login";
             else
             {
+
                 _repository.UserRepository.LoginUser(user);
                 string token = GenerateJwtToken(user);
                 result.Return = new Dictionary<string, User> { { token, user } };
@@ -89,7 +90,7 @@ namespace Application.Application
             else
             {
                 user.Delete(loggedUser.Id);
-                user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Delete, "User Deleted by", loggedUser.Id));
+                loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Delete, "User Deleted", user.Id, loggedUser.LaboratoryId));
                 _repository.UserRepository.Update(user);
 
                 result.Success = true;
@@ -105,7 +106,7 @@ namespace Application.Application
                 result.Message = "User not authorized to get users.";
             else
             {
-                result.Return = _repository.UserRepository.GetUsers(page, pageLength, loggedUser.EnvironmentId ,userName, email, roleId, departamentName);
+                result.Return = _repository.UserRepository.GetUsers(page, pageLength, loggedUser.LaboratoryId ,userName, email, roleId, departamentName);
                 result.Success = true;
             }
 
@@ -125,7 +126,7 @@ namespace Application.Application
                 else
                 {
                     user.Edit(userName, email, roleId, departamentName, loggedUser.Id);
-                    user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Update, "User Edited by", loggedUser.Id));
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.LaboratoryId));
                     _repository.UserRepository.Update(user);
                     result.Success = true;
                     result.Return = user;

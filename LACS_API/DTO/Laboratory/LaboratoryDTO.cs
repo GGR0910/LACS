@@ -1,14 +1,14 @@
-﻿using Environment = Domain.Entities.Environment;
+﻿using Laboratory = Domain.Entities.Laboratory;
 
 namespace LACS_API.DTO
 {
-    public class EnvironmentDTO
+    public class LaboratoryDTO
     {
-        public EnvironmentDTO(Environment environment) 
+        public LaboratoryDTO(Laboratory environment) 
         {
             Id = environment.Id;
             Name = environment.Name;
-            Document = environment.Document;
+            Document = environment.ResponsibleDocument;
             LaboratoryAdress = environment.LaboratoryAdress;
             LaboratoryContactInfo = environment.LaboratoryContactInfo;
             LaboratoryEmail = environment.LaboratoryEmail;

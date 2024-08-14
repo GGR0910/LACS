@@ -25,9 +25,9 @@ namespace Data.Repository
             return _context.Users.FirstOrDefault(u => u.Email == email && !u.Deleted);
         }
 
-        public DataTableReturn<User> GetUsers(int page, int pageLength, string environmentId, string? userName, string? email, int? roleId, string? departamentName)
+        public DataTableReturn<User> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName)
         {
-            IQueryable<User> users = _context.Users.Where(u => u.EnvironmentId == environmentId && !u.Deleted);
+            IQueryable<User> users = _context.Users.Where(u => u.LaboratoryId == laboratoryId && !u.Deleted);
 
             int recordsTotal = users.Count();
 
@@ -58,7 +58,7 @@ namespace Data.Repository
 
         public void LoginUser(User user)
         {
-            user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Login, "User Logged", user.Id));
+            user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Login, "User Logged", user.Id, user.LaboratoryId));
 
             user.LastAcess = DateTime.Now;
             Update(user);

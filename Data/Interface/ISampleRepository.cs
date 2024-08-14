@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Interface.Analisys
+namespace Data.Interface
 {
     public interface ISampleRepository : IBaseRepository<Sample>
     {

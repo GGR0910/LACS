@@ -43,8 +43,10 @@ namespace Application.Application
                 user = new User(loggedUser.Id, userName, email, password,departamentName, roleId, loggedUser.EnvironmentId);
                 UserInteraction interaction = new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Register, "Registred new User", user.Id);
                 user.UserInteractions.Add(interaction);
-
                 _repository.UserRepository.Add(user);
+
+                //Enviar email de confirmação e de boas vindas pro usuário
+
                 result.Success = true;
                 result.Return = user;
             }
@@ -129,6 +131,7 @@ namespace Application.Application
                     result.Return = user;
                 }
             }
+            return Task.FromResult(result);
         }
     }
 }

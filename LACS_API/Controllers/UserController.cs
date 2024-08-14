@@ -20,7 +20,6 @@ namespace LACS_API.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("Login")]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequest)
         {
             Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
@@ -42,7 +41,6 @@ namespace LACS_API.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
         public async Task<IActionResult> Register(RegisterUserRequestDTO registerRequest)
         {
 
@@ -60,8 +58,8 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = resultRegister.Message });
         }
 
+
         [HttpDelete]
-        [Route("Delete")]
         public async Task<IActionResult> Delete(string userId)
         {
             Result<object> result = new Result<object>();
@@ -80,8 +78,8 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = result.Message });
         }
 
+
         [HttpGet]
-        [Route("Details")]
         public async Task<IActionResult> Details(string userId)
         {
             User user = await _application.User.GetDetails(userId);
@@ -92,8 +90,8 @@ namespace LACS_API.Controllers
                 return NotFound(new { message = "User not found." });
         }
         
+        
         [HttpPost]
-        [Route("UserList")]
         public async Task<IActionResult> UserList(UserPaginationListRequest listRequest) 
         {
 
@@ -101,7 +99,7 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = "Invalid edit request. Please check the data." });
 
             ICollection<UserDTO> users = new List<UserDTO>();
-            var datatableReturnResult = await _application.User.GetUsersAsync(listRequest.Page, listRequest.PageSize, LoggedUser, listRequest.UserName, listRequest.Email, listRequest.RoleId, listRequest.DepartamentName);
+            Result<DataTableReturn<User>> datatableReturnResult = await _application.User.GetUsersAsync(listRequest.Page, listRequest.PageSize, LoggedUser, listRequest.UserName, listRequest.Email, listRequest.RoleId, listRequest.DepartamentName);
 
             if (datatableReturnResult.Success)
             {
@@ -118,8 +116,8 @@ namespace LACS_API.Controllers
 
         }
 
+      
         [HttpPost]
-        [Route("Edit")]
         public async Task<IActionResult> Edit(UserEditRequestDTO editRequest)
         {
             Result<User> result = new Result<User>();

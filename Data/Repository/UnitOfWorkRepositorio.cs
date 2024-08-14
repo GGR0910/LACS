@@ -1,6 +1,5 @@
 ﻿using Data.Context;
 using Data.Interface;
-using Data.Interface.Analisys;
 using Data.Repository.Analisys;
 using Domain.Entities;
 using Microsoft.Data.SqlClient;
@@ -28,6 +27,7 @@ namespace Data.Repository
             UserRepository = new UserRepository(_context);
             SampleRepository = new SampleRepository(_context);
             SolicitationRepository = new SolicitationRepository(_context);
+            EnvironmentRepository = new EnvironmentRepository(_context);
         }
 
         #region Repositories
@@ -39,6 +39,7 @@ namespace Data.Repository
         public IUserRepository UserRepository { get; private set; }
         public ISampleRepository SampleRepository { get; private set; }
         public ISolicitationRepository SolicitationRepository { get; private set; }
+        public IEnvironmentRepository EnvironmentRepository { get; private set; }
 
         #endregion
 

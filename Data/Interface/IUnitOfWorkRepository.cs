@@ -1,10 +1,4 @@
-﻿using Data.Interface.Analisys;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Data.Interface
 {
     public interface IUnitOfWorkRepository
@@ -22,6 +16,7 @@ namespace Data.Interface
         IUserRepository UserRepository { get; }
         ISampleRepository SampleRepository { get; }
         ISolicitationRepository SolicitationRepository { get; }
+        IEnvironmentRepository EnvironmentRepository { get; }
 
         #endregion
 

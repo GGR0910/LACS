@@ -83,5 +83,28 @@ namespace Application.Application
 
             return Task.FromResult(result);
         }
+
+        public Task<Result<Environment>> Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departmentName, string countryName, User loggedUser)
+        {
+            Result<Environment> result = new Result<Environment>();
+
+            if (!loggedUser.IsAdmin)
+                result.Message = "User not authorized to edit users";
+            else
+            {
+                Environment? environment = _repository.EnvironmentRepository.GetById(loggedUser.EnvironmentId);
+                if (environment == null)
+                    result.Message = "User not found";
+                else
+                {
+                    environment.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.Id);
+                    loggedUser.UserInteractions.Add(new UserInteraction(environment.Id, (int)UserInteractionTypeEnum.Update, "Environment Edited by", loggedUser.Id));
+                    _repository.EnvironmentRepository.Update(environment);
+                    result.Success = true;
+                    result.Return = environment;
+                }
+            }
+            return Task.FromResult(result);
+        }
     }
 }

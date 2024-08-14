@@ -41,8 +41,20 @@ namespace LACS_API.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(UpdateEnvironmentRequestDTO request)
         {
+            Result<Environment> result = new Result<Environment>();
+
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid edit request. Please check the data." });
+
+            result = await _application.Environment.Edit(request.Name, request.LaboratoryAdress, request.LaboratoryContactInfo, request.LaboratoryEmail, request.DepartmentName, request.CountryName, LoggedUser);
+
+            if (result.Success)
+            {
+                _application.SaveChanges();
+                return Ok(new Result<EnvironmentDTO>() { Success = true, Return = new EnvironmentDTO(result.Return) });
+            }
+            else
+                return BadRequest(new { message = result.Message });
         }
 
         [HttpGet]

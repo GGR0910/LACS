@@ -1,5 +1,5 @@
 ﻿using Data.Context;
-using Data.Interface.Analisys;
+using Data.Interface;
 using Domain;
 using Domain.Entities;
 using Domain.Util;

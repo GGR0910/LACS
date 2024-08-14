@@ -1,5 +1,4 @@
 ﻿using Data.Context;
-using Data.Interface.Analisys;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Domain.Util;
@@ -9,8 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain;
+using Data.Interface;
 
-namespace Data.Repository.Analisys
+namespace Data.Repository
 {
     public class SolicitationRepository : BaseRepository<Solicitation>, ISolicitationRepository
     {
@@ -29,9 +29,9 @@ namespace Data.Repository.Analisys
                 .Include(s => s.Samples)
                 .Include(s => s.SolicitationType)
                 .FirstOrDefault(x => x.Id == solicitationId);
-            
-          
-            if(solicitation == null)
+
+
+            if (solicitation == null)
                 result.Message = "Solicitation not found.";
             else
             {
@@ -51,20 +51,20 @@ namespace Data.Repository.Analisys
                 .Include(s => s.Samples)
                 .Include(s => s.SolicitationType)
                 .Where(s => !s.Deleted && s.ExpectedCompletionDate == null);
-          
+
             int recordsTotal = solicitations.Count();
 
 
             if (solicitationTypeId.HasValue)
                 solicitations = solicitations.Where(s => s.SoliciationTypeId == solicitationTypeId);
 
-            
+
             if (resultsDelivered.HasValue)
                 solicitations = solicitations.Where(s => s.ResultsDelivered == resultsDelivered);
-            
+
             if (initialDate.HasValue)
                 solicitations = solicitations.Where(s => s.CreatedAt >= initialDate);
-            
+
             if (finalDate.HasValue)
                 solicitations = solicitations.Where(s => s.CreatedAt <= finalDate);
 

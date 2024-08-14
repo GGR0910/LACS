@@ -32,16 +32,16 @@ namespace Data.Repository
             int recordsTotal = users.Count();
 
             if (!userName.IsNullOrEmpty())
-                users = users.Where(u => u.UserName == userName);
+                users = users.Where(u => u.UserName.Contains(userName));
             
             if (!email.IsNullOrEmpty())
-                users = users.Where(u => u.Email == email);
+                users = users.Where(u => u.Email.Contains(email));
 
             if (roleId.HasValue)
                 users = users.Where(u => u.RoleId == roleId);
 
             if (!departamentName.IsNullOrEmpty())
-                users = users.Where(u => u.DepartamentName == departamentName);
+                users = users.Where(u => u.DepartamentName.Contains(departamentName));
 
             users = users.OrderBy(u => u.UserName).Skip((page - 1) * pageLength).Take(pageLength);
 

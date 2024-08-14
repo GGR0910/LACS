@@ -35,5 +35,22 @@ namespace Domain.Entities
         public string ResponsibleName { get; set; }
         public virtual IEnumerable<Solicitation> Solicitations { get; set; }
         public virtual IEnumerable<Analisys> Analisys { get; set; }
+
+        public void Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string loggedUserId)
+        {
+            Name = name;
+            LaboratoryAdress = laboratoryAdress;
+            LaboratoryContactInfo = laboratoryContactInfo;
+            LaboratoryEmail = laboratoryEmail;
+            DepartmentName = departamentName;
+            CountryName = countryName;
+            Update(loggedUserId);
+        }
+
+        public void Delete(string loggedUserId)
+        {
+            Deleted = true;
+            Update(loggedUserId);
+        }
     }
 }

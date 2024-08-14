@@ -15,6 +15,7 @@ namespace Application.Interface
         IUserApplication User { get; }
         ISampleApplication Sample { get; }
         ISolicitationApplication Solicitation { get; }
+        IEnvironmentApplication Environment { get; }
 
         #endregion
     }

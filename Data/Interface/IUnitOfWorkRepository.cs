@@ -13,10 +13,11 @@ namespace Data.Interface
         #region Interfaces
 
         IBaseRepository<TEntity> Repository<TEntity>() where TEntity : class;
-        IUserRepository UserRepository { get; }
-        ISampleRepository SampleRepository { get; }
-        ISolicitationRepository SolicitationRepository { get; }
-        ILaboratoryRepository LaboratoryRepository { get; }
+        IUserRepository User { get; }
+        ISampleRepository Sample { get; }
+        ISolicitationRepository Solicitation { get; }
+        ILaboratoryRepository Laboratory{ get; }
+        IAnalisysRepository Analisys { get; }
 
         #endregion
 

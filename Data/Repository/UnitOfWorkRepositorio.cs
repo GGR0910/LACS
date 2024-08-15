@@ -1,6 +1,5 @@
 ﻿using Data.Context;
 using Data.Interface;
-using Data.Repository.Analisys;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
@@ -16,10 +15,11 @@ namespace Data.Repository
         {
             _context = context;
             _configuration = configuration;
-            UserRepository = new UserRepository(_context);
-            SampleRepository = new SampleRepository(_context);
-            SolicitationRepository = new SolicitationRepository(_context);
-            LaboratoryRepository = new LaboratoryRepository(_context);
+            User = new UserRepository(_context);
+            Sample = new SampleRepository(_context);
+            Solicitation = new SolicitationRepository(_context);
+            Laboratory = new LaboratoryRepository(_context);
+            Analisys = new AnalisysRepository(_context);
         }
 
         #region Repositories
@@ -28,10 +28,11 @@ namespace Data.Repository
             return new BaseRepository<TEntity>(_context);
         }
 
-        public IUserRepository UserRepository { get; private set; }
-        public ISampleRepository SampleRepository { get; private set; }
-        public ISolicitationRepository SolicitationRepository { get; private set; }
-        public ILaboratoryRepository LaboratoryRepository { get; private set; }
+        public IUserRepository User { get; private set; }
+        public ISampleRepository Sample { get; private set; }
+        public ISolicitationRepository Solicitation { get; private set; }
+        public ILaboratoryRepository Laboratory { get; private set; }
+        public IAnalisysRepository Analisys { get; private set; }
 
         #endregion
 

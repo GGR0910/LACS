@@ -25,8 +25,8 @@ namespace Application.Application
         public Result<object> AssignSampleToAnalist(List<string> SampleIds, string AnalistId, string LoggedUserId, bool AreSamplesAnalized)
         {
             Result<object> result = new Result<object>();
-            User? loggedUser = _repository.UserRepository.GetById(LoggedUserId);
-            User? analist = _repository.UserRepository.GetById(AnalistId);
+            User? loggedUser = _repository.User.GetById(LoggedUserId);
+            User? analist = _repository.User.GetById(AnalistId);
 
             if (loggedUser == null)
                 result.Message = "User not found";
@@ -38,7 +38,7 @@ namespace Application.Application
             {
                 foreach (var sampleId in SampleIds)
                 {
-                    Sample? sample = _repository.SampleRepository.GetById(sampleId);
+                    Sample? sample = _repository.Sample.GetById(sampleId);
                     if(sample == null)
                     {
                         result.Message += $"Sample {sampleId} not found";
@@ -59,7 +59,7 @@ namespace Application.Application
 
 
                 if (result.Message.IsNullOrEmpty()) { 
-                    _repository.UserRepository.Update(analist);
+                    _repository.User.Update(analist);
                     _repository.SaveChanges();
                     result.Success = true;
                 }
@@ -71,7 +71,7 @@ namespace Application.Application
         public  Task<Result<DataTableReturn<Sample>>> GetSamplesAsync(int page, int pageSize, string loggedUserId, string? requesterId, int? sampleTypeId, int? samplePhisicalStateId, bool? analized, DateTime? initialDate, DateTime? finalDate)
         {
             Result<DataTableReturn<Sample>> result = new Result<DataTableReturn<Sample>>();
-            User? user = _repository.UserRepository.GetById(loggedUserId);
+            User? user = _repository.User.GetById(loggedUserId);
 
             if (user == null)
                 result.Message = "User not found.";
@@ -79,7 +79,7 @@ namespace Application.Application
                 result.Message = "User not authorized to get samples.";
             else
             {
-                result.Return =  _repository.SampleRepository.GetSamples(page, pageSize, requesterId, sampleTypeId, samplePhisicalStateId, analized, initialDate, finalDate);
+                result.Return =  _repository.Sample.GetSamples(page, pageSize, requesterId, sampleTypeId, samplePhisicalStateId, analized, initialDate, finalDate);
                 result.Success = true;
             }
 

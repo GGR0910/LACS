@@ -23,7 +23,7 @@ namespace Application.Application
         public Task<Result<Solicitation>> RegisterSolicitation(string requesterId, int soliciationTypeId, string samplesDescription, string analysisGoalDescription, int analisysTypeId, string? desiredMagnefication, bool needsRecobriment, string? recobrimentMaterial, string? specialPrecautions, DateTime desiredDeadline, string deliveryLocation, bool desireToAccompanyAnalysis, string? observations, int sampleAmount, int sampleTypeId, int samplePhisicalStateId)
         {
             Result<Solicitation> result = new Result<Solicitation>();
-            User? requester = _repository.UserRepository.GetById(requesterId);
+            User? requester = _repository.User.GetById(requesterId);
 
             if (requester == null)
                 result.Message = "Requester not found.";
@@ -40,7 +40,7 @@ namespace Application.Application
                 foreach (var sample in Enumerable.Range(0, sampleAmount))
                     solicitation.Samples.Add(new Sample(solicitation.Id, requesterId));
 
-                _repository.SolicitationRepository.Add(solicitation);
+                _repository.Solicitation.Add(solicitation);
                 _repository.SaveChanges();
                 result.Return = solicitation;
                 result.Success = true;
@@ -54,8 +54,8 @@ namespace Application.Application
         public Task<Result<Solicitation>> MarkSamplesRecieved(string solicitationId, string loggedUserId)
         {
             Result<Solicitation> result = new Result<Solicitation>();
-            User? user = _repository.UserRepository.GetById(loggedUserId);
-            result = _repository.SolicitationRepository.GetSolicitation(solicitationId);
+            User? user = _repository.User.GetById(loggedUserId);
+            result = _repository.Solicitation.GetSolicitation(solicitationId);
 
             if(!result.Success)
                 result.Message = "Solicitation not found.";
@@ -71,7 +71,7 @@ namespace Application.Application
                 solicitation.ExpectedCompletionDate = solicitation.Samples.Max(s => s.SampleAnalisysExpectedDate).AddDays(1);
                 solicitation.Update(loggedUserId);
 
-                _repository.SolicitationRepository.Update(solicitation);
+                _repository.Solicitation.Update(solicitation);
                 _repository.SaveChanges();
                 result.Success = true;
 
@@ -83,7 +83,7 @@ namespace Application.Application
 
         private void DefineExpectedDeliverDate(ref Solicitation solicitation)
         {
-            IEnumerable<Sample> samples = _repository.SampleRepository.GetAll();
+            IEnumerable<Sample> samples = _repository.Sample.GetAll();
             List<IGrouping<DateTime, Sample>> samplesNotAnalyzedByDate = samples.Where(s => !s.SampleAnalisysDone && s.SampleAnalisysDate == null).GroupBy(x => x.SampleAnalisysExpectedDate).OrderByDescending(x => x.Key).ToList();
 
             if (samplesNotAnalyzedByDate.Any())
@@ -131,7 +131,7 @@ namespace Application.Application
         public async Task<Result<DataTableReturn<Solicitation>>> GetSolicitations(int page, int pageSize, string loggedUserId, string? requesterId, int? solicitationTypeId, int? analisysTypeId, bool? resultsDelivered, DateTime? initialDate, DateTime? finalDate)
         {
             Result<DataTableReturn<Solicitation>> result = new Result<DataTableReturn<Solicitation>>();
-            User? user = _repository.UserRepository.GetById(loggedUserId);
+            User? user = _repository.User.GetById(loggedUserId);
 
             if (user == null)
                 result.Message = "User not found.";
@@ -139,7 +139,7 @@ namespace Application.Application
                 result.Message = "User not authorized to mark samples as received.";
             else
             {
-                //result.Return = await _repository.SolicitationRepository.GetSolicitations(page, pageSize, requesterId, solicitationTypeId, analisysTypeId, resultsDelivered, initialDate, finalDate);
+                //result.Return = await _repository.Solicitation.GetSolicitations(page, pageSize, requesterId, solicitationTypeId, analisysTypeId, resultsDelivered, initialDate, finalDate);
                 result.Success = true;
             }
 
@@ -148,7 +148,7 @@ namespace Application.Application
 
         public Task<Result<Solicitation>> GetSolicitationDetails(string solicitationId)
         {
-            //return Task.FromResult(_repository.SolicitationRepository.GetSolicitation(solicitationId));
+            //return Task.FromResult(_repository.Solicitation.GetSolicitation(solicitationId));
             throw new NotImplementedException();
         }
     }

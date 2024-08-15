@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTO\Analisys\Responses\" />
     <Folder Include="Middleware\" />
   </ItemGroup>
 

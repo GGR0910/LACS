@@ -27,12 +27,14 @@ namespace Application.Application
             User = new UserApplication(_repository, _configuration);
             Sample = new SampleApplication(_repository, _configuration);
             Laboratory = new LaboratoryApplication(_repository, _configuration);
+            Analisys = new AnalisysApplication(_repository, _configuration);
         }
 
         public IUserApplication User { get; private set; }
         public ISampleApplication Sample { get; private set; }
         public ISolicitationApplication Solicitation { get; private set; }
         public ILaboratoryApplication Laboratory { get; private set; }
+        public IAnalisysApplication Analisys { get; private set; }
 
         public void Dispose()
         {

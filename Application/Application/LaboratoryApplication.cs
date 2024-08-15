@@ -17,7 +17,7 @@ namespace Application.Application
 
         public Task<Result<Laboratory>> Register(string name, string responsibleDocument, string departmentName, string laboratoryAdress, string laboratoryEmail, string laboratoryContactInfo, string countryName, string userUserName, string userEmail, User? loggedUser)
         {
-            User? startUser = _repository.UserRepository.GetUserByEmail(userEmail);
+            User? startUser = _repository.User.GetUserByEmail(userEmail);
             Result<Laboratory> result = new Result<Laboratory>();
 
             if (loggedUser.RoleId != (int)RolesEnum.SuperAdmin)
@@ -30,8 +30,8 @@ namespace Application.Application
                 startUser = new User(loggedUser.Id,userUserName, userEmail, "BAH", departmentName,(int)RolesEnum.Admin, laboratory.Id);
                 loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id, loggedUser.LaboratoryId));
                 
-                _repository.UserRepository.Add(startUser);
-                _repository.LaboratoryRepository.Add(laboratory);
+                _repository.User.Add(startUser);
+                _repository.Laboratory.Add(laboratory);
 
                 //Enviar email de confirmação e de boas vindas pro usuário
 
@@ -44,13 +44,13 @@ namespace Application.Application
 
         public Task<Laboratory> GetDetails(string environmentId)
         { 
-            return Task.FromResult(_repository.LaboratoryRepository.GetById(environmentId));
+            return Task.FromResult(_repository.Laboratory.GetById(environmentId));
         }
 
         public Task<Result<object>> Delete(string environmentId, User? loggedUser)
         {
             Result<object> result = new Result<object>();
-            Laboratory? laboratory = _repository.LaboratoryRepository.GetById(environmentId);
+            Laboratory? laboratory = _repository.Laboratory.GetById(environmentId);
 
             if (loggedUser.RoleId != (int)RolesEnum.SuperAdmin)
                 result.Message = "User not authorized to delete environments";
@@ -60,7 +60,7 @@ namespace Application.Application
             {
                 laboratory.Delete(loggedUser.Id);
                 loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory deleted", laboratory.Id, loggedUser.LaboratoryId));
-                _repository.LaboratoryRepository.Update(laboratory);
+                _repository.Laboratory.Update(laboratory);
 
                 result.Success = true;
             }
@@ -76,7 +76,7 @@ namespace Application.Application
                 result.Message = "User not authorized to get users.";
             else
             {
-                result.Return = _repository.LaboratoryRepository.GetLaboratorys(page, pageSize, name, document, countryName, departmentName, initialDate, finalDate);
+                result.Return = _repository.Laboratory.GetLaboratorys(page, pageSize, name, document, countryName, departmentName, initialDate, finalDate);
                 result.Success = true;
             }
 
@@ -91,14 +91,14 @@ namespace Application.Application
                 result.Message = "User not authorized to edit users";
             else
             {
-                Laboratory? laboratory = _repository.LaboratoryRepository.GetById(loggedUser.LaboratoryId);
+                Laboratory? laboratory = _repository.Laboratory.GetById(loggedUser.LaboratoryId);
                 if (laboratory == null)
                     result.Message = "User not found";
                 else
                 {
                     laboratory.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.Id);
                     loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id, loggedUser.LaboratoryId));
-                    _repository.LaboratoryRepository.Update(laboratory);
+                    _repository.Laboratory.Update(laboratory);
                     result.Success = true;
                     result.Return = laboratory;
                 }

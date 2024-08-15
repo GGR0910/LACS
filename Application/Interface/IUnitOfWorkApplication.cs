@@ -16,6 +16,7 @@ namespace Application.Interface
         ISampleApplication Sample { get; }
         ISolicitationApplication Solicitation { get; }
         ILaboratoryApplication Laboratory { get; }
+        IAnalisysApplication Analisys { get; }
 
         #endregion
     }

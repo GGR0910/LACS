@@ -15,6 +15,8 @@ namespace LACS_API.DTO
             DepartmentName = environment.DepartmentName;
             CountryName = environment.CountryName;
             ResponsibleName = environment.ResponsibleName;
+            CreatedAt = environment.CreatedAt;
+            UpdatedAt = environment.UpdatedAt;
         }
 
         public string Id { get; set; }
@@ -26,5 +28,8 @@ namespace LACS_API.DTO
         public string DepartmentName { get; set; }
         public string CountryName { get; set; }
         public string ResponsibleName { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
     }
 }

@@ -1,15 +1,16 @@
 ﻿using Domain.Entities;
 using LACS_API.DTO.Analisys.Responses;
 using LACS_API.DTO.EnumDTOs;
+using LACS_API.DTO.Sample;
 using Microsoft.IdentityModel.Tokens;
 
-namespace LACS_API.DTO.Analisys
+namespace LACS_API.DTO.Solicitation
 {
     public class SolicitationDTO
     {
         public SolicitationDTO()
         {
-            
+
         }
         public SolicitationDTO(Solicitation solicitation)
         {
@@ -21,19 +22,19 @@ namespace LACS_API.DTO.Analisys
             CompletionDate = solicitation.CompletionDate;
             ResultsDelivered = solicitation.ResultsDelivered;
             SampleAmount = solicitation.SampleAmount;
-            SolicitationType = new SolicitationTypeDTO() 
+            SolicitationType = new SolicitationTypeDTO()
             {
                 Id = solicitation.SolicitationType.Id,
                 Name = solicitation.SolicitationType.Name
             };
-           
+
         }
         public string Id { get; set; }
-        public  UserDTO Requester { get; set; }
-        public  SolicitationTypeDTO SolicitationType { get; set; }
+        public UserDTO Requester { get; set; }
+        public SolicitationTypeDTO SolicitationType { get; set; }
         public string SamplesDescription { get; set; }
         public string AnalysisGoalDescription { get; set; }
-        public  AnalisysTypeDTO AnalisysType { get; set; }
+        public AnalisysTypeDTO AnalisysType { get; set; }
         public string? DesiredMagnefication { get; set; }
         public bool NeedsRecobriment { get; set; }
         public string? RecobrimentMaterial { get; set; }

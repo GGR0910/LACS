@@ -1,4 +1,4 @@
-﻿namespace LACS_API.DTO.Analisys.Requests
+﻿namespace LACS_API.DTO.Sample.Requests
 {
     public class SampleListPaginationRequestDTO : Pagination
     {

@@ -21,17 +21,17 @@ namespace Application.Application
 
         public Task<User> GetDetails(string userId)
         {
-            return Task.FromResult(_repository.UserRepository.GetById(userId));
+            return Task.FromResult(_repository.User.GetById(userId));
         }
 
         public Task<IEnumerable<User>> GetUsers()
         {
-            return Task.FromResult(_repository.UserRepository.GetAll());
+            return Task.FromResult(_repository.User.GetAll());
         }
 
         public async Task<Result<User>> Register(string userName, string email, string password, int roleId, string departamentName, User loggedUser)
         {
-            User? user = _repository.UserRepository.GetUserByEmail(email);
+            User? user = _repository.User.GetUserByEmail(email);
             Result<User> result = new Result<User>();
 
             if(!loggedUser.IsAdmin)
@@ -43,7 +43,7 @@ namespace Application.Application
                 user = new User(loggedUser.Id, userName, email, password,departamentName, roleId, loggedUser.LaboratoryId);
                 UserInteraction interaction = new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.LaboratoryId);
                 loggedUser.UserInteractions.Add(interaction);
-                _repository.UserRepository.Add(user);
+                _repository.User.Add(user);
 
                 //Enviar email de confirmação e de boas vindas pro usuário
 
@@ -58,7 +58,7 @@ namespace Application.Application
         {
             Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
 
-            User? user = _repository.UserRepository.GetUserByEmail(email);
+            User? user = _repository.User.GetUserByEmail(email);
 
             if(user == null)
                 result.Message = "User not found";
@@ -69,7 +69,7 @@ namespace Application.Application
             else
             {
 
-                _repository.UserRepository.LoginUser(user);
+                _repository.User.LoginUser(user);
                 string token = GenerateJwtToken(user);
                 result.Return = new Dictionary<string, User> { { token, user } };
                 result.Success = true;
@@ -81,7 +81,7 @@ namespace Application.Application
         public Task<Result<object>> Delete(string userId, User loggedUser)
         {
             Result<object> result = new Result<object>();
-            User? user = _repository.UserRepository.GetById(userId);
+            User? user = _repository.User.GetById(userId);
 
             if(!loggedUser.IsAdmin)
                 result.Message = "User not authorized to delete users";
@@ -91,7 +91,7 @@ namespace Application.Application
             {
                 user.Delete(loggedUser.Id);
                 loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Delete, "User Deleted", user.Id, loggedUser.LaboratoryId));
-                _repository.UserRepository.Update(user);
+                _repository.User.Update(user);
 
                 result.Success = true;
             }
@@ -106,7 +106,7 @@ namespace Application.Application
                 result.Message = "User not authorized to get users.";
             else
             {
-                result.Return = _repository.UserRepository.GetUsers(page, pageLength, loggedUser.LaboratoryId ,userName, email, roleId, departamentName);
+                result.Return = _repository.User.GetUsers(page, pageLength, loggedUser.LaboratoryId ,userName, email, roleId, departamentName);
                 result.Success = true;
             }
 
@@ -120,14 +120,14 @@ namespace Application.Application
                 result.Message = "User not authorized to edit users";
             else
             {
-                User? user = _repository.UserRepository.GetById(id);
+                User? user = _repository.User.GetById(id);
                 if (user == null)
                     result.Message = "User not found";
                 else
                 {
                     user.Edit(userName, email, roleId, departamentName, loggedUser.Id);
                     loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.LaboratoryId));
-                    _repository.UserRepository.Update(user);
+                    _repository.User.Update(user);
                     result.Success = true;
                     result.Return = user;
                 }

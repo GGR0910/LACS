@@ -1,13 +1,13 @@
 ﻿using Domain.Entities;
 using LACS_API.DTO.EnumDTOs;
 
-namespace LACS_API.DTO.Analisys
+namespace LACS_API.DTO.Sample
 {
     public class SampleDTO
     {
         public SampleDTO()
         {
-            
+
         }
 
         public string Id { get; set; }

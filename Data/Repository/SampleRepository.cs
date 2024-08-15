@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Repository.Analisys
+namespace Data.Repository
 {
     public class SampleRepository : BaseRepository<Sample>, ISampleRepository
     {

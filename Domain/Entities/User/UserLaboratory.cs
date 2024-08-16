@@ -65,7 +65,7 @@ namespace Domain.Entities
 
         public void UnDelete(string currentUserLaboratoryId)
         {
-            Deleted = true;
+            Deleted = false;
             Update(currentUserLaboratoryId);
         }
     }

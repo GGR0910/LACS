@@ -1,6 +1,7 @@
 ﻿using Data.Context;
 using Data.Interface;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace Data.Repository
     {
         public UserLaboratoryRepository(DataContext baseContext) : base(baseContext)
         {
+        }
+
+        public UserLaboratory? GetUserLaboratory(string userLaboratoryId)
+        {
+            return _context.UserLaboratory.Include(x => x.Laboratory).Include(x => x.Role).FirstOrDefault(x => x.Id == userLaboratoryId);
         }
     }
 }

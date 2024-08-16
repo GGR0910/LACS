@@ -41,8 +41,8 @@ namespace Application.Application
             else if (user != null)
             {
                 UserLaboratory? userLaboratory = user.UserLaboratories.FirstOrDefault(x => x.LaboratoryId == loggedUser.CurrentUserLaboratory.LaboratoryId);
-                if (userLaboratory != null && !userLaboratory.Deleted)
-                    result.Message = "User already registered in this laboratory";
+                if (userLaboratory == null)
+                    user.UserLaboratories.Add(new UserLaboratory(loggedUser.CurrentUserLaboratoryId, roleId, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
                 else 
                 {
                     if (userLaboratory.Deleted)
@@ -51,7 +51,7 @@ namespace Application.Application
                         loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, "User Registered", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
                     }
                     else
-                        user.UserLaboratories.Add(new UserLaboratory(loggedUser.CurrentUserLaboratoryId, roleId, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                        result.Message = "User already registered in this laboratory"; 
 
                     //Enviar email de adição do usuário ao ambiente 
                 }
@@ -59,23 +59,19 @@ namespace Application.Application
             }
             else
             { 
-                user = new User(loggedUser.Id, userName, email, password,departamentName);
+                user = new User(loggedUser.CurrentUserLaboratoryId, userName, email, password,departamentName);
                 UserInteraction interaction = new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId);
                 
                 loggedUser.UserInteractions.Add(interaction);
                 _repository.User.Add(user);
                 _repository.SaveChanges();
 
-                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, user.Id, user.Id);
+                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, user.Id, user.CurrentUserLaboratory.LaboratoryId);
                 _repository.UserLaboratory.Add(userLaboratory);
                 
-                user.CurrentUserLaboratory = user.UserLaboratories.First();
-                _repository.User.Update(user);
+                user.CurrentUserLaboratory = user.UserLaboratories.First();;
 
                 //Enviar email de confirmação e de boas vindas pro usuário
-
-                result.Success = true;
-                result.Return = user;
             }
 
             if (string.IsNullOrEmpty(result.Message)) {
@@ -113,7 +109,7 @@ namespace Application.Application
         public Task<Result<object>> Delete(string userId, User loggedUser)
         {
             Result<object> result = new Result<object>();
-            User? user = _repository.User.GetById(userId);
+            User? user = _repository.User.GetUserById(userId);
 
             if (!loggedUser.CurrentUserLaboratory!.IsAdmin)
                 result.Message = "User not authorized to delete users";

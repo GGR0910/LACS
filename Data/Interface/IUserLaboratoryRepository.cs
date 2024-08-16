@@ -10,5 +10,6 @@ namespace Data.Interface
 {
     public interface IUserLaboratoryRepository : IBaseRepository<UserLaboratory>
     {
+        UserLaboratory? GetUserLaboratory(string userLaboratoryId);
     }
 }

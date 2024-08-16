@@ -19,7 +19,7 @@ namespace LACS_API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequest)
         {
             Result<Dictionary<string, User>> result = new Result<Dictionary<string, User>>();
@@ -40,7 +40,7 @@ namespace LACS_API.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterUserRequestDTO registerRequest)
         {
 
@@ -59,7 +59,7 @@ namespace LACS_API.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(string userId)
         {
             Result<object> result = new Result<object>();
@@ -79,7 +79,7 @@ namespace LACS_API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("Details")]
         public async Task<IActionResult> Details(string userId)
         {
             User user = await _application.User.GetDetails(userId);
@@ -91,7 +91,7 @@ namespace LACS_API.Controllers
         }
         
         
-        [HttpPost]
+        [HttpPost("List")]
         public async Task<IActionResult> UserList(UserPaginationListRequest listRequest) 
         {
 
@@ -117,7 +117,7 @@ namespace LACS_API.Controllers
         }
 
       
-        [HttpPost]
+        [HttpPost("Edit")]
         public async Task<IActionResult> Edit(UserEditRequestDTO editRequest)
         {
             Result<User> result = new Result<User>();

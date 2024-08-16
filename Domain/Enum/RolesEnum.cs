@@ -10,8 +10,6 @@ namespace Domain.Enum
     {
         Admin = 1,
         Analist = 2,
-        User = 3,
-        Guest = 4,
-        SuperAdmin = 5
+        User = 3
     }
 }

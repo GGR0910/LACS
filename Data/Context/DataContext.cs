@@ -38,6 +38,7 @@ namespace Data.Context
         public DbSet<AnalisysFormQuestionOption> AnalisysFormQuestionOption { get; set; }
         public DbSet<AnalisysFormAnswer> AnalisysFormAnswer { get; set; }
         public DbSet<AnalisysFormSubmit> AnalisysFormSubmit { get; set; }
+        public DbSet<UserLaboratory> UserLaboratory { get; set; }
 
         #endregion
 
@@ -70,6 +71,7 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new AnalisysFormQuestionOptionConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysFormAnswerConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysFormSubmitConfiguration());
+            modelBuilder.ApplyConfiguration(new UserLaboratoryConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -90,15 +92,18 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            Laboratory environment = new Laboratory("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "System Environment", "NA", "NA", "NA", "NA", "NA", "NA", "Gabriel");
-            modelBuilder.Entity<Laboratory>().HasData(environment);
-
-
-            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", (int)RolesEnum.SuperAdmin, environment.Id);
-            adminUser.EmailConfirmed = true;
-            adminUser.Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09";
+            
+            User adminUser = new User()
+            {
+                Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
+                UserName = "SystemUser",
+                Email = "ggr0910@hotmail.com",
+                EncryptedPassword = "Gogoll90@",
+                DepartamentName = "System",
+                EmailConfirmed = true,
+                CreatedAt = DateTime.Now,
+            };
             modelBuilder.Entity<User>().HasData(adminUser);
-
         }
     }
 }

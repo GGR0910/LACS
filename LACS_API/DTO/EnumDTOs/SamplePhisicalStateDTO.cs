@@ -1,4 +1,4 @@
-﻿namespace LACS_API.DTO.EnumDTOs
+﻿namespace LACS_API.DTO
 {
     public class SamplePhisicalStateDTO : EnumDTO
     {

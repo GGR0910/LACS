@@ -9,29 +9,27 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserLaboratoryConfiguration : IEntityTypeConfiguration<UserLaboratory>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserLaboratory> builder)
         {
-            builder.Property(u => u.UserName)
+            builder.HasOne(u => u.Role)
+                .WithMany(r => r.UserLaboratories)
+                .HasForeignKey(u => u.RoleId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.Email)
-                .IsRequired()
-                .HasMaxLength(200);
+            builder.HasOne(u => u.Laboratory)
+                .WithMany(r => r.UserLaboratories)
+                .HasForeignKey(u => u.LaboratoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.EncryptedPassword)
-                .IsRequired()
-                .HasMaxLength(200);
+            builder.HasOne(u => u.User)
+               .WithMany(r => r.UserLaboratories)
+               .HasForeignKey(u => u.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.LastAcess);
-
-            builder.Property(u => u.EmailConfirmed);
-
-            builder.HasOne(u => u.CurrentUserLaboratory)
-                .WithOne(x => x.CurrentLaboratory)
-                .HasForeignKey<User>(u => u.CurrentUserLaboratoryId);
+            builder.HasIndex(ul => new { ul.LaboratoryId, ul.UserId }).IsUnique();
 
             //Base entity Data
 
@@ -50,12 +48,12 @@ namespace Data.Configuration
                 .IsRequired();
 
             builder.HasOne(u => u.CreatedByUserLaboratory)
-                .WithMany(x => x.UsersCreatedBy)
+                .WithMany(x => x.UserLaboratoriesCreatedBy)
                 .HasForeignKey(u => u.CreatedById)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUserLaboratory)
-                .WithMany(x => x.UsersUpdatedBy)
+                .WithMany(x => x.UserLaboratoriesUpdatedBy)
                 .HasForeignKey(u => u.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data

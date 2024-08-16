@@ -34,16 +34,43 @@ namespace Application.Application
             User? user = _repository.User.GetUserByEmail(email);
             Result<User> result = new Result<User>();
 
-            if(!loggedUser.IsAdmin)
+            if(!loggedUser.CurrentUserLaboratory!.IsAdmin)
                 result.Message = "User not authorized to register new users";
+            else if (userName == "SystemUser")
+                result.Message = "User name not allowed";
             else if (user != null)
-                result.Message = "E-mail already registred";
-            else
             {
-                user = new User(loggedUser.Id, userName, email, password,departamentName, roleId, loggedUser.LaboratoryId);
-                UserInteraction interaction = new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.LaboratoryId);
+                UserLaboratory? userLaboratory = user.UserLaboratories.FirstOrDefault(x => x.LaboratoryId == loggedUser.CurrentUserLaboratory.LaboratoryId);
+                if (userLaboratory != null && !userLaboratory.Deleted)
+                    result.Message = "User already registered in this laboratory";
+                else 
+                {
+                    if (userLaboratory.Deleted)
+                    {
+                        userLaboratory!.UnDelete(loggedUser.CurrentUserLaboratoryId);
+                        loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, "User Registered", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                    }
+                    else
+                        user.UserLaboratories.Add(new UserLaboratory(loggedUser.CurrentUserLaboratoryId, roleId, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+
+                    //Enviar email de adição do usuário ao ambiente 
+                }
+
+            }
+            else
+            { 
+                user = new User(loggedUser.Id, userName, email, password,departamentName);
+                UserInteraction interaction = new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId);
+                
                 loggedUser.UserInteractions.Add(interaction);
                 _repository.User.Add(user);
+                _repository.SaveChanges();
+
+                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, user.Id, user.Id);
+                _repository.UserLaboratory.Add(userLaboratory);
+                
+                user.CurrentUserLaboratory = user.UserLaboratories.First();
+                _repository.User.Update(user);
 
                 //Enviar email de confirmação e de boas vindas pro usuário
 
@@ -51,6 +78,11 @@ namespace Application.Application
                 result.Return = user;
             }
 
+            if (string.IsNullOrEmpty(result.Message)) {
+                _repository.User.Update(user);
+                result.Success = true;
+                result.Return = user;
+            }
             return result;
         }
 
@@ -83,17 +115,24 @@ namespace Application.Application
             Result<object> result = new Result<object>();
             User? user = _repository.User.GetById(userId);
 
-            if(!loggedUser.IsAdmin)
+            if (!loggedUser.CurrentUserLaboratory!.IsAdmin)
                 result.Message = "User not authorized to delete users";
             else if (user == null)
                 result.Message = "User not found";
             else
             {
-                user.Delete(loggedUser.Id);
-                loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Delete, "User Deleted", user.Id, loggedUser.LaboratoryId));
-                _repository.User.Update(user);
-
-                result.Success = true;
+                
+                UserLaboratory? userLaboratory = user.UserLaboratories.FirstOrDefault(x => x.LaboratoryId == loggedUser.CurrentUserLaboratory.LaboratoryId);
+                if (userLaboratory == null)
+                    result.Message = "User not found in this laboratory";
+                else
+                {
+                    userLaboratory.Delete(loggedUser.CurrentUserLaboratoryId);
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Delete, "User Deleted", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                    
+                    _repository.User.Update(user);
+                    result.Success = true;
+                }
             }
            
             return Task.FromResult(result);
@@ -102,11 +141,11 @@ namespace Application.Application
         public Task<Result<DataTableReturn<User>>> GetUsersAsync(int page, int pageLength, User loggedUser, string? userName, string? email, int? roleId, string? departamentName)
         {
             Result<DataTableReturn<User>> result = new Result<DataTableReturn<User>>();            
-            if (loggedUser?.RoleId == (int)RolesEnum.User)
+            if (loggedUser?.CurrentUserLaboratory!.RoleId == (int)RolesEnum.User)
                 result.Message = "User not authorized to get users.";
             else
             {
-                result.Return = _repository.User.GetUsers(page, pageLength, loggedUser.LaboratoryId ,userName, email, roleId, departamentName);
+                result.Return = _repository.User.GetUsers(page, pageLength, loggedUser.CurrentUserLaboratory!.LaboratoryId ,userName, email, roleId, departamentName);
                 result.Success = true;
             }
 
@@ -116,21 +155,24 @@ namespace Application.Application
         public Task<Result<User>> Edit(string id, string userName, string email, int roleId, string departamentName, User loggedUser)
         {
             Result<User> result = new Result<User>();
-            if(!loggedUser.IsAdmin)
+            User? user = _repository.User.GetById(id);
+            if (!loggedUser.CurrentUserLaboratory!.IsAdmin)
                 result.Message = "User not authorized to edit users";
+            else if (user == null)
+                result.Message = "User not found";
             else
             {
-                User? user = _repository.User.GetById(id);
-                if (user == null)
-                    result.Message = "User not found";
+                if(!user.UserLaboratories.Any(x => x.LaboratoryId == loggedUser.CurrentUserLaboratory.LaboratoryId && !x.Deleted))
+                    result.Message = "User not found in this laboratory";
                 else
                 {
-                    user.Edit(userName, email, roleId, departamentName, loggedUser.Id);
-                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.LaboratoryId));
+                    user.Edit(userName, email, roleId, departamentName, loggedUser.CurrentUserLaboratoryId);
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
                     _repository.User.Update(user);
                     result.Success = true;
                     result.Return = user;
                 }
+               
             }
             return Task.FromResult(result);
         }

@@ -14,10 +14,12 @@ namespace Domain.Entities
             UserInteractions = new List<UserInteraction>();
             Samples = new List<Sample>();
             Submissions = new List<AnalisysFormSubmit>();
+            UserLaboratories = new List<UserLaboratory>();
         }
 
-        public User(string creatorId, string username, string email, string encryptedPassword, string departamentName, int roleId, string laboratoryId) : base(creatorId)
+        public User(string? creatorId, string username, string email, string encryptedPassword, string departamentName) : base(creatorId)
         {
+            UserLaboratories = new List<UserLaboratory>();
             UserInteractions = new List<UserInteraction>();
             Samples = new List<Sample>();
             Submissions = new List<AnalisysFormSubmit>();
@@ -26,8 +28,6 @@ namespace Domain.Entities
             EncryptedPassword = encryptedPassword;
             EmailConfirmed = false;
             DepartamentName=departamentName;
-            RoleId = roleId;
-            LaboratoryId=laboratoryId;
         }
 
         public string DepartamentName { get; set; }
@@ -36,14 +36,12 @@ namespace Domain.Entities
         public string EncryptedPassword { get; set; }
         public DateTime? LastAcess { get; set; }
         public bool EmailConfirmed { get; set; }
-        public int RoleId { get; set; }
-        public virtual Role Role { get; set; }
-        public string? LaboratoryId { get; set; }
-        public virtual Laboratory? Laboratory { get; set; }
+        public string? CurrentUserLaboratoryId { get; set; }
+        public virtual UserLaboratory? CurrentUserLaboratory { get; set; }
         public virtual ICollection<UserInteraction> UserInteractions { get; set; }
         public virtual ICollection<AnalisysFormSubmit> Submissions { get; set; }
         public virtual ICollection<Sample> Samples { get; set; }
-        public bool IsAdmin => RoleId == (int)RolesEnum.Admin || RoleId == (int)RolesEnum.SuperAdmin;
+        public virtual ICollection<UserLaboratory> UserLaboratories { get; set; }
 
         public void Delete(string loggedUserId)
         {
@@ -51,12 +49,12 @@ namespace Domain.Entities
             Update(loggedUserId);
         }
 
-        public void Edit(string userName, string email, int roleId, string departamentName, string id)
+        public void Edit(string userName, string email, int roleId ,string departamentName, string id)
         {
             UserName = userName;
             Email = email;
-            RoleId = roleId;
             DepartamentName = departamentName;
+
             Update(id);
         }
     }

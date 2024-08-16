@@ -61,7 +61,7 @@ namespace Application.Application
                 result.Message = "Solicitation not found.";
             else if (user == null)
                 result.Message += "User not found.";
-            else if(user?.RoleId == (int)RolesEnum.User)
+            else if(!user.CurrentUserLaboratory.CanOperate)
                 result.Message += "User not authorized to mark samples as received.";
             else
             {
@@ -135,7 +135,7 @@ namespace Application.Application
 
             if (user == null)
                 result.Message = "User not found.";
-            if (user?.RoleId == (int)RolesEnum.User)
+            if (user?.CurrentUserLaboratory!.RoleId == (int)RolesEnum.User)
                 result.Message = "User not authorized to mark samples as received.";
             else
             {

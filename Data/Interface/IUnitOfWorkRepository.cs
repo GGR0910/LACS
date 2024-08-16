@@ -18,6 +18,7 @@ namespace Data.Interface
         ISolicitationRepository Solicitation { get; }
         ILaboratoryRepository Laboratory{ get; }
         IAnalisysRepository Analisys { get; }
+        IUserLaboratoryRepository UserLaboratory { get; }
 
         #endregion
 

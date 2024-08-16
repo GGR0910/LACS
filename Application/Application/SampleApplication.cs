@@ -30,7 +30,7 @@ namespace Application.Application
 
             if (loggedUser == null)
                 result.Message = "User not found";
-            else if (loggedUser.RoleId == (int)RolesEnum.User)
+            else if (!loggedUser.CurrentUserLaboratory.CanOperate)
                 result.Message += "User does not have permission to assign samples";
             else if (analist == null)
                 result.Message += "Analist not found";
@@ -75,7 +75,7 @@ namespace Application.Application
 
             if (user == null)
                 result.Message = "User not found.";
-            if (user?.RoleId == (int)RolesEnum.User)
+            if (!user.CurrentUserLaboratory!.CanOperate)
                 result.Message = "User not authorized to get samples.";
             else
             {

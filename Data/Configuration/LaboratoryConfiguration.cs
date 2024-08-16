@@ -62,12 +62,15 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
-                .IsRequired()
-                .HasMaxLength(36);
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+                .WithMany(x => x.LaboratoriesCreatedBy)
+                .HasForeignKey(u => u.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.LaboratoriesUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

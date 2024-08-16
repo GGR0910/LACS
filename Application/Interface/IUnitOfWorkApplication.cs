@@ -17,7 +17,7 @@ namespace Application.Interface
         ISolicitationApplication Solicitation { get; }
         ILaboratoryApplication Laboratory { get; }
         IAnalisysApplication Analisys { get; }
-
+        IUserLaboratoryApplication UserLaboratory { get; }
         #endregion
     }
 }

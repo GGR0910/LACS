@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240814153758_Laboratory")]
-    partial class Laboratory
+    [Migration("20240815233133_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,15 +31,22 @@ namespace Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<bool>("AllowWatching")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AmountDonePerDay")
                         .HasColumnType("int");
+
+                    b.Property<string>("AnalistsNames")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -66,13 +73,16 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("LaboratoryId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Analisys");
                 });
@@ -90,9 +100,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -111,14 +120,17 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalisysId")
                         .IsUnique();
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("AnalisysForm");
                 });
@@ -141,9 +153,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -156,15 +167,18 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalisysFormSubmitId");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("AnalisysFormAnswer");
                 });
@@ -182,9 +196,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -210,15 +223,18 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalisysFormId");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("QuestionTypeId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("AnalisysFormQuestion");
                 });
@@ -232,9 +248,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -260,13 +275,16 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("AnalisysFormQuestionOption");
                 });
@@ -343,9 +361,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -362,18 +379,21 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalisysFormId");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("RequesterId");
 
                     b.HasIndex("SolicitationId")
                         .IsUnique();
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("AnalisysFormSubmit");
                 });
@@ -392,9 +412,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(36)
+                    b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -438,30 +456,16 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Laboratory");
+                    b.HasIndex("CreatedById");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "bd65758a-5488-4feb-a717-5ac7923300bd",
-                            CountryName = "NA",
-                            CreatedAt = new DateTime(2024, 8, 14, 12, 37, 58, 267, DateTimeKind.Local).AddTicks(9916),
-                            CreatedBy = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
-                            Deleted = false,
-                            DepartmentName = "NA",
-                            LaboratoryAdress = "NA",
-                            LaboratoryContactInfo = "NA",
-                            LaboratoryEmail = "NA",
-                            Name = "System Environment",
-                            ResponsibleDocument = "NA",
-                            ResponsibleName = "Gabriel"
-                        });
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("Laboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -495,16 +499,6 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             Name = "User"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Guest"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "SuperAdmin"
                         });
                 });
 
@@ -521,9 +515,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -548,15 +541,18 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalistId");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("SolicitationId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Sample");
                 });
@@ -577,9 +573,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -603,15 +598,18 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AnalisysId");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("SoliciationTypeId");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Solicitation");
                 });
@@ -654,9 +652,10 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(36)
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CurrentUserLaboratoryId")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -679,20 +678,13 @@ namespace Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("LaboratoryId")
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<DateTime?>("LastAcess")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("UserName")
@@ -702,9 +694,13 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LaboratoryId");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("CurrentUserLaboratoryId")
+                        .IsUnique()
+                        .HasFilter("[CurrentUserLaboratoryId] IS NOT NULL");
+
+                    b.HasIndex("UpdatedById");
 
                     b.ToTable("Users");
 
@@ -712,15 +708,12 @@ namespace Data.Migrations
                         new
                         {
                             Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
-                            CreatedAt = new DateTime(2024, 8, 14, 12, 37, 58, 268, DateTimeKind.Local).AddTicks(69),
-                            CreatedBy = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
+                            CreatedAt = new DateTime(2024, 8, 15, 20, 31, 32, 933, DateTimeKind.Local).AddTicks(5709),
                             Deleted = false,
                             DepartamentName = "System",
                             Email = "ggr0910@hotmail.com",
                             EmailConfirmed = true,
                             EncryptedPassword = "Gogoll90@",
-                            LaboratoryId = "bd65758a-5488-4feb-a717-5ac7923300bd",
-                            RoleId = 5,
                             UserName = "SystemUser"
                         });
                 });
@@ -734,9 +727,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Deleted")
@@ -759,8 +751,7 @@ namespace Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(36)
+                    b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("UserId")
@@ -771,6 +762,10 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UpdatedById");
 
                     b.HasIndex("UserId");
 
@@ -843,15 +838,78 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserLaboratory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LaboratoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("LaboratoryId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserLaboratory");
+                });
+
             modelBuilder.Entity("Domain.Entities.Analisys", b =>
                 {
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Laboratory", "Laboratory")
                         .WithMany("Analisys")
                         .HasForeignKey("LaboratoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("Laboratory");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnalisysForm", b =>
@@ -862,7 +920,22 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysFormCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysFormUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Analisys");
+
+                    b.Navigation("CreatedByUserLaboratory");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnalisysFormAnswer", b =>
@@ -873,15 +946,30 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysFormAnswerCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.AnalisysFormQuestion", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysFormAnswerUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("Question");
 
                     b.Navigation("Submission");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnalisysFormQuestion", b =>
@@ -892,26 +980,56 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysFormQuestionCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.AnalisysFormQuestionType", "QuestionType")
                         .WithMany("Questions")
                         .HasForeignKey("QuestionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysFormQuestionUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("AnalisysForm");
 
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("QuestionType");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnalisysFormQuestionOption", b =>
                 {
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysFormQuestionOptionCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.AnalisysFormQuestion", "Question")
                         .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysFormQuestionOptionUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("Question");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnalisysFormSubmit", b =>
@@ -919,6 +1037,12 @@ namespace Data.Migrations
                     b.HasOne("Domain.Entities.AnalisysForm", "Form")
                         .WithMany("Submissions")
                         .HasForeignKey("AnalisysFormId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("AnalisysFormSubmitCreatedBy")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -934,11 +1058,37 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("AnalisysFormSubmitUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("Form");
 
                     b.Navigation("Requester");
 
                     b.Navigation("Solicitation");
+
+                    b.Navigation("UpdatedByUserLaboratory");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Laboratory", b =>
+                {
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("LaboratoriesCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("LaboratoriesUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUserLaboratory");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.Sample", b =>
@@ -949,15 +1099,30 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("SamplesCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Solicitation", "Solicitation")
                         .WithMany("Samples")
                         .HasForeignKey("SolicitationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("SamplesUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Analist");
 
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("Solicitation");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.Solicitation", b =>
@@ -968,37 +1133,68 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("SolicitationsCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.SolicitationType", "SolicitationType")
                         .WithMany("Solicitations")
                         .HasForeignKey("SoliciationTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("SolicitationsUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Analisys");
 
+                    b.Navigation("CreatedByUserLaboratory");
+
                     b.Navigation("SolicitationType");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.HasOne("Domain.Entities.Laboratory", "Laboratory")
-                        .WithMany("Users")
-                        .HasForeignKey("LaboratoryId")
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("UsersCreatedBy")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Entities.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("Domain.Entities.UserLaboratory", "CurrentUserLaboratory")
+                        .WithOne("CurrentLaboratory")
+                        .HasForeignKey("Domain.Entities.User", "CurrentUserLaboratoryId");
 
-                    b.Navigation("Laboratory");
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("UsersUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Role");
+                    b.Navigation("CreatedByUserLaboratory");
+
+                    b.Navigation("CurrentUserLaboratory");
+
+                    b.Navigation("UpdatedByUserLaboratory");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserInteraction", b =>
                 {
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("UserInteractionsCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("UserInteractionsUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("UserInteractions")
                         .HasForeignKey("UserId")
@@ -1011,9 +1207,54 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CreatedByUserLaboratory");
+
+                    b.Navigation("UpdatedByUserLaboratory");
+
                     b.Navigation("User");
 
                     b.Navigation("UserInteractionType");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserLaboratory", b =>
+                {
+                    b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
+                        .WithMany("UserLaboratoriesCreatedBy")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.Laboratory", "Laboratory")
+                        .WithMany("UserLaboratories")
+                        .HasForeignKey("LaboratoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Role", "Role")
+                        .WithMany("UserLaboratories")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
+                        .WithMany("UserLaboratoriesUpdatedBy")
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("UserLaboratories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUserLaboratory");
+
+                    b.Navigation("Laboratory");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("UpdatedByUserLaboratory");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.Analisys", b =>
@@ -1052,12 +1293,12 @@ namespace Data.Migrations
                 {
                     b.Navigation("Analisys");
 
-                    b.Navigation("Users");
+                    b.Navigation("UserLaboratories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("UserLaboratories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Solicitation", b =>
@@ -1080,11 +1321,67 @@ namespace Data.Migrations
                     b.Navigation("Submissions");
 
                     b.Navigation("UserInteractions");
+
+                    b.Navigation("UserLaboratories");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserInteractionType", b =>
                 {
                     b.Navigation("UserInteractions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserLaboratory", b =>
+                {
+                    b.Navigation("AnalisysCreatedBy");
+
+                    b.Navigation("AnalisysFormAnswerCreatedBy");
+
+                    b.Navigation("AnalisysFormAnswerUpdatedBy");
+
+                    b.Navigation("AnalisysFormCreatedBy");
+
+                    b.Navigation("AnalisysFormQuestionCreatedBy");
+
+                    b.Navigation("AnalisysFormQuestionOptionCreatedBy");
+
+                    b.Navigation("AnalisysFormQuestionOptionUpdatedBy");
+
+                    b.Navigation("AnalisysFormQuestionUpdatedBy");
+
+                    b.Navigation("AnalisysFormSubmitCreatedBy");
+
+                    b.Navigation("AnalisysFormSubmitUpdatedBy");
+
+                    b.Navigation("AnalisysFormUpdatedBy");
+
+                    b.Navigation("AnalisysUpdatedBy");
+
+                    b.Navigation("CurrentLaboratory")
+                        .IsRequired();
+
+                    b.Navigation("LaboratoriesCreatedBy");
+
+                    b.Navigation("LaboratoriesUpdatedBy");
+
+                    b.Navigation("SamplesCreatedBy");
+
+                    b.Navigation("SamplesUpdatedBy");
+
+                    b.Navigation("SolicitationsCreatedBy");
+
+                    b.Navigation("SolicitationsUpdatedBy");
+
+                    b.Navigation("UserInteractionsCreatedBy");
+
+                    b.Navigation("UserInteractionsUpdatedBy");
+
+                    b.Navigation("UserLaboratoriesCreatedBy");
+
+                    b.Navigation("UserLaboratoriesUpdatedBy");
+
+                    b.Navigation("UsersCreatedBy");
+
+                    b.Navigation("UsersUpdatedBy");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿namespace LACS_API.DTO.Sample.Requests
+﻿namespace LACS_API.DTO
 {
     public class MarkSamplesRecievedRequestDTO : BaseRequestDTO
     {

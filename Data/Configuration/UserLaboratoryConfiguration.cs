@@ -31,6 +31,9 @@ namespace Data.Configuration
 
             builder.HasIndex(ul => new { ul.LaboratoryId, ul.UserId }).IsUnique();
 
+            builder.Property(u => u.IsCurrent)
+                .IsRequired();
+
             //Base entity Data
 
 

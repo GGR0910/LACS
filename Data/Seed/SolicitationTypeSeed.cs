@@ -14,7 +14,7 @@ namespace Data.Seed
             return new List<object>
             {
                 new SolicitationType { Id = 1, Name = "Academic" },
-                new SolicitationType { Id = 2, Name = "ServicePrestation" }
+                new SolicitationType { Id = 2, Name = "Comercial" }
             };
         }
     }

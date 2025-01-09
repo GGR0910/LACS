@@ -1,32 +1,25 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Data.Configuration
 {
-    public class AnalisysFormAnswerConfiguration : IEntityTypeConfiguration<AnalisysFormAnswer>
+    public class FormSectionConfiguration : IEntityTypeConfiguration<FormSection>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormAnswer> builder)
+
+        public void Configure(EntityTypeBuilder<FormSection> builder)
         {
-           builder.Property(u => u.Answer)
+
+            builder.Property(x => x.Title)
                 .IsRequired()
-                .HasMaxLength(int.MaxValue);
+                .HasMaxLength(200);
 
+            builder.Property(x => x.Order).IsRequired();
 
-            builder.HasOne(u => u.Question)
-                .WithMany(s => s.Answers)
-                .HasForeignKey(u => u.QuestionId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(u => u.Submission)
-                .WithMany(s => s.Answers)
-                .HasForeignKey(u => u.AnalisysFormSubmitId)
+            builder.HasOne(x => x.Form)
+                .WithMany(x => x.Sections)
+                .HasForeignKey(x => x.FormId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -47,18 +40,19 @@ namespace Data.Configuration
                 .IsRequired();
 
             builder.HasOne(u => u.CreatedByUserLaboratory)
-               .WithMany(x => x.AnalisysFormAnswerCreatedBy)
+               .WithMany(x => x.FormSectionCreatedBy)
                .HasForeignKey(u => u.CreatedById)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUserLaboratory)
-                .WithMany(x => x.AnalisysFormAnswerUpdatedBy)
+                .WithMany(x => x.FormSectionUpdatedBy)
                 .HasForeignKey(u => u.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 
         }
+
     }
 }

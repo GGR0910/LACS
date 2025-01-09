@@ -1,33 +1,27 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class AnalisysFormSubmitConfiguration : IEntityTypeConfiguration<AnalisysFormSubmit>
+    public class FormAnswerConfiguration : IEntityTypeConfiguration<FormAnswer>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormSubmit> builder)
+        public void Configure(EntityTypeBuilder<FormAnswer> builder)
         {
+           builder.Property(u => u.Answer)
+                .IsRequired()
+                .HasMaxLength(int.MaxValue);
 
-            builder.HasOne(u => u.Form)
-                .WithMany(s => s.Submissions)
-                .HasForeignKey(u => u.AnalisysFormId)
+
+            builder.HasOne(u => u.Question)
+                .WithMany(s => s.Answers)
+                .HasForeignKey(u => u.QuestionId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(u => u.Requester)
-                .WithMany(s => s.Submissions)
-                .HasForeignKey(u => u.RequesterId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(u => u.Solicitation)
-                .WithOne(s => s.AnalisysFormSubmit)
+            builder.HasOne(u => u.Submission)
+                .WithMany(s => s.Answers)
+                .HasForeignKey(u => u.FormSubmitId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -48,13 +42,13 @@ namespace Data.Configuration
                 .IsRequired();
 
             builder.HasOne(u => u.CreatedByUserLaboratory)
-                .WithMany(x => x.AnalisysFormSubmitCreatedBy)
-                .HasForeignKey(u => u.CreatedById)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+               .WithMany(x => x.FormAnswerCreatedBy)
+               .HasForeignKey(u => u.CreatedById)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUserLaboratory)
-                .WithMany(x => x.AnalisysFormSubmitUpdatedBy)
+                .WithMany(x => x.FormAnswerUpdatedBy)
                 .HasForeignKey(u => u.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data

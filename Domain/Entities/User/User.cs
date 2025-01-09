@@ -1,11 +1,4 @@
-﻿using Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class User : BaseEntity
     {
@@ -13,7 +6,7 @@ namespace Domain.Entities
         {
             UserInteractions = new List<UserInteraction>();
             Samples = new List<Sample>();
-            Submissions = new List<AnalisysFormSubmit>();
+            Submissions = new List<FormSubmit>();
             UserLaboratories = new List<UserLaboratory>();
         }
 
@@ -22,7 +15,7 @@ namespace Domain.Entities
             UserLaboratories = new List<UserLaboratory>();
             UserInteractions = new List<UserInteraction>();
             Samples = new List<Sample>();
-            Submissions = new List<AnalisysFormSubmit>();
+            Submissions = new List<FormSubmit>();
             UserName = username;
             Email = email;
             EncryptedPassword = encryptedPassword;
@@ -36,12 +29,12 @@ namespace Domain.Entities
         public string EncryptedPassword { get; set; }
         public DateTime? LastAcess { get; set; }
         public bool EmailConfirmed { get; set; }
-        public string? CurrentUserLaboratoryId { get; set; }
-        public virtual UserLaboratory? CurrentUserLaboratory { get; set; }
+        public virtual UserLaboratory? CurrentUserLaboratory { get { return UserLaboratories.FirstOrDefault(x => x.IsCurrent == true && !x.Deleted); } }
         public virtual ICollection<UserInteraction> UserInteractions { get; set; }
-        public virtual ICollection<AnalisysFormSubmit> Submissions { get; set; }
+        public virtual ICollection<FormSubmit> Submissions { get; set; }
         public virtual ICollection<Sample> Samples { get; set; }
         public virtual ICollection<UserLaboratory> UserLaboratories { get; set; }
+        public virtual ICollection<AnalystAnalisysResponsible> AnalystAnalisys { get; set; }
 
         public void Delete(string loggedUserId)
         {

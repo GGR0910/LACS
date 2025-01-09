@@ -29,8 +29,6 @@ namespace Application.Application
                 result.Message = "Requester not found.";
             else if (!Enum.IsDefined(typeof(SolicitationTypeEnum), soliciationTypeId))
                 result.Message = "Invalid solicitation type.";
-            else if (!Enum.IsDefined(typeof(AnalisysTypeEnum), analisysTypeId))
-                result.Message = "Invalid analisys type.";
             else if (desiredDeadline < DateTime.Now)
                 result.Message = "Invalid desired deadline.";
             else

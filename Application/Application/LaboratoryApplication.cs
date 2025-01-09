@@ -20,7 +20,6 @@ namespace Application.Application
             User? startUser = _repository.User.GetUserByEmail(userEmail);
             Result<Laboratory> result = new Result<Laboratory>();
 
-
             if (loggedUser.UserName != "SystemUser")
                 result.Message = "User not authorized to register new laboratory";
             else if(userUserName == "SystemUser")
@@ -33,17 +32,13 @@ namespace Application.Application
                     _repository.User.Add(startUser);
                 }
 
-                Laboratory? laboratory = new Laboratory(name, responsibleDocument, laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, userUserName);
+                Laboratory laboratory = new Laboratory(name, responsibleDocument, laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, userUserName);
+                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, startUser.Id, laboratory.Id, true);
                 _repository.Laboratory.Add(laboratory);
-
-                //Enviar email de confirmação e de boas vindas pro usuário
-                _repository.SaveChanges();
-
-                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, startUser.Id, laboratory.Id);
                 _repository.UserLaboratory.Add(userLaboratory);
 
-                startUser.CurrentUserLaboratory = startUser.UserLaboratories.First();
-                _repository.User.Update(startUser);
+
+                //Enviar email de confirmação e de boas vindas pro usuário
 
                 result.Success = true;
                 result.Return = laboratory;
@@ -101,7 +96,7 @@ namespace Application.Application
                     result.Message = "Laboratory not found";
                 else
                 {
-                    laboratory.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.CurrentUserLaboratoryId);
+                    laboratory.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.CurrentUserLaboratory.Id);
                     loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id));
                     _repository.Laboratory.Update(laboratory);
                     result.Success = true;

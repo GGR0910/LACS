@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace Data.Seed
 {
-    public class AnalisysFormQuestionTypeSeed
+    public class FormQuestionTypeSeed
     {
         public static List<object> GenerateSeed()
         {
             return new List<object>
             {
-                new AnalisysFormQuestionType { Id = 1, Name = "integer" },
-                new AnalisysFormQuestionType { Id = 2, Name = "text" },
-                new AnalisysFormQuestionType { Id = 3, Name = "boolean" },
-                new AnalisysFormQuestionType { Id = 4, Name = "date" },
-                new AnalisysFormQuestionType { Id = 5, Name = "time" },
-                new AnalisysFormQuestionType { Id = 6, Name = "datetime" },
-                new AnalisysFormQuestionType { Id = 7, Name = "decimal" },
-                new AnalisysFormQuestionType { Id = 8, Name = "select" }
+                new FormQuestionType { Id = 1, Name = "integer" },
+                new FormQuestionType { Id = 2, Name = "text" },
+                new FormQuestionType { Id = 3, Name = "boolean" },
+                new FormQuestionType { Id = 4, Name = "date" },
+                new FormQuestionType { Id = 5, Name = "time" },
+                new FormQuestionType { Id = 6, Name = "datetime" },
+                new FormQuestionType { Id = 7, Name = "decimal" },
+                new FormQuestionType { Id = 8, Name = "select" }
             };
         }
     }

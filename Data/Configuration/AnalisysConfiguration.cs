@@ -32,10 +32,6 @@ namespace Data.Configuration
 
             builder.Property(u => u.SampleDeliverObservations);
 
-            builder.Property(u => u.AnalistsNames)
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(u => u.AllowWatching)
                 .IsRequired();
 

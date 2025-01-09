@@ -1,32 +1,29 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Data.Configuration
 {
-    public class AnalisysFormQuestionOptionConfiguration : IEntityTypeConfiguration<AnalisysFormQuestionOption>
+    public class FormSubmitConfiguration : IEntityTypeConfiguration<FormSubmit>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormQuestionOption> builder)
+        public void Configure(EntityTypeBuilder<FormSubmit> builder)
         {
-           builder.Property(u => u.Option)
+
+            builder.HasOne(u => u.Form)
+                .WithMany(s => s.Submissions)
+                .HasForeignKey(u => u.FormId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.OptionName)
+            builder.HasOne(u => u.Requester)
+                .WithMany(s => s.Submissions)
+                .HasForeignKey(u => u.RequesterId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.Enabled)
-                .IsRequired();
-
-            builder.HasOne(u => u.Question)
-                .WithMany(s => s.Options)
-                .HasForeignKey(u => u.QuestionId)
+            builder.HasOne(u => u.Solicitation)
+                .WithOne(s => s.FormSubmit)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -47,13 +44,13 @@ namespace Data.Configuration
                 .IsRequired();
 
             builder.HasOne(u => u.CreatedByUserLaboratory)
-                .WithMany(x => x.AnalisysFormQuestionOptionCreatedBy)
+                .WithMany(x => x.FormSubmitCreatedBy)
                 .HasForeignKey(u => u.CreatedById)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUserLaboratory)
-                .WithMany(x => x.AnalisysFormQuestionOptionUpdatedBy)
+                .WithMany(x => x.FormSubmitUpdatedBy)
                 .HasForeignKey(u => u.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data

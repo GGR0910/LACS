@@ -52,7 +52,7 @@ namespace LACS_API.Controllers
             if (resultRegister.Success)
             {
                 _application.SaveChanges();
-                return Ok(new Result<UserDTO>() { Success = true, Return = new UserDTO(resultRegister.Return)});
+                return Ok(new Result<UserDTO>() { Success = true, Return = new UserDTO(resultRegister.Return, LoggedUser.CurrentUserLaboratory!)});
             }
             else
                 return BadRequest(new { message = resultRegister.Message });
@@ -85,7 +85,7 @@ namespace LACS_API.Controllers
             User user = await _application.User.GetDetails(userId);
 
             if (user != null)
-                return Ok(user);
+                return Ok(new UserDTO(user));
             else
                 return NotFound(new { message = "User not found." });
         }

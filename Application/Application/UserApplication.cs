@@ -21,7 +21,7 @@ namespace Application.Application
 
         public Task<User> GetDetails(string userId)
         {
-            return Task.FromResult(_repository.User.GetById(userId));
+            return Task.FromResult(_repository.User.GetUserById(userId));
         }
 
         public Task<IEnumerable<User>> GetUsers()
@@ -34,21 +34,24 @@ namespace Application.Application
             User? user = _repository.User.GetUserByEmail(email);
             Result<User> result = new Result<User>();
 
-            if(!loggedUser.CurrentUserLaboratory!.IsAdmin)
+            if(!loggedUser.CurrentUserLaboratory!.IsAdmin || userName == "SystemUser")
                 result.Message = "User not authorized to register new users";
-            else if (userName == "SystemUser")
-                result.Message = "User name not allowed";
             else if (user != null)
             {
                 UserLaboratory? userLaboratory = user.UserLaboratories.FirstOrDefault(x => x.LaboratoryId == loggedUser.CurrentUserLaboratory.LaboratoryId);
                 if (userLaboratory == null)
-                    user.UserLaboratories.Add(new UserLaboratory(loggedUser.CurrentUserLaboratoryId, roleId, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                {
+                    user.UserLaboratories.Add(new UserLaboratory(loggedUser.CurrentUserLaboratory.Id, roleId, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId, false));
+                    _repository.User.Update(user);
+                }
                 else 
                 {
                     if (userLaboratory.Deleted)
                     {
-                        userLaboratory!.UnDelete(loggedUser.CurrentUserLaboratoryId);
-                        loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, "User Registered", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                        userLaboratory!.UnDelete(loggedUser.CurrentUserLaboratory.Id);
+                        loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratory.Id, (int)UserInteractionTypeEnum.Register, "User Registered", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                        _repository.UserLaboratory.Update(userLaboratory);
+                        _repository.User.Update(loggedUser);
                     }
                     else
                         result.Message = "User already registered in this laboratory"; 
@@ -59,23 +62,19 @@ namespace Application.Application
             }
             else
             { 
-                user = new User(loggedUser.CurrentUserLaboratoryId, userName, email, password,departamentName);
-                UserInteraction interaction = new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId);
-                
+                user = new User(loggedUser.CurrentUserLaboratory.Id, userName, email, password,departamentName);
+                UserInteraction interaction = new UserInteraction(loggedUser.CurrentUserLaboratory.Id, (int)UserInteractionTypeEnum.Register, $"Registred new User",user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId);
+                UserLaboratory userLaboratory = new UserLaboratory(loggedUser.CurrentUserLaboratory.Id, (int)RolesEnum.Admin, user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId, true);
+
                 loggedUser.UserInteractions.Add(interaction);
                 _repository.User.Add(user);
-                _repository.SaveChanges();
-
-                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, user.Id, user.CurrentUserLaboratory.LaboratoryId);
-                _repository.UserLaboratory.Add(userLaboratory);
+               _repository.UserLaboratory.Add(userLaboratory);
                 
-                user.CurrentUserLaboratory = user.UserLaboratories.First();;
-
                 //Enviar email de confirmação e de boas vindas pro usuário
             }
 
             if (string.IsNullOrEmpty(result.Message)) {
-                _repository.User.Update(user);
+
                 result.Success = true;
                 result.Return = user;
             }
@@ -123,8 +122,8 @@ namespace Application.Application
                     result.Message = "User not found in this laboratory";
                 else
                 {
-                    userLaboratory.Delete(loggedUser.CurrentUserLaboratoryId);
-                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Delete, "User Deleted", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                    userLaboratory.Delete(loggedUser.CurrentUserLaboratory.Id);
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratory.Id, (int)UserInteractionTypeEnum.Delete, "User Deleted", userLaboratory.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
                     
                     _repository.User.Update(user);
                     result.Success = true;
@@ -162,8 +161,8 @@ namespace Application.Application
                     result.Message = "User not found in this laboratory";
                 else
                 {
-                    user.Edit(userName, email, roleId, departamentName, loggedUser.CurrentUserLaboratoryId);
-                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratoryId, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
+                    user.Edit(userName, email, roleId, departamentName, loggedUser.CurrentUserLaboratory.Id);
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.CurrentUserLaboratory.Id, (int)UserInteractionTypeEnum.Update, "User Edited", user.Id, loggedUser.CurrentUserLaboratory.LaboratoryId));
                     _repository.User.Update(user);
                     result.Success = true;
                     result.Return = user;

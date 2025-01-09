@@ -9,6 +9,6 @@ namespace Domain.Enum
     public enum SolicitationTypeEnum
     {
         Academic = 1,
-        ServicePrestation = 2,
+        Comercial = 2,
     }
 }

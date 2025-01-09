@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240815233133_Init")]
-    partial class Init
+    [Migration("20240820222525_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,7 @@ namespace Data.Migrations
                     b.ToTable("Analisys");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysForm", b =>
+            modelBuilder.Entity("Domain.Entities.Form", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
@@ -132,16 +132,16 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("AnalisysForm");
+                    b.ToTable("Form");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormAnswer", b =>
+            modelBuilder.Entity("Domain.Entities.FormAnswer", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("AnalisysFormSubmitId")
+                    b.Property<string>("FormSubmitId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
@@ -172,7 +172,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnalisysFormSubmitId");
+                    b.HasIndex("FormSubmitId");
 
                     b.HasIndex("CreatedById");
 
@@ -180,16 +180,16 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("AnalisysFormAnswer");
+                    b.ToTable("FormAnswer");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestion", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestion", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("AnalisysFormId")
+                    b.Property<string>("FormId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
@@ -228,7 +228,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnalisysFormId");
+                    b.HasIndex("FormId");
 
                     b.HasIndex("CreatedById");
 
@@ -236,10 +236,10 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("AnalisysFormQuestion");
+                    b.ToTable("FormQuestion");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestionOption", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestionOption", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
@@ -286,10 +286,10 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("AnalisysFormQuestionOption");
+                    b.ToTable("FormQuestionOption");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestionType", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestionType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,7 +303,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnalisysFormQuestionType");
+                    b.ToTable("FormQuestionType");
 
                     b.HasData(
                         new
@@ -348,13 +348,13 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormSubmit", b =>
+            modelBuilder.Entity("Domain.Entities.FormSubmit", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("AnalisysFormId")
+                    b.Property<string>("FormId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
@@ -384,7 +384,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnalisysFormId");
+                    b.HasIndex("FormId");
 
                     b.HasIndex("CreatedById");
 
@@ -395,7 +395,7 @@ namespace Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("AnalisysFormSubmit");
+                    b.ToTable("FormSubmit");
                 });
 
             modelBuilder.Entity("Domain.Entities.Laboratory", b =>
@@ -655,9 +655,6 @@ namespace Data.Migrations
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("CurrentUserLaboratoryId")
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
@@ -696,10 +693,6 @@ namespace Data.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("CurrentUserLaboratoryId")
-                        .IsUnique()
-                        .HasFilter("[CurrentUserLaboratoryId] IS NOT NULL");
-
                     b.HasIndex("UpdatedById");
 
                     b.ToTable("Users");
@@ -708,7 +701,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
-                            CreatedAt = new DateTime(2024, 8, 15, 20, 31, 32, 933, DateTimeKind.Local).AddTicks(5709),
+                            CreatedAt = new DateTime(2024, 8, 20, 19, 25, 25, 593, DateTimeKind.Local).AddTicks(4656),
                             Deleted = false,
                             DepartamentName = "System",
                             Email = "ggr0910@hotmail.com",
@@ -853,6 +846,9 @@ namespace Data.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LaboratoryId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
@@ -912,22 +908,22 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUserLaboratory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysForm", b =>
+            modelBuilder.Entity("Domain.Entities.Form", b =>
                 {
                     b.HasOne("Domain.Entities.Analisys", "Analisys")
-                        .WithOne("AnalisysForm")
-                        .HasForeignKey("Domain.Entities.AnalisysForm", "AnalisysId")
+                        .WithOne("Form")
+                        .HasForeignKey("Domain.Entities.Form", "AnalisysId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
-                        .WithMany("AnalisysFormCreatedBy")
+                        .WithMany("FormCreatedBy")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
-                        .WithMany("AnalisysFormUpdatedBy")
+                        .WithMany("FormUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -938,28 +934,28 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUserLaboratory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormAnswer", b =>
+            modelBuilder.Entity("Domain.Entities.FormAnswer", b =>
                 {
-                    b.HasOne("Domain.Entities.AnalisysFormSubmit", "Submission")
+                    b.HasOne("Domain.Entities.FormSubmit", "Submission")
                         .WithMany("Answers")
-                        .HasForeignKey("AnalisysFormSubmitId")
+                        .HasForeignKey("FormSubmitId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
-                        .WithMany("AnalisysFormAnswerCreatedBy")
+                        .WithMany("FormAnswerCreatedBy")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.AnalisysFormQuestion", "Question")
+                    b.HasOne("Domain.Entities.FormQuestion", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
-                        .WithMany("AnalisysFormAnswerUpdatedBy")
+                        .WithMany("FormAnswerUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -972,32 +968,32 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUserLaboratory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestion", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestion", b =>
                 {
-                    b.HasOne("Domain.Entities.AnalisysForm", "AnalisysForm")
+                    b.HasOne("Domain.Entities.Form", "Form")
                         .WithMany("Questions")
-                        .HasForeignKey("AnalisysFormId")
+                        .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
-                        .WithMany("AnalisysFormQuestionCreatedBy")
+                        .WithMany("FormQuestionCreatedBy")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.AnalisysFormQuestionType", "QuestionType")
+                    b.HasOne("Domain.Entities.FormQuestionType", "QuestionType")
                         .WithMany("Questions")
                         .HasForeignKey("QuestionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
-                        .WithMany("AnalisysFormQuestionUpdatedBy")
+                        .WithMany("FormQuestionUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("AnalisysForm");
+                    b.Navigation("Form");
 
                     b.Navigation("CreatedByUserLaboratory");
 
@@ -1006,22 +1002,22 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUserLaboratory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestionOption", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestionOption", b =>
                 {
                     b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
-                        .WithMany("AnalisysFormQuestionOptionCreatedBy")
+                        .WithMany("FormQuestionOptionCreatedBy")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.AnalisysFormQuestion", "Question")
+                    b.HasOne("Domain.Entities.FormQuestion", "Question")
                         .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
-                        .WithMany("AnalisysFormQuestionOptionUpdatedBy")
+                        .WithMany("FormQuestionOptionUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -1032,16 +1028,16 @@ namespace Data.Migrations
                     b.Navigation("UpdatedByUserLaboratory");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormSubmit", b =>
+            modelBuilder.Entity("Domain.Entities.FormSubmit", b =>
                 {
-                    b.HasOne("Domain.Entities.AnalisysForm", "Form")
+                    b.HasOne("Domain.Entities.Form", "Form")
                         .WithMany("Submissions")
-                        .HasForeignKey("AnalisysFormId")
+                        .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "CreatedByUserLaboratory")
-                        .WithMany("AnalisysFormSubmitCreatedBy")
+                        .WithMany("FormSubmitCreatedBy")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1053,13 +1049,13 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Solicitation", "Solicitation")
-                        .WithOne("AnalisysFormSubmit")
-                        .HasForeignKey("Domain.Entities.AnalisysFormSubmit", "SolicitationId")
+                        .WithOne("FormSubmit")
+                        .HasForeignKey("Domain.Entities.FormSubmit", "SolicitationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
-                        .WithMany("AnalisysFormSubmitUpdatedBy")
+                        .WithMany("FormSubmitUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -1166,18 +1162,12 @@ namespace Data.Migrations
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Entities.UserLaboratory", "CurrentUserLaboratory")
-                        .WithOne("CurrentLaboratory")
-                        .HasForeignKey("Domain.Entities.User", "CurrentUserLaboratoryId");
-
                     b.HasOne("Domain.Entities.UserLaboratory", "UpdatedByUserLaboratory")
                         .WithMany("UsersUpdatedBy")
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedByUserLaboratory");
-
-                    b.Navigation("CurrentUserLaboratory");
 
                     b.Navigation("UpdatedByUserLaboratory");
                 });
@@ -1259,32 +1249,32 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Analisys", b =>
                 {
-                    b.Navigation("AnalisysForm")
+                    b.Navigation("Form")
                         .IsRequired();
 
                     b.Navigation("Solicitations");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysForm", b =>
+            modelBuilder.Entity("Domain.Entities.Form", b =>
                 {
                     b.Navigation("Questions");
 
                     b.Navigation("Submissions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestion", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestion", b =>
                 {
                     b.Navigation("Answers");
 
                     b.Navigation("Options");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormQuestionType", b =>
+            modelBuilder.Entity("Domain.Entities.FormQuestionType", b =>
                 {
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.AnalisysFormSubmit", b =>
+            modelBuilder.Entity("Domain.Entities.FormSubmit", b =>
                 {
                     b.Navigation("Answers");
                 });
@@ -1303,7 +1293,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Solicitation", b =>
                 {
-                    b.Navigation("AnalisysFormSubmit")
+                    b.Navigation("FormSubmit")
                         .IsRequired();
 
                     b.Navigation("Samples");
@@ -1334,30 +1324,27 @@ namespace Data.Migrations
                 {
                     b.Navigation("AnalisysCreatedBy");
 
-                    b.Navigation("AnalisysFormAnswerCreatedBy");
+                    b.Navigation("FormAnswerCreatedBy");
 
-                    b.Navigation("AnalisysFormAnswerUpdatedBy");
+                    b.Navigation("FormAnswerUpdatedBy");
 
-                    b.Navigation("AnalisysFormCreatedBy");
+                    b.Navigation("FormCreatedBy");
 
-                    b.Navigation("AnalisysFormQuestionCreatedBy");
+                    b.Navigation("FormQuestionCreatedBy");
 
-                    b.Navigation("AnalisysFormQuestionOptionCreatedBy");
+                    b.Navigation("FormQuestionOptionCreatedBy");
 
-                    b.Navigation("AnalisysFormQuestionOptionUpdatedBy");
+                    b.Navigation("FormQuestionOptionUpdatedBy");
 
-                    b.Navigation("AnalisysFormQuestionUpdatedBy");
+                    b.Navigation("FormQuestionUpdatedBy");
 
-                    b.Navigation("AnalisysFormSubmitCreatedBy");
+                    b.Navigation("FormSubmitCreatedBy");
 
-                    b.Navigation("AnalisysFormSubmitUpdatedBy");
+                    b.Navigation("FormSubmitUpdatedBy");
 
-                    b.Navigation("AnalisysFormUpdatedBy");
+                    b.Navigation("FormUpdatedBy");
 
                     b.Navigation("AnalisysUpdatedBy");
-
-                    b.Navigation("CurrentLaboratory")
-                        .IsRequired();
 
                     b.Navigation("LaboratoriesCreatedBy");
 

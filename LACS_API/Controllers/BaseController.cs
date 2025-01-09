@@ -24,9 +24,7 @@ namespace LACS_API.Controllers
         {
             _configuration = configuration;
             _application = new UnitOfWorkApplication(configuration);
-            LoggedUser = _application.User.GetDetails("9bc35431-6f98-4cc1-86d4-2cd107d888bf").Result;
-            if(LoggedUser.CurrentUserLaboratoryId != null)
-                LoggedUser.CurrentUserLaboratory = _application.UserLaboratory.GetDetails(LoggedUser.CurrentUserLaboratoryId).Result;
+            LoggedUser = _application.User.GetDetails("36152b19-0271-4cab-a3cd-1c6891ae1a43").Result;
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -54,12 +52,6 @@ namespace LACS_API.Controllers
                     context.Result = new UnauthorizedResult();
                     return;
                 } 
-                else
-                {
-                    if (LoggedUser.CurrentUserLaboratoryId != null)
-                        LoggedUser.CurrentUserLaboratory = _application.UserLaboratory.GetDetails(LoggedUser.CurrentUserLaboratoryId).Result;
-                }
-               
             }
         }
     }

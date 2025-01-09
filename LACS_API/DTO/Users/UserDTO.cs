@@ -20,6 +20,20 @@ namespace LACS_API.DTO
             LastAcess = user.LastAcess;
         }
 
+        //To use when registering user
+        public UserDTO(User user, UserLaboratory loggedUserLaboratory)
+        {
+            Id = user.Id;
+            UserName = user.UserName;
+            Email = user.Email;
+            Deleted= user.Deleted;
+            RoleId=user.CurrentUserLaboratory != null ? user.CurrentUserLaboratory.RoleId : null;
+            DepartamentName=user.DepartamentName;
+            Laboratory = new LaboratoryDTO(loggedUserLaboratory.Laboratory);
+            CreatedAt = user.CreatedAt;
+            UpdatedAt = user.UpdatedAt;
+            LastAcess = user.LastAcess;
+        }
 
 
         public string Id { get; set; }

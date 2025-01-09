@@ -13,11 +13,12 @@ namespace Domain.Entities
         {
 
         }
-        public UserLaboratory(string? creatorUserLaboratoryId, int roleId, string userId, string laboratoryId) : base(creatorUserLaboratoryId)
+        public UserLaboratory(string? creatorUserLaboratoryId, int roleId, string userId, string laboratoryId, bool isCurrent) : base(creatorUserLaboratoryId)
         {
             RoleId = roleId;
             UserId = userId;
             LaboratoryId = laboratoryId;
+            IsCurrent = isCurrent;
         }
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
@@ -25,23 +26,27 @@ namespace Domain.Entities
         public virtual User User { get; set; }
         public string LaboratoryId { get; set; }
         public virtual Laboratory Laboratory { get; set; }
-        public virtual User CurrentLaboratory { get; set; }
+        public bool IsCurrent { get; set; }
         public bool CanOperate { get { return RoleId == (int)RolesEnum.Admin || RoleId == (int)RolesEnum.Analist; } }
         public bool IsAdmin { get { return RoleId == (int)RolesEnum.Admin; } }
 
         #region Base entity Data
         public ICollection<Analisys> AnalisysCreatedBy { get; set; }
         public ICollection<Analisys> AnalisysUpdatedBy { get; set; }
-        public ICollection<AnalisysFormAnswer> AnalisysFormAnswerCreatedBy { get; set;}
-        public ICollection<AnalisysFormAnswer> AnalisysFormAnswerUpdatedBy { get; set; }
-        public ICollection<AnalisysFormSubmit> AnalisysFormSubmitCreatedBy { get; set; }
-        public ICollection<AnalisysFormSubmit> AnalisysFormSubmitUpdatedBy { get; set; }
-        public ICollection<AnalisysForm> AnalisysFormCreatedBy { get; set; }
-        public ICollection<AnalisysForm> AnalisysFormUpdatedBy { get; set; }
-        public ICollection<AnalisysFormQuestion> AnalisysFormQuestionCreatedBy { get; set; }
-        public ICollection<AnalisysFormQuestion> AnalisysFormQuestionUpdatedBy { get; set; }
-        public ICollection<AnalisysFormQuestionOption> AnalisysFormQuestionOptionCreatedBy { get; set; }
-        public ICollection<AnalisysFormQuestionOption> AnalisysFormQuestionOptionUpdatedBy { get; set; }
+        public ICollection<FormAnswer> FormAnswerCreatedBy { get; set;}
+        public ICollection<FormAnswer> FormAnswerUpdatedBy { get; set; }
+        public ICollection<FormSubmit> FormSubmitCreatedBy { get; set; }
+        public ICollection<FormSubmit> FormSubmitUpdatedBy { get; set; }
+        public ICollection<Form> FormCreatedBy { get; set; }
+        public ICollection<Form> FormUpdatedBy { get; set; }
+        public ICollection<FormQuestion> FormQuestionCreatedBy { get; set; }
+        public ICollection<FormQuestion> FormQuestionUpdatedBy { get; set; }
+        public ICollection<FormQuestionOption> FormQuestionOptionCreatedBy { get; set; }
+        public ICollection<FormQuestionOption> FormQuestionOptionUpdatedBy { get; set; }
+        public ICollection<FormSection> FormSectionCreatedBy { get; set; }
+        public ICollection<FormSection> FormSectionUpdatedBy { get; set; }
+        public ICollection<RequesterNotes> RequesterNotesCreatedBy { get; set; }
+        public ICollection<RequesterNotes> RequesterNotesUpdatedBy { get; set; }
         public ICollection<Laboratory> LaboratoriesCreatedBy { get; set; }
         public ICollection<Laboratory> LaboratoriesUpdatedBy { get; set; }
         public ICollection<User> UsersCreatedBy { get; set; }
@@ -54,19 +59,21 @@ namespace Domain.Entities
         public ICollection<UserLaboratory> UserLaboratoriesUpdatedBy { get; set; }
         public ICollection<UserInteraction> UserInteractionsCreatedBy { get; set; }
         public ICollection<UserInteraction> UserInteractionsUpdatedBy { get; set; }
+        public ICollection<AnalystAnalisysResponsible> AnalystAnalisysResponsiblesCreatedBy { get; set; }
+        public ICollection<AnalystAnalisysResponsible> AnalystAnalisysResponsiblesUpdatedBy { get; set; }
 
         #endregion
 
-        public void Delete(string currentUserLaboratoryId)
+        public void Delete(string CurrentUserLaboratoryId)
         {
             Deleted = true;
-            Update(currentUserLaboratoryId);
+            Update(CurrentUserLaboratoryId);
         }
 
-        public void UnDelete(string currentUserLaboratoryId)
+        public void UnDelete(string CurrentUserLaboratoryId)
         {
             Deleted = false;
-            Update(currentUserLaboratoryId);
+            Update(CurrentUserLaboratoryId);
         }
     }
 }

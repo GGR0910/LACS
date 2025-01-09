@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LACS_API.DTO.Sample.Requests
+namespace LACS_API.DTO
 {
     public class AssignSampleToAnalistRequestDTO : BaseRequestDTO
     {

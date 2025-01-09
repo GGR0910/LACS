@@ -11,7 +11,6 @@ namespace LACS_API.DTO
             Description = analisys.Description;
             AmountDonePerDay = analisys.AmountDonePerDay;
             SampleDeliverObservations = analisys.SampleDeliverObservations;
-            AnalistsNames = analisys.AnalistsNames;
             AllowWatching = analisys.AllowWatching;
             Laboratory = new LaboratoryDTO(analisys.Laboratory);
             CreatedAt = analisys.CreatedAt;

@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
-using LACS_API.DTO.EnumDTOs;
+using LACS_API.DTO;
 
-namespace LACS_API.DTO.Sample
+namespace LACS_API.DTO
 {
     public class SampleDTO
     {

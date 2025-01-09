@@ -32,10 +32,6 @@ namespace Data.Configuration
 
             builder.Property(u => u.SampleDeliverObservations);
 
-            builder.Property(u => u.AnalistsNames)
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(u => u.AllowWatching)
                 .IsRequired();
 
@@ -55,12 +51,16 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+                .WithMany(x => x.AnalisysCreatedBy)
+                .HasForeignKey(u => u.CreatedById)
                 .IsRequired()
-                .HasMaxLength(36);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.AnalisysUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

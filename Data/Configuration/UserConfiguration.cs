@@ -29,17 +29,6 @@ namespace Data.Configuration
 
             builder.Property(u => u.EmailConfirmed);
 
-            builder.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(u => u.Laboratory)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.LaboratoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             //Base entity Data
 
 
@@ -56,12 +45,15 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
-                .IsRequired()
-                .HasMaxLength(36);
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+                .WithMany(x => x.UsersCreatedBy)
+                .HasForeignKey(u => u.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.UsersUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

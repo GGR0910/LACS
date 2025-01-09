@@ -6,11 +6,6 @@ using Domain.Enum;
 using Domain.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repository
 {
@@ -22,12 +17,17 @@ namespace Data.Repository
 
         public User? GetUserByEmail(string email) 
         { 
-            return _context.Users.FirstOrDefault(u => u.Email == email && !u.Deleted);
+            return _context.Users.Include(x => x.UserLaboratories).ThenInclude(x => x.Laboratory).FirstOrDefault(u => u.Email == email);
+        }
+
+        public User? GetUserById(string id)
+        {
+            return _context.Users.Include(x => x.UserLaboratories).ThenInclude(x => x.Laboratory).FirstOrDefault(u => u.Id == id);
         }
 
         public DataTableReturn<User> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName)
         {
-            IQueryable<User> users = _context.Users.Where(u => u.LaboratoryId == laboratoryId && !u.Deleted);
+            IQueryable<User> users = _context.Users.Where(u => u.UserLaboratories.Any(x => x.LaboratoryId == laboratoryId) && !u.Deleted).Include(x => x.UserLaboratories);
 
             int recordsTotal = users.Count();
 
@@ -38,7 +38,7 @@ namespace Data.Repository
                 users = users.Where(u => u.Email.Contains(email));
 
             if (roleId.HasValue)
-                users = users.Where(u => u.RoleId == roleId);
+                users = users.Where(u => u.UserLaboratories.Any(x => x.RoleId == roleId));
 
             if (!departamentName.IsNullOrEmpty())
                 users = users.Where(u => u.DepartamentName.Contains(departamentName));
@@ -58,8 +58,6 @@ namespace Data.Repository
 
         public void LoginUser(User user)
         {
-            user.UserInteractions.Add(new UserInteraction(user.Id, (int)UserInteractionTypeEnum.Login, "User Logged", user.Id, user.LaboratoryId));
-
             user.LastAcess = DateTime.Now;
             Update(user);
         }

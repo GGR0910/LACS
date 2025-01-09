@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Solicitation : BaseEntity
     {
@@ -30,10 +24,14 @@ namespace Domain.Entities
         public bool ResultsDelivered { get; set; }
         public int SampleAmount { get { return Samples.Count(); } }
         public virtual ICollection<Sample> Samples { get; set; }
+        public string ResponsibleAnalistId { get; set; }
+        public virtual User ResponsibleAnalist { get; set; }
+
+        public IEnumerable<RequesterNotes> RequesterNotes { get; set; }
 
         //Specific solicitation information
         public string AnalisysId { get; set; }
         public virtual Analisys Analisys { get; set; }
-        public virtual AnalisysFormSubmit AnalisysFormSubmit { get; set; }
+        public virtual FormSubmit FormSubmit { get; set; }
     }
 }

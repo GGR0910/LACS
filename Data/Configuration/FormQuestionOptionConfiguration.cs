@@ -1,17 +1,13 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Data.Configuration
 {
-    public class AnalisysFormQuestionOptionConfiguration : IEntityTypeConfiguration<AnalisysFormQuestionOption>
+    public class FormQuestionOptionConfiguration : IEntityTypeConfiguration<FormQuestionOption>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormQuestionOption> builder)
+        public void Configure(EntityTypeBuilder<FormQuestionOption> builder)
         {
            builder.Property(u => u.Option)
                 .IsRequired()
@@ -46,12 +42,16 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+                .WithMany(x => x.FormQuestionOptionCreatedBy)
+                .HasForeignKey(u => u.CreatedById)
                 .IsRequired()
-                .HasMaxLength(36);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.FormQuestionOptionUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

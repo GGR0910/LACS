@@ -1,17 +1,12 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class AnalisysFormAnswerConfiguration : IEntityTypeConfiguration<AnalisysFormAnswer>
+    public class FormAnswerConfiguration : IEntityTypeConfiguration<FormAnswer>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormAnswer> builder)
+        public void Configure(EntityTypeBuilder<FormAnswer> builder)
         {
            builder.Property(u => u.Answer)
                 .IsRequired()
@@ -26,7 +21,7 @@ namespace Data.Configuration
 
             builder.HasOne(u => u.Submission)
                 .WithMany(s => s.Answers)
-                .HasForeignKey(u => u.AnalisysFormSubmitId)
+                .HasForeignKey(u => u.FormSubmitId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -46,12 +41,16 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
-                .IsRequired()
-                .HasMaxLength(36);
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+               .WithMany(x => x.FormAnswerCreatedBy)
+               .HasForeignKey(u => u.CreatedById)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.FormAnswerUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

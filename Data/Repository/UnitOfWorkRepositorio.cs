@@ -20,6 +20,7 @@ namespace Data.Repository
             Solicitation = new SolicitationRepository(_context);
             Laboratory = new LaboratoryRepository(_context);
             Analisys = new AnalisysRepository(_context);
+            UserLaboratory = new UserLaboratoryRepository(_context);
         }
 
         #region Repositories
@@ -33,6 +34,7 @@ namespace Data.Repository
         public ISolicitationRepository Solicitation { get; private set; }
         public ILaboratoryRepository Laboratory { get; private set; }
         public IAnalisysRepository Analisys { get; private set; }
+        public IUserLaboratoryRepository UserLaboratory { get; private set; }
 
         #endregion
 

@@ -12,24 +12,31 @@ namespace Domain.Entities
         {
 
         }
-        public BaseEntity(string creatorId)
+        public BaseEntity(string? creatorId)
         {
             Id = Guid.NewGuid().ToString();
             CreatedAt = DateTime.Now;
-            CreatedBy = creatorId;
+            CreatedById = creatorId;
             Deleted = false;
         }
         public string Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
-        public string CreatedBy { get; set; }
-        public string? UpdatedBy { get; set; }
+        public string? CreatedById { get; set; }
+        public virtual UserLaboratory CreatedByUserLaboratory { get; set; }
+        public string? UpdatedById { get; set; }
+        public virtual UserLaboratory UpdatedByUserLaboratory { get; set; }
 
-        public void Update(string userId)
+        public void Update(string userLaboratoryId)
         {
             UpdatedAt = DateTime.Now;
-            UpdatedBy = userId;
+            UpdatedById = userLaboratoryId;
+        }
+
+        public void Update()
+        {
+            UpdatedAt = DateTime.Now;
         }
     }
 }

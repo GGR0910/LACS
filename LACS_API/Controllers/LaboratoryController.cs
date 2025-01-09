@@ -1,13 +1,8 @@
 ﻿using Domain.Entities;
 using Domain;
-using LACS_API.DTO.Analisys.Requests;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Util;
-using LACS_API.DTO.Analisys;
-using LACS_API.DTO.Analisys.Responses;
 using LACS_API.DTO;
-using Microsoft.AspNetCore.Identity.Data;
 
 namespace LACS_API.Controllers
 {
@@ -20,7 +15,7 @@ namespace LACS_API.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterLaboratoryRequestDTO request)
         {
             if (!ModelState.IsValid)
@@ -37,7 +32,7 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = resultRegister.Message });
         }
 
-        [HttpPost]
+        [HttpPost("Update")]
         public async Task<IActionResult> Update(UpdateLaboratoryRequestDTO request)
         {
             Result<Laboratory> result = new Result<Laboratory>();
@@ -56,7 +51,7 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = result.Message });
         }
 
-        [HttpGet]
+        [HttpGet("Details")]
         public async Task<IActionResult> Details(string LaboratoryId)
         {
             Laboratory Laboratory = await _application.Laboratory.GetDetails(LaboratoryId);
@@ -67,7 +62,7 @@ namespace LACS_API.Controllers
                 return NotFound(new { message = "Laboratory not found." });
         }
 
-        [HttpPost]
+        [HttpPost("List")]
         public async Task<IActionResult> List(LaboratoryListRequestDTO request)
         {
             if (!ModelState.IsValid)
@@ -90,7 +85,7 @@ namespace LACS_API.Controllers
                 return BadRequest(new { message = datatableReturnResult.Message });
         }
 
-        [HttpDelete]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(string LaboratoryId)
         {
             Result<object> result = new Result<object>();

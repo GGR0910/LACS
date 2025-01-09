@@ -1,16 +1,8 @@
 ﻿using Data.Configuration;
 using Data.Seed;
 using Domain.Entities;
-using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Laboratory = Domain.Entities.Laboratory;
 
 namespace Data.Context
 {
@@ -32,12 +24,16 @@ namespace Data.Context
         public DbSet<Solicitation> Solicitation { get; set; }
         public DbSet<Laboratory> Laboratory { get; set; }
         public DbSet<Analisys> Analisys { get; set; }
-        public DbSet<AnalisysForm> AnalisysForm { get; set; }
-        public DbSet<AnalisysFormQuestion> AnalisysFormQuestion { get; set; }
-        public DbSet<AnalisysFormQuestionType> AnalisysFormQuestionType { get; set; }
-        public DbSet<AnalisysFormQuestionOption> AnalisysFormQuestionOption { get; set; }
-        public DbSet<AnalisysFormAnswer> AnalisysFormAnswer { get; set; }
-        public DbSet<AnalisysFormSubmit> AnalisysFormSubmit { get; set; }
+        public DbSet<Form> Form { get; set; }
+        public DbSet<FormQuestion> FormQuestion { get; set; }
+        public DbSet<FormQuestionType> FormQuestionType { get; set; }
+        public DbSet<FormQuestionOption> FormQuestionOption { get; set; }
+        public DbSet<FormAnswer> FormAnswer { get; set; }
+        public DbSet<FormSubmit> FormSubmit { get; set; }
+        public DbSet<FormSection> FormSection { get; set; }
+        public DbSet<UserLaboratory> UserLaboratory { get; set; }
+        public DbSet<RequesterNotes> RequesterNotes { get; set; }
+
 
         #endregion
 
@@ -64,12 +60,16 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new SampleConfiguration());
             modelBuilder.ApplyConfiguration(new LaboratoryConfiguration());
             modelBuilder.ApplyConfiguration(new AnalisysConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormQuestionOptionConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormAnswerConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormSubmitConfiguration());
+            modelBuilder.ApplyConfiguration(new FormConfiguration());
+            modelBuilder.ApplyConfiguration(new FormQuestionConfiguration());
+            modelBuilder.ApplyConfiguration(new FormQuestionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new FormQuestionOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new FormAnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new FormSubmitConfiguration());
+            modelBuilder.ApplyConfiguration(new FormSectionConfiguration());
+            modelBuilder.ApplyConfiguration(new RequesterNotesConfiguration());
+            modelBuilder.ApplyConfiguration(new UserLaboratoryConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalystAnalisysResponsibleConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -82,7 +82,7 @@ namespace Data.Context
             modelBuilder.Entity<Role>().HasData(RoleSeed.GenerateSeed());
             modelBuilder.Entity<UserInteractionType>().HasData(UserInteractionTypeSeed.GenerateSeed());
             modelBuilder.Entity<SolicitationType>().HasData(SolicitationTypeSeed.GenerateSeed());   
-            modelBuilder.Entity<AnalisysFormQuestionType>().HasData(AnalisysFormQuestionTypeSeed.GenerateSeed());
+            modelBuilder.Entity<FormQuestionType>().HasData(FormQuestionTypeSeed.GenerateSeed());
             #endregion
 
             GerarBaseAdmin(modelBuilder);
@@ -90,15 +90,17 @@ namespace Data.Context
 
         public void GerarBaseAdmin(ModelBuilder modelBuilder)
         {
-            Laboratory environment = new Laboratory("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "System Environment", "NA", "NA", "NA", "NA", "NA", "NA", "Gabriel");
-            modelBuilder.Entity<Laboratory>().HasData(environment);
-
-
-            User adminUser = new User("c7af4e3e-ff58-4f65-a942-9f5461d65b09", "SystemUser", "ggr0910@hotmail.com", "Gogoll90@", "System", (int)RolesEnum.SuperAdmin, environment.Id);
-            adminUser.EmailConfirmed = true;
-            adminUser.Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09";
+            User adminUser = new User()
+            {
+                Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
+                UserName = "SystemUser",
+                Email = "ggr0910@hotmail.com",
+                EncryptedPassword = "Gogoll90@",
+                DepartamentName = "System",
+                EmailConfirmed = true,
+                CreatedAt = DateTime.Now,
+            };
             modelBuilder.Entity<User>().HasData(adminUser);
-
         }
     }
 }

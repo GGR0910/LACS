@@ -1,22 +1,18 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Data.Configuration
 {
-    public class AnalisysFormSubmitConfiguration : IEntityTypeConfiguration<AnalisysFormSubmit>
+    public class FormSubmitConfiguration : IEntityTypeConfiguration<FormSubmit>
     {
-        public void Configure(EntityTypeBuilder<AnalisysFormSubmit> builder)
+        public void Configure(EntityTypeBuilder<FormSubmit> builder)
         {
 
             builder.HasOne(u => u.Form)
                 .WithMany(s => s.Submissions)
-                .HasForeignKey(u => u.AnalisysFormId)
+                .HasForeignKey(u => u.FormId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -27,7 +23,7 @@ namespace Data.Configuration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.Solicitation)
-                .WithOne(s => s.AnalisysFormSubmit)
+                .WithOne(s => s.FormSubmit)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -47,12 +43,16 @@ namespace Data.Configuration
             builder.Property(u => u.Deleted)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedBy)
+            builder.HasOne(u => u.CreatedByUserLaboratory)
+                .WithMany(x => x.FormSubmitCreatedBy)
+                .HasForeignKey(u => u.CreatedById)
                 .IsRequired()
-                .HasMaxLength(36);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.UpdatedBy)
-                .HasMaxLength(36);
+            builder.HasOne(u => u.UpdatedByUserLaboratory)
+                .WithMany(x => x.FormSubmitUpdatedBy)
+                .HasForeignKey(u => u.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
 
 

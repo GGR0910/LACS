@@ -12,10 +12,10 @@ namespace LACS_API.Controllers
         {
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterAnalisysRequestDTO request)
-        {
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterAnalisysRequestDTO request)
+        //{
 
-        } 
+        //} 
     }
 }

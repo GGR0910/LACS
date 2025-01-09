@@ -20,23 +20,29 @@ namespace Application.Application
             User? startUser = _repository.User.GetUserByEmail(userEmail);
             Result<Laboratory> result = new Result<Laboratory>();
 
-            if (loggedUser.RoleId != (int)RolesEnum.SuperAdmin)
+            if (loggedUser.UserName != "SystemUser")
                 result.Message = "User not authorized to register new laboratory";
-            else if (startUser != null)
-                result.Message = "User already exists";
-            else
+            else if(userUserName == "SystemUser")
+                result.Message = "User name not allowed";
+            else 
             {
-                Laboratory? laboratory = new Laboratory(loggedUser.Id, name, responsibleDocument, laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, userUserName);  
-                startUser = new User(loggedUser.Id,userUserName, userEmail, "BAH", departmentName,(int)RolesEnum.Admin, laboratory.Id);
-                loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id, loggedUser.LaboratoryId));
-                
-                _repository.User.Add(startUser);
+                if (startUser == null)
+                {
+                    startUser = new User(null, userUserName, userEmail, "BAH", departmentName);
+                    _repository.User.Add(startUser);
+                }
+
+                Laboratory laboratory = new Laboratory(name, responsibleDocument, laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, userUserName);
+                UserLaboratory userLaboratory = new UserLaboratory(null, (int)RolesEnum.Admin, startUser.Id, laboratory.Id, true);
                 _repository.Laboratory.Add(laboratory);
+                _repository.UserLaboratory.Add(userLaboratory);
+
 
                 //Enviar email de confirmação e de boas vindas pro usuário
 
                 result.Success = true;
                 result.Return = laboratory;
+
             }
 
             return Task.FromResult(result);
@@ -51,15 +57,14 @@ namespace Application.Application
         {
             Result<object> result = new Result<object>();
             Laboratory? laboratory = _repository.Laboratory.GetById(environmentId);
-
-            if (loggedUser.RoleId != (int)RolesEnum.SuperAdmin)
-                result.Message = "User not authorized to delete environments";
+            
+            if(loggedUser.UserName != "SystemUser")
+                result.Message = "User not authorized to delete laboratorys";
             else if (laboratory == null)
                 result.Message = "Environment not found";
             else
             {
-                laboratory.Delete(loggedUser.Id);
-                loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory deleted", laboratory.Id, loggedUser.LaboratoryId));
+                laboratory.Delete();
                 _repository.Laboratory.Update(laboratory);
 
                 result.Success = true;
@@ -71,14 +76,9 @@ namespace Application.Application
         public Task<Result<DataTableReturn<Laboratory>>> GetLaboratorysAsync(int page, int pageSize, User? loggedUser, string? name, string? document, string? countryName, string? departmentName, DateTime? initialDate, DateTime? finalDate)
         {
             Result<DataTableReturn<Laboratory>> result = new Result<DataTableReturn<Laboratory>>();
-            
-            if (loggedUser?.RoleId == (int)RolesEnum.User)
-                result.Message = "User not authorized to get users.";
-            else
-            {
-                result.Return = _repository.Laboratory.GetLaboratorys(page, pageSize, name, document, countryName, departmentName, initialDate, finalDate);
-                result.Success = true;
-            }
+
+            result.Return = _repository.Laboratory.GetLaboratorys(page, pageSize, name, document, countryName, departmentName, initialDate, finalDate);
+            result.Success = true;
 
             return Task.FromResult(result);
         }
@@ -87,17 +87,17 @@ namespace Application.Application
         {
             Result<Laboratory> result = new Result<Laboratory>();
 
-            if (!loggedUser.IsAdmin)
+            if (!loggedUser.CurrentUserLaboratory.IsAdmin)
                 result.Message = "User not authorized to edit users";
             else
             {
-                Laboratory? laboratory = _repository.Laboratory.GetById(loggedUser.LaboratoryId);
+                Laboratory? laboratory = _repository.Laboratory.GetById(loggedUser.CurrentUserLaboratory.LaboratoryId);
                 if (laboratory == null)
-                    result.Message = "User not found";
+                    result.Message = "Laboratory not found";
                 else
                 {
-                    laboratory.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.Id);
-                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id, loggedUser.LaboratoryId));
+                    laboratory.Edit(name,laboratoryAdress, laboratoryContactInfo, laboratoryEmail, departmentName, countryName, loggedUser.CurrentUserLaboratory.Id);
+                    loggedUser.UserInteractions.Add(new UserInteraction(loggedUser.Id, (int)UserInteractionTypeEnum.Update, "Laboratory Edited", laboratory.Id));
                     _repository.Laboratory.Update(laboratory);
                     result.Success = true;
                     result.Return = laboratory;

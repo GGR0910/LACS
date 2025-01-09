@@ -13,7 +13,7 @@ namespace Domain.Entities
             
         }
 
-        public Laboratory(string loggedUserId, string name, string document, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string responsibleName) : base(loggedUserId)
+        public Laboratory(string name, string document, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string responsibleName) : base(null)
         {
             Name = name;
             ResponsibleDocument = document;
@@ -34,9 +34,9 @@ namespace Domain.Entities
         public string DepartmentName { get; set; }
         public string CountryName { get; set; }
         public virtual ICollection<Analisys> Analisys { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<UserLaboratory> UserLaboratories { get; set; }
 
-        public void Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string loggedUserId)
+        public void Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string? loggedUserId)
         {
             Name = name;
             LaboratoryAdress = laboratoryAdress;
@@ -47,10 +47,10 @@ namespace Domain.Entities
             Update(loggedUserId);
         }
 
-        public void Delete(string loggedUserId)
+        public void Delete()
         {
             Deleted = true;
-            Update(loggedUserId);
+            Update();
         }
     }
 }

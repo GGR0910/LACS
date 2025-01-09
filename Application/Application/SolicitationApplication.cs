@@ -29,8 +29,6 @@ namespace Application.Application
                 result.Message = "Requester not found.";
             else if (!Enum.IsDefined(typeof(SolicitationTypeEnum), soliciationTypeId))
                 result.Message = "Invalid solicitation type.";
-            else if (!Enum.IsDefined(typeof(AnalisysTypeEnum), analisysTypeId))
-                result.Message = "Invalid analisys type.";
             else if (desiredDeadline < DateTime.Now)
                 result.Message = "Invalid desired deadline.";
             else
@@ -61,7 +59,7 @@ namespace Application.Application
                 result.Message = "Solicitation not found.";
             else if (user == null)
                 result.Message += "User not found.";
-            else if(user?.RoleId == (int)RolesEnum.User)
+            else if(!user.CurrentUserLaboratory.CanOperate)
                 result.Message += "User not authorized to mark samples as received.";
             else
             {
@@ -135,7 +133,7 @@ namespace Application.Application
 
             if (user == null)
                 result.Message = "User not found.";
-            if (user?.RoleId == (int)RolesEnum.User)
+            if (user?.CurrentUserLaboratory!.RoleId == (int)RolesEnum.User)
                 result.Message = "User not authorized to mark samples as received.";
             else
             {

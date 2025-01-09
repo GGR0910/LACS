@@ -28,6 +28,8 @@ namespace Application.Application
             Sample = new SampleApplication(_repository, _configuration);
             Laboratory = new LaboratoryApplication(_repository, _configuration);
             Analisys = new AnalisysApplication(_repository, _configuration);
+            UserLaboratory = new UserLaboratoryApplication(_repository, _configuration);
+            Form = new FormApplication(_repository, _configuration);
         }
 
         public IUserApplication User { get; private set; }
@@ -35,6 +37,8 @@ namespace Application.Application
         public ISolicitationApplication Solicitation { get; private set; }
         public ILaboratoryApplication Laboratory { get; private set; }
         public IAnalisysApplication Analisys { get; private set; }
+        public IUserLaboratoryApplication UserLaboratory { get; private set; }
+        public IFormApplication Form { get; private set; }
 
         public void Dispose()
         {

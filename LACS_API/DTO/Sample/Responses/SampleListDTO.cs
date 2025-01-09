@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
-using Microsoft.IdentityModel.Tokens;
 
-namespace LACS_API.DTO.Sample.Responses
+namespace LACS_API.DTO
 {
     public class SampleListDTO
     {

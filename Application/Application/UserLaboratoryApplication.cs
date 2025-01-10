@@ -16,9 +16,6 @@ namespace Application.Application
         {
         }
 
-        public Task<UserLaboratory> GetDetails(string userLaboratoryId)
-        {
-            return Task.FromResult(_repository.UserLaboratory.GetUserLaboratory(userLaboratoryId));
-        }
+       
     }
 }

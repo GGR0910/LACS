@@ -24,16 +24,21 @@ namespace Data.Configuration
             builder.Property(u => u.AmountDonePerDay)
                 .IsRequired();
 
-            builder.HasOne(u => u.Laboratory)
-                .WithMany(s => s.Analisys)
-                .HasForeignKey(u => u.LaboratoryId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.Property(u => u.SampleDeliverObservations);
 
             builder.Property(u => u.AllowWatching)
                 .IsRequired();
+
+            builder.HasOne(u => u.Laboratory)
+                 .WithMany(s => s.Analisys)
+                 .HasForeignKey(u => u.LaboratoryId)
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.CurrentForm)
+                .WithOne(s => s.Analisys)
+                .HasForeignKey<Analisys>(u => u.CurrentFormId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
 

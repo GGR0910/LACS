@@ -35,12 +35,7 @@
         public virtual ICollection<Sample> Samples { get; set; }
         public virtual ICollection<UserLaboratory> UserLaboratories { get; set; }
         public virtual ICollection<AnalystAnalisysResponsible> AnalystAnalisys { get; set; }
-
-        public void Delete(string loggedUserId)
-        {
-            Deleted = true;
-            Update(loggedUserId);
-        }
+        public virtual ICollection<Solicitation> Solicitations { get; set; }
 
         public void Edit(string userName, string email, int roleId ,string departamentName, string id)
         {

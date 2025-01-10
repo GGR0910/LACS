@@ -24,7 +24,7 @@ namespace LACS_API.Controllers
         {
             _configuration = configuration;
             _application = new UnitOfWorkApplication(configuration);
-            LoggedUser = _application.User.GetDetails("36152b19-0271-4cab-a3cd-1c6891ae1a43").Result;
+            LoggedUser = _application.User.GetDetails("36152b19-0271-4cab-a3cd-1c6891ae1a43").Result.Return;
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -45,7 +45,7 @@ namespace LACS_API.Controllers
                 var tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
                 var token = tokenHandler.ReadJwtToken(tokenString);
                 var userIdClaim = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.UserData);
-                LoggedUser = userIdClaim != null ? _application.User.GetDetails(userIdClaim.Value).Result : null;
+                LoggedUser = userIdClaim != null ? _application.User.GetDetails(userIdClaim.Value).Result.Return : null;
 
                 if(LoggedUser == null)
                 {

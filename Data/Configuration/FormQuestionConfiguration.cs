@@ -11,6 +11,12 @@ namespace Data.Configuration
         {
            builder.Property(u => u.QuestionText)
                 .IsRequired()
+                .HasMaxLength(500);
+
+            builder.Property(u => u.QuestionInstructions)
+                .HasMaxLength(200);
+
+            builder.Property(u => u.QuestionPlaceholder)
                 .HasMaxLength(200);
 
             builder.Property(u => u.Order)

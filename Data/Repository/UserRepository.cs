@@ -25,7 +25,7 @@ namespace Data.Repository
             return _context.Users.Include(x => x.UserLaboratories).ThenInclude(x => x.Laboratory).FirstOrDefault(u => u.Id == id);
         }
 
-        public DataTableReturn<User> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName)
+        public Task<DataTableReturn<User>> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName)
         {
             IQueryable<User> users = _context.Users.Where(u => u.UserLaboratories.Any(x => x.LaboratoryId == laboratoryId) && !u.Deleted).Include(x => x.UserLaboratories);
 
@@ -53,13 +53,14 @@ namespace Data.Repository
                 Page = page
             };
 
-            return dataTableReturn;
+            return Task.FromResult(dataTableReturn);
         }
 
         public void LoginUser(User user)
         {
             user.LastAcess = DateTime.Now;
             Update(user);
+            _context.SaveChanges();
         }
     }
 }

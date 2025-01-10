@@ -63,17 +63,5 @@ namespace Domain.Entities
         public ICollection<AnalystAnalisysResponsible> AnalystAnalisysResponsiblesUpdatedBy { get; set; }
 
         #endregion
-
-        public void Delete(string CurrentUserLaboratoryId)
-        {
-            Deleted = true;
-            Update(CurrentUserLaboratoryId);
-        }
-
-        public void UnDelete(string CurrentUserLaboratoryId)
-        {
-            Deleted = false;
-            Update(CurrentUserLaboratoryId);
-        }
     }
 }

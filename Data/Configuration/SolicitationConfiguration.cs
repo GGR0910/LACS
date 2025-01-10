@@ -19,6 +19,8 @@ namespace Data.Configuration
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(u => u.DesiredDeadline);
+
             builder.Property(u => u.SamplesReceivedDate);
             
             builder.Property(u => u.ExpectedCompletionDate);
@@ -28,6 +30,11 @@ namespace Data.Configuration
             builder.Property(u => u.ResultsDelivered)
                 .IsRequired();
 
+            builder.HasOne(u => u.ResponsibleAnalist)
+                .WithMany(s => s.Solicitations)
+                .HasForeignKey(u => u.ResponsibleAnalistId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
 

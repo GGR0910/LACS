@@ -17,7 +17,7 @@
         //Basic solicitation information
         public int SoliciationTypeId { get; set; }
         public virtual SolicitationType SolicitationType { get; set; }
-        public DateTime DesiredDeadline { get; set; }
+        public DateTime? DesiredDeadline { get; set; }
         public DateTime? SamplesReceivedDate { get; set; }
         public DateTime? ExpectedCompletionDate { get; set; }
         public DateTime? CompletionDate { get; set; }

@@ -16,6 +16,9 @@ namespace Data.Configuration
                 .IsRequired()
                 .HasMaxLength(200);
 
+            builder.Property(u => u.FormVersion)
+                .IsRequired();
+
             builder.HasOne(u => u.Analisys)
                 .WithOne(s => s.CurrentForm)
                 .HasForeignKey<Form>(u => u.AnalisysId)

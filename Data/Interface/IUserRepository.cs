@@ -13,7 +13,7 @@ namespace Data.Interface
     {
         User? GetUserByEmail(string email);
         User? GetUserById(string id);
-        DataTableReturn<User> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName);
+        Task<DataTableReturn<User>> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName);
         void LoginUser(User user);
     }
 }

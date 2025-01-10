@@ -16,6 +16,7 @@ namespace Domain.Entities
         public bool AllowWatching{ get; set; }
         public string LaboratoryId { get; set; }
         public virtual Laboratory Laboratory { get; set; }
+        public string CurrentFormId { get; set; }
         public virtual Form CurrentForm { get; set; }
         public IEnumerable<Form> Forms { get; set; }
         public virtual IEnumerable<Solicitation> Solicitations { get; set; }

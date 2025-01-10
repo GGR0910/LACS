@@ -26,6 +26,7 @@ namespace Data.Configuration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(u => u.SampleAnalisysExpectedDate);
+            builder.Property(u => u.SampleAnalisysDate);
             builder.Property(u => u.SampleAnalisysDone);
             builder.Property(u => u.SampleAnalysisResult);
 

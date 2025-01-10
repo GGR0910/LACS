@@ -34,9 +34,10 @@ namespace Domain.Entities
             UpdatedById = userLaboratoryId;
         }
 
-        public void Update()
+        public void ChangeStatus(string loggedUserId)
         {
-            UpdatedAt = DateTime.Now;
+            Deleted = Deleted ? false : true;
+            Update(loggedUserId);
         }
     }
 }

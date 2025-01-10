@@ -9,6 +9,6 @@ namespace Application.Interface
 {
     public interface IUserLaboratoryApplication : IBaseApplication<UserLaboratory>
     {
-        Task<UserLaboratory> GetDetails(string userLaboratoryId);
+      
     }
 }

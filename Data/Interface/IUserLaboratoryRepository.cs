@@ -1,5 +1,6 @@
 ﻿using Data.Repository;
 using Domain.Entities;
+using Domain.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Data.Interface
 {
     public interface IUserLaboratoryRepository : IBaseRepository<UserLaboratory>
     {
-        UserLaboratory? GetUserLaboratory(string userLaboratoryId);
+        Task<UserLaboratory?> GetUserLaboratory(string userLaboratoryId);
+
+        Task<DataTableReturn<UserLaboratory>> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName);
     }
 }

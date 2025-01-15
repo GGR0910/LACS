@@ -12,13 +12,13 @@ namespace Domain.Entities
         public string Description { get; set; }
         public int AmountDonePerDay { get; set; }
         public string SampleDeliverObservations { get; set; }
+        public virtual User MainAnalist { get { return ResponsibleAnalists.First(x => x.IsMain).Analyst; } }
         public IEnumerable<AnalystAnalisysResponsible> ResponsibleAnalists { get; set; }
         public bool AllowWatching{ get; set; }
         public string LaboratoryId { get; set; }
         public virtual Laboratory Laboratory { get; set; }
-        public string CurrentFormId { get; set; }
-        public virtual Form CurrentForm { get; set; }
-        public IEnumerable<Form> Forms { get; set; }
+        public virtual Form CurrentForm { get { return AnalisysForms.First(x => !x.Deleted && x.Current).Form;}}
+        public IEnumerable<AnalisysForm> AnalisysForms { get; set; }
         public virtual IEnumerable<Solicitation> Solicitations { get; set; }
 
     }

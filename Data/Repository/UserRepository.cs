@@ -25,7 +25,7 @@ namespace Data.Repository
             return _context.Users.Include(x => x.UserLaboratories).ThenInclude(x => x.Laboratory).FirstOrDefault(u => u.Id == id);
         }
 
-        public Task<DataTableReturn<User>> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId, string? departamentName)
+        public Task<DataTableReturn<User>> GetUsers(int page, int pageLength, string laboratoryId, string? userName, string? email, int? roleId)
         {
             IQueryable<User> users = _context.Users.Where(u => u.UserLaboratories.Any(x => x.LaboratoryId == laboratoryId) && !u.Deleted).Include(x => x.UserLaboratories);
 
@@ -39,9 +39,6 @@ namespace Data.Repository
 
             if (roleId.HasValue)
                 users = users.Where(u => u.UserLaboratories.Any(x => x.RoleId == roleId));
-
-            if (!departamentName.IsNullOrEmpty())
-                users = users.Where(u => u.DepartamentName.Contains(departamentName));
 
             users = users.OrderBy(u => u.UserName).Skip((page - 1) * pageLength).Take(pageLength);
 

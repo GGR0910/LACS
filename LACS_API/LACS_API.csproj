@@ -38,7 +38,6 @@
     <Folder Include="DTO\Solicitation\Requests\" />
     <Folder Include="DTO\Solicitation\Responses\" />
     <Folder Include="DTO\Submition\Requests\" />
-    <Folder Include="DTO\Users\Requests\" />
     <Folder Include="DTO\Users\Responses\" />
   </ItemGroup>
 

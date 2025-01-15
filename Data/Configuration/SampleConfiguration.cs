@@ -28,7 +28,10 @@ namespace Data.Configuration
             builder.Property(u => u.SampleAnalisysExpectedDate);
             builder.Property(u => u.SampleAnalisysDate);
             builder.Property(u => u.SampleAnalisysDone);
-            builder.Property(u => u.SampleAnalysisResult);
+
+            builder.Property(u => u.SampleName);
+            builder.Property(u => u.SampleDescription);
+            builder.Property(u => u.SampleResult);
 
             //Base entity Data
 

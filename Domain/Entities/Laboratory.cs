@@ -13,44 +13,42 @@ namespace Domain.Entities
             
         }
 
-        public Laboratory(string name, string document, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string responsibleName) : base(null)
+        public Laboratory(string name, string document, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string countryName, string responsibleName, string laboratoryDocument) : base(null)
         {
             Name = name;
             ResponsibleDocument = document;
             LaboratoryAdress = laboratoryAdress;
             LaboratoryContactInfo = laboratoryContactInfo;
             LaboratoryEmail = laboratoryEmail;
-            DepartmentName = departamentName;
             CountryName = countryName;
             ResponsibleName = responsibleName;
+            LaboratoryDocument = laboratoryDocument;
+            PersonlizedEndpoint = name.Replace(" ","-") + "-" + countryName.Replace(" ","-");
         }
 
         public string Name { get; set; }
         public string ResponsibleName { get; set; }
         public string ResponsibleDocument { get; set; }
+        public string LaboratoryDocument { get; set; }
         public string LaboratoryAdress { get; set; }
         public string LaboratoryContactInfo { get; set; }
         public string LaboratoryEmail { get; set; }
-        public string DepartmentName { get; set; }
         public string CountryName { get; set; }
+        public string DefaultPassword { get; set; }
+        public string DefaultDepartamentName { get; set; }
+        //When acess the link, the user will see the lab info and available analisys
+        public string PersonlizedEndpoint { get; set; }
         public virtual ICollection<Analisys> Analisys { get; set; }
         public virtual ICollection<UserLaboratory> UserLaboratories { get; set; }
 
-        public void Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string departamentName, string countryName, string? loggedUserId)
+        public void Edit(string name, string laboratoryAdress, string laboratoryContactInfo, string laboratoryEmail, string countryName, string? loggedUserId)
         {
             Name = name;
             LaboratoryAdress = laboratoryAdress;
             LaboratoryContactInfo = laboratoryContactInfo;
             LaboratoryEmail = laboratoryEmail;
-            DepartmentName = departamentName;
             CountryName = countryName;
             Update(loggedUserId);
-        }
-
-        public void Delete()
-        {
-            Deleted = true;
-            Update();
         }
     }
 }

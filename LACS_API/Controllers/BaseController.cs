@@ -11,7 +11,6 @@ using System.Security.Claims;
 
 namespace LACS_API.Controllers
 {
-    //Antes de subir por o Authorize, tirar o api explorer e tirar o loggedUser do construtor
     [Route("api/[controller]")]
     [ApiController]
     public class BaseController : Controller
@@ -24,11 +23,11 @@ namespace LACS_API.Controllers
         {
             _configuration = configuration;
             _application = new UnitOfWorkApplication(configuration);
-            LoggedUser = _application.User.GetDetails("36152b19-0271-4cab-a3cd-1c6891ae1a43").Result.Return;
+            LoggedUser = _application.User.GetDetails("c7af4e3e-ff58-4f65-a942-9f5461d65b09").Result.Return;
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        public void OnActionExecuting(ActionExecutingContext context)
+        public  void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any())
                 return;

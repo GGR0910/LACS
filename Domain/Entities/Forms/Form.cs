@@ -6,10 +6,11 @@ namespace Domain.Entities
         public string Name { get; set; }
         public string Title { get; set; }
         public decimal FormVersion { get; set; }
-        public string AnalisysId { get; set; }
-        public virtual Analisys Analisys { get; set; }
+        public bool CollectDetailedSampleInformation { get; set; }
         public virtual IEnumerable<FormSubmit> Submissions { get; set; }
         public virtual IEnumerable<FormSection> Sections { get; set; }
+        public virtual IEnumerable<AnalisysForm> AnalisysForms { get; set; }
+        public virtual Analisys Analisys { get { return AnalisysForms.First(x => !x.Deleted && x.Current).Analisys; } }
 
     }
 }

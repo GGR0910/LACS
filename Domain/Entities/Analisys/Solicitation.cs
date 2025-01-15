@@ -22,6 +22,7 @@
         public DateTime? ExpectedCompletionDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public bool ResultsDelivered { get; set; }
+        public string AnalysisResult { get; set; }
         public int SampleAmount { get { return Samples.Count(); } }
         public virtual ICollection<Sample> Samples { get; set; }
         public string ResponsibleAnalistId { get; set; }

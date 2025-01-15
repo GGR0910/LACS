@@ -16,7 +16,7 @@ namespace Data.Seed
                 new UserInteractionType { Id = 1, Name = "Login" },
                 new UserInteractionType { Id = 2, Name = "Register" },
                 new UserInteractionType { Id = 3, Name = "Update" },
-                new UserInteractionType { Id = 4, Name = "Delete" },
+                new UserInteractionType { Id = 4, Name = "DeleteStatusChanged" },
                 new UserInteractionType { Id = 5, Name = "ChangePassword" },
                 new UserInteractionType { Id = 6, Name = "Logout" },
                 new UserInteractionType { Id = 7, Name = "SubmittedSamples" },

@@ -34,15 +34,27 @@ namespace Data.Configuration
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(u => u.DepartmentName)
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(u => u.CountryName)
                 .IsRequired()
                 .HasMaxLength(200);
 
             builder.Property(u => u.ResponsibleName)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            builder.Property(u => u.DefaultPassword)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            builder.Property(u => u.DefaultDepartamentName)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            builder.Property(u => u.LaboratoryDocument)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            builder.Property(u => u.PersonlizedEndpoint)
                 .IsRequired()
                 .HasMaxLength(200);
 

@@ -25,12 +25,13 @@ namespace Data.Configuration
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(u => u.DepartamentName)
-                .HasMaxLength(200);
-
             builder.Property(u => u.LastAcess);
 
             builder.Property(u => u.EmailConfirmed);
+
+            builder.Property(u => u.Document)
+                .IsRequired()
+                .HasMaxLength(20);
 
             //Base entity Data
 

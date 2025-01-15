@@ -9,34 +9,29 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class AnalisysConfiguration : IEntityTypeConfiguration<Analisys>
+    public class AnalisysFormConfiguration : IEntityTypeConfiguration<AnalisysForm>
     {
-        public void Configure(EntityTypeBuilder<Analisys> builder)
+        public void Configure(EntityTypeBuilder<AnalisysForm> builder)
         {
-           builder.Property(u => u.Name)
+            builder.HasAlternateKey(u => new { u.FormId, u.Current });
+            
+            builder.HasOne(u => u.Form)
+                 .WithMany(s => s.AnalisysForms)
+                .HasForeignKey(u => u.FormId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.Description)
+            builder.HasOne(u => u.Analisys)
+                .WithMany(s => s.AnalisysForms)
+                .HasForeignKey(u => u.AnalisysId)
                 .IsRequired()
-                .HasMaxLength(200);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(u => u.AmountDonePerDay)
+            builder.Property(u => u.Current)
+                .HasDefaultValue(false)
                 .IsRequired();
-
-            builder.Property(u => u.SampleDeliverObservations);
-
-            builder.Property(u => u.AllowWatching)
-                .IsRequired();
-
-            builder.HasOne(u => u.Laboratory)
-                 .WithMany(s => s.Analisys)
-                 .HasForeignKey(u => u.LaboratoryId)
-                 .IsRequired()
-                 .OnDelete(DeleteBehavior.Restrict);
 
             //Base entity Data
-
 
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id)
@@ -52,18 +47,16 @@ namespace Data.Configuration
                 .IsRequired();
 
             builder.HasOne(u => u.CreatedByUserLaboratory)
-                .WithMany(x => x.AnalisysCreatedBy)
-                .HasForeignKey(u => u.CreatedById)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+               .WithMany(x => x.AnalisysFormCreatedBy)
+               .HasForeignKey(u => u.CreatedById)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUserLaboratory)
-                .WithMany(x => x.AnalisysUpdatedBy)
+                .WithMany(x => x.AnalisysFormUpdatedBy)
                 .HasForeignKey(u => u.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //End base entity Data
-
-
         }
     }
 }

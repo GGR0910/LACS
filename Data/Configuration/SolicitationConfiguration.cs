@@ -28,7 +28,10 @@ namespace Data.Configuration
             builder.Property(u => u.CompletionDate);
 
             builder.Property(u => u.ResultsDelivered)
+                .HasDefaultValue(false)
                 .IsRequired();
+
+            builder.Property(u => u.AnalysisResult);
 
             builder.HasOne(u => u.ResponsibleAnalist)
                 .WithMany(s => s.Solicitations)

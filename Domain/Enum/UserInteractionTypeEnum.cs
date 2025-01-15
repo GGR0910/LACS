@@ -11,7 +11,7 @@ namespace Domain.Enum
         Login = 1,
         Register = 2,
         Update = 3,
-        Delete = 4,
+        DeleteStatuschanged = 4,
         ChangePassword = 5,
         Logout = 6,
         SubmittedSamples = 7,

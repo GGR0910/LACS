@@ -1,6 +1,7 @@
 ﻿using Data.Configuration;
 using Data.Seed;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -33,6 +34,8 @@ namespace Data.Context
         public DbSet<FormSection> FormSection { get; set; }
         public DbSet<UserLaboratory> UserLaboratory { get; set; }
         public DbSet<RequesterNotes> RequesterNotes { get; set; }
+        public DbSet<AnalystAnalisysResponsible> AnalystAnalisysResponsible { get; set; }
+        public DbSet<AnalisysForm> AnalisysForms { get; set; }
 
 
         #endregion
@@ -70,6 +73,7 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new RequesterNotesConfiguration());
             modelBuilder.ApplyConfiguration(new UserLaboratoryConfiguration());
             modelBuilder.ApplyConfiguration(new AnalystAnalisysResponsibleConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalisysFormConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -96,11 +100,40 @@ namespace Data.Context
                 UserName = "SystemUser",
                 Email = "ggr0910@hotmail.com",
                 EncryptedPassword = "Gogoll90@",
-                DepartamentName = "System",
                 EmailConfirmed = true,
                 CreatedAt = DateTime.Now,
             };
             modelBuilder.Entity<User>().HasData(adminUser);
+
+            Laboratory laboratory = new Laboratory()
+            {
+                Id = "2f55736e-eafd-498f-9815-80f2ce639301",
+                Name = "Laboratório de Análises Clínicas",
+                CreatedAt = DateTime.Now,
+                CountryName = "Brasil",
+                LaboratoryAdress = "Rua dos Bobos, nº 0",
+                LaboratoryContactInfo = "11999999999",
+                LaboratoryEmail = "teste@hotmail.com",
+                ResponsibleDocument = "123456789",
+                ResponsibleName = "Admin",
+                DefaultDepartamentName = "Laboratório",
+                DefaultPassword = "Teste"
+            };
+
+            modelBuilder.Entity<Laboratory>().HasData(laboratory);
+
+            UserLaboratory userLaboratory = new UserLaboratory()
+            {
+                Id = "f3b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b",
+                UserId = adminUser.Id,
+                LaboratoryId = laboratory.Id,
+                CreatedAt = DateTime.Now,
+                RoleId = (int)RolesEnum.Admin,
+                IsCurrent = true,
+                LabUserName= "SystemUser"
+            };
+
+            modelBuilder.Entity<UserLaboratory>().HasData(userLaboratory);
         }
     }
 }

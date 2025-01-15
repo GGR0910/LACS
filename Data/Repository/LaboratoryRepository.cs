@@ -3,22 +3,21 @@ using Data.Interface;
 using Domain.Entities;
 using Domain.Util;
 using Microsoft.IdentityModel.Tokens;
-using Laboratory = Domain.Entities.Laboratory;
 
 namespace Data.Repository
 {
-    public class LaboratoryRepository : BaseRepository<Domain.Entities.Laboratory>, ILaboratoryRepository
+    public class LaboratoryRepository : BaseRepository<Laboratory>, ILaboratoryRepository
     {
         public LaboratoryRepository(DataContext baseContext) : base(baseContext)
         {
         }
 
-        public Domain.Entities.Laboratory? GetLaboratoryByDocument(string document)
+        public Laboratory? GetLaboratoryByDocument(string document)
         {
-           return _context.Laboratory.FirstOrDefault(x => x.ResponsibleDocument == document);
+           return _context.Laboratory.FirstOrDefault(x => x.LaboratoryDocument == document);
         }
 
-        public DataTableReturn<Domain.Entities.Laboratory> GetLaboratorys(int page, int pageSize, string? name, string? document, string? countryName, string? departmentName, DateTime? initialDate, DateTime? finalDate)
+        public DataTableReturn<Laboratory> GetLaboratorys(int page, int pageSize, string? name, string? document, string? countryName, string? departmentName, DateTime? initialDate, DateTime? finalDate)
         {
             IQueryable<Laboratory> Laboratorys = _context.Laboratory;
 
@@ -32,9 +31,6 @@ namespace Data.Repository
 
             if (!countryName.IsNullOrEmpty())
                 Laboratorys = Laboratorys.Where(x => x.CountryName.Contains(countryName));
-
-            if (!departmentName.IsNullOrEmpty())
-                Laboratorys = Laboratorys.Where(x => x.DepartmentName.Contains(departmentName));
 
             if (initialDate != null)
                 Laboratorys = Laboratorys.Where(x => x.CreatedAt >= initialDate);

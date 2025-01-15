@@ -34,6 +34,13 @@ namespace Data.Configuration
             builder.Property(u => u.IsCurrent)
                 .IsRequired();
 
+            builder.Property(u => u.SectorName)
+                .HasMaxLength(200);
+
+            builder.Property(u => u.LabUserName)
+                .IsRequired()
+                .HasMaxLength(200);
+
             //Base entity Data
 
 

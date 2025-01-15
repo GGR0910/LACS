@@ -13,12 +13,14 @@ namespace Domain.Entities
         {
 
         }
-        public UserLaboratory(string? creatorUserLaboratoryId, int roleId, string userId, string laboratoryId, bool isCurrent) : base(creatorUserLaboratoryId)
+        public UserLaboratory(string? creatorUserLaboratoryId, int roleId, string userId, string laboratoryId, bool isCurrent, string sectorName, string labUserName) : base(creatorUserLaboratoryId)
         {
             RoleId = roleId;
             UserId = userId;
             LaboratoryId = laboratoryId;
             IsCurrent = isCurrent;
+            SectorName = sectorName;
+            LabUserName = labUserName;
         }
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
@@ -27,6 +29,8 @@ namespace Domain.Entities
         public string LaboratoryId { get; set; }
         public virtual Laboratory Laboratory { get; set; }
         public bool IsCurrent { get; set; }
+        public string? SectorName { get; set; }
+        public string LabUserName { get; set; }
         public bool CanOperate { get { return RoleId == (int)RolesEnum.Admin || RoleId == (int)RolesEnum.Analist; } }
         public bool IsAdmin { get { return RoleId == (int)RolesEnum.Admin; } }
 
@@ -61,7 +65,18 @@ namespace Domain.Entities
         public ICollection<UserInteraction> UserInteractionsUpdatedBy { get; set; }
         public ICollection<AnalystAnalisysResponsible> AnalystAnalisysResponsiblesCreatedBy { get; set; }
         public ICollection<AnalystAnalisysResponsible> AnalystAnalisysResponsiblesUpdatedBy { get; set; }
+        public ICollection<AnalisysForm> AnalisysFormCreatedBy { get; set; }
+        public ICollection<AnalisysForm> AnalisysFormUpdatedBy { get; set; }
 
         #endregion
+
+        public void Edit(string userName, int roleId, string departamentName, string userLaboratoryId)
+        {
+            RoleId = roleId;
+            LabUserName = userName;
+            SectorName = departamentName;
+            UpdatedAt = DateTime.Now;
+            Update(userLaboratoryId);
+        }
     }
 }

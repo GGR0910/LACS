@@ -19,11 +19,7 @@ namespace Data.Configuration
             builder.Property(u => u.FormVersion)
                 .IsRequired();
 
-            builder.HasOne(u => u.Analisys)
-                .WithOne(s => s.CurrentForm)
-                .HasForeignKey<Form>(u => u.AnalisysId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(u => u.CollectDetailedSampleInformation);
 
             //Base entity Data
 

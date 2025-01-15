@@ -36,7 +36,7 @@ namespace LACS_API.DTO
         public bool NeedsRecobriment { get; set; }
         public string? RecobrimentMaterial { get; set; }
         public string? SpecialPrecautions { get; set; }
-        public DateTime DesiredDeadline { get; set; }
+        public DateTime? DesiredDeadline { get; set; }
         public string DeliveryLocation { get; set; }
         public bool DesireToAccompanyAnalysis { get; set; }
         public string? Observations { get; set; }

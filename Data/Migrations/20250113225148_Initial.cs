@@ -74,7 +74,6 @@ namespace Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     AmountDonePerDay = table.Column<int>(type: "int", nullable: false),
                     SampleDeliverObservations = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AnalistsNames = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     AllowWatching = table.Column<bool>(type: "bit", nullable: false),
                     LaboratoryId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -89,13 +88,64 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AnalisysForms",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    FormId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    AnalisysId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    Current = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(36)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalisysForms", x => x.Id);
+                    table.UniqueConstraint("AK_AnalisysForms_FormId_Current", x => new { x.FormId, x.Current });
+                    table.ForeignKey(
+                        name: "FK_AnalisysForms_Analisys_AnalisysId",
+                        column: x => x.AnalisysId,
+                        principalTable: "Analisys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalystAnalisysResponsible",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    AnalystId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    AnalisysId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(36)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalystAnalisysResponsible", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AnalystAnalisysResponsible_Analisys_AnalisysId",
+                        column: x => x.AnalisysId,
+                        principalTable: "Analisys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Form",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    AnalisysId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    FormVersion = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -105,12 +155,6 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Form", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Form_Analisys_AnalisysId",
-                        column: x => x.AnalisysId,
-                        principalTable: "Analisys",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,11 +181,12 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    Question = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    FormId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    QuestionText = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    QuestionInstructions = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    QuestionPlaceholder = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     QuestionTypeId = table.Column<int>(type: "int", nullable: false),
-                    HasOptions = table.Column<bool>(type: "bit", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
+                    SectionId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     IsRequired = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -156,12 +201,6 @@ namespace Data.Migrations
                         name: "FK_FormQuestion_FormQuestionType_QuestionTypeId",
                         column: x => x.QuestionTypeId,
                         principalTable: "FormQuestionType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FormQuestion_Form_FormId",
-                        column: x => x.FormId,
-                        principalTable: "Form",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -188,6 +227,31 @@ namespace Data.Migrations
                         name: "FK_FormQuestionOption_FormQuestion_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "FormQuestion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FormSection",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    FormId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(36)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FormSection", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FormSection_Form_FormId",
+                        column: x => x.FormId,
+                        principalTable: "Form",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -230,6 +294,8 @@ namespace Data.Migrations
                     LaboratoryEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DepartmentName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CountryName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DefaultPassword = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DefaultDepartamentName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -239,6 +305,25 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Laboratory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequesterNotes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    NoteText = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
+                    Important = table.Column<bool>(type: "bit", nullable: false),
+                    SolicitationId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(36)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequesterNotes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -269,11 +354,12 @@ namespace Data.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     SoliciationTypeId = table.Column<int>(type: "int", nullable: false),
-                    DesiredDeadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DesiredDeadline = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SamplesReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpectedCompletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CompletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ResultsDelivered = table.Column<bool>(type: "bit", nullable: false),
+                    ResponsibleAnalistId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     AnalisysId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -334,6 +420,8 @@ namespace Data.Migrations
                     UserId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     LaboratoryId = table.Column<string>(type: "nvarchar(36)", nullable: false),
                     IsCurrent = table.Column<bool>(type: "bit", nullable: false),
+                    SectorName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    LabUserName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -374,7 +462,6 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    DepartamentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     EncryptedPassword = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -419,6 +506,11 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Laboratory",
+                columns: new[] { "Id", "CountryName", "CreatedAt", "CreatedById", "DefaultDepartamentName", "DefaultPassword", "Deleted", "DepartmentName", "LaboratoryAdress", "LaboratoryContactInfo", "LaboratoryEmail", "Name", "ResponsibleDocument", "ResponsibleName", "UpdatedAt", "UpdatedById" },
+                values: new object[] { "2f55736e-eafd-498f-9815-80f2ce639301", "Brasil", new DateTime(2025, 1, 13, 19, 51, 48, 218, DateTimeKind.Local).AddTicks(6580), null, "Laboratório", "Teste", false, "Laboratório", "Rua dos Bobos, nº 0", "11999999999", "teste@hotmail.com", "Laboratório de Análises Clínicas", "123456789", "Admin", null, null });
+
+            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -434,7 +526,7 @@ namespace Data.Migrations
                 values: new object[,]
                 {
                     { 1, "Academic" },
-                    { 2, "ServicePrestation" }
+                    { 2, "Comercial" }
                 });
 
             migrationBuilder.InsertData(
@@ -445,7 +537,7 @@ namespace Data.Migrations
                     { 1, "Login" },
                     { 2, "Register" },
                     { 3, "Update" },
-                    { 4, "Delete" },
+                    { 4, "DeleteStatusChanged" },
                     { 5, "ChangePassword" },
                     { 6, "Logout" },
                     { 7, "SubmittedSamples" },
@@ -455,8 +547,13 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "CreatedById", "Deleted", "DepartamentName", "Email", "EmailConfirmed", "EncryptedPassword", "LastAcess", "UpdatedAt", "UpdatedById", "UserName" },
-                values: new object[] { "c7af4e3e-ff58-4f65-a942-9f5461d65b09", new DateTime(2024, 8, 20, 19, 25, 25, 593, DateTimeKind.Local).AddTicks(4656), null, false, "System", "ggr0910@hotmail.com", true, "Gogoll90@", null, null, null, "SystemUser" });
+                columns: new[] { "Id", "CreatedAt", "CreatedById", "Deleted", "Email", "EmailConfirmed", "EncryptedPassword", "LastAcess", "UpdatedAt", "UpdatedById", "UserName" },
+                values: new object[] { "c7af4e3e-ff58-4f65-a942-9f5461d65b09", new DateTime(2025, 1, 13, 19, 51, 48, 218, DateTimeKind.Local).AddTicks(6413), null, false, "ggr0910@hotmail.com", true, "Gogoll90@", null, null, null, "SystemUser" });
+
+            migrationBuilder.InsertData(
+                table: "UserLaboratory",
+                columns: new[] { "Id", "CreatedAt", "CreatedById", "Deleted", "IsCurrent", "LabUserName", "LaboratoryId", "RoleId", "SectorName", "UpdatedAt", "UpdatedById", "UserId" },
+                values: new object[] { "f3b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b", new DateTime(2025, 1, 13, 19, 51, 48, 218, DateTimeKind.Local).AddTicks(6622), null, false, true, "SystemUser", "2f55736e-eafd-498f-9815-80f2ce639301", 1, null, null, null, "c7af4e3e-ff58-4f65-a942-9f5461d65b09" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Analisys_CreatedById",
@@ -474,10 +571,39 @@ namespace Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Form_AnalisysId",
-                table: "Form",
-                column: "AnalisysId",
-                unique: true);
+                name: "IX_AnalisysForms_AnalisysId",
+                table: "AnalisysForms",
+                column: "AnalisysId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalisysForms_CreatedById",
+                table: "AnalisysForms",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalisysForms_UpdatedById",
+                table: "AnalisysForms",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalystAnalisysResponsible_AnalisysId",
+                table: "AnalystAnalisysResponsible",
+                column: "AnalisysId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalystAnalisysResponsible_AnalystId",
+                table: "AnalystAnalisysResponsible",
+                column: "AnalystId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalystAnalisysResponsible_CreatedById",
+                table: "AnalystAnalisysResponsible",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalystAnalisysResponsible_UpdatedById",
+                table: "AnalystAnalisysResponsible",
+                column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Form_CreatedById",
@@ -490,14 +616,14 @@ namespace Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FormAnswer_FormSubmitId",
-                table: "FormAnswer",
-                column: "FormSubmitId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FormAnswer_CreatedById",
                 table: "FormAnswer",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormAnswer_FormSubmitId",
+                table: "FormAnswer",
+                column: "FormSubmitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormAnswer_QuestionId",
@@ -510,11 +636,6 @@ namespace Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FormQuestion_FormId",
-                table: "FormQuestion",
-                column: "FormId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FormQuestion_CreatedById",
                 table: "FormQuestion",
                 column: "CreatedById");
@@ -523,6 +644,11 @@ namespace Data.Migrations
                 name: "IX_FormQuestion_QuestionTypeId",
                 table: "FormQuestion",
                 column: "QuestionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormQuestion_SectionId",
+                table: "FormQuestion",
+                column: "SectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormQuestion_UpdatedById",
@@ -545,14 +671,29 @@ namespace Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FormSubmit_FormId",
-                table: "FormSubmit",
+                name: "IX_FormSection_CreatedById",
+                table: "FormSection",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormSection_FormId",
+                table: "FormSection",
                 column: "FormId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormSection_UpdatedById",
+                table: "FormSection",
+                column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormSubmit_CreatedById",
                 table: "FormSubmit",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormSubmit_FormId",
+                table: "FormSubmit",
+                column: "FormId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormSubmit_RequesterId",
@@ -578,6 +719,21 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Laboratory_UpdatedById",
                 table: "Laboratory",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequesterNotes_CreatedById",
+                table: "RequesterNotes",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequesterNotes_SolicitationId",
+                table: "RequesterNotes",
+                column: "SolicitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequesterNotes_UpdatedById",
+                table: "RequesterNotes",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -609,6 +765,11 @@ namespace Data.Migrations
                 name: "IX_Solicitation_CreatedById",
                 table: "Solicitation",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Solicitation_ResponsibleAnalistId",
+                table: "Solicitation",
+                column: "ResponsibleAnalistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Solicitation_SoliciationTypeId",
@@ -701,6 +862,54 @@ namespace Data.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_AnalisysForms_Form_FormId",
+                table: "AnalisysForms",
+                column: "FormId",
+                principalTable: "Form",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AnalisysForms_UserLaboratory_CreatedById",
+                table: "AnalisysForms",
+                column: "CreatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AnalisysForms_UserLaboratory_UpdatedById",
+                table: "AnalisysForms",
+                column: "UpdatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AnalystAnalisysResponsible_UserLaboratory_CreatedById",
+                table: "AnalystAnalisysResponsible",
+                column: "CreatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AnalystAnalisysResponsible_UserLaboratory_UpdatedById",
+                table: "AnalystAnalisysResponsible",
+                column: "UpdatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AnalystAnalisysResponsible_Users_AnalystId",
+                table: "AnalystAnalisysResponsible",
+                column: "AnalystId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Form_UserLaboratory_CreatedById",
                 table: "Form",
                 column: "CreatedById",
@@ -749,6 +958,14 @@ namespace Data.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_FormQuestion_FormSection_SectionId",
+                table: "FormQuestion",
+                column: "SectionId",
+                principalTable: "FormSection",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_FormQuestion_UserLaboratory_CreatedById",
                 table: "FormQuestion",
                 column: "CreatedById",
@@ -775,6 +992,22 @@ namespace Data.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_FormQuestionOption_UserLaboratory_UpdatedById",
                 table: "FormQuestionOption",
+                column: "UpdatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FormSection_UserLaboratory_CreatedById",
+                table: "FormSection",
+                column: "CreatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FormSection_UserLaboratory_UpdatedById",
+                table: "FormSection",
                 column: "UpdatedById",
                 principalTable: "UserLaboratory",
                 principalColumn: "Id",
@@ -829,6 +1062,30 @@ namespace Data.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_RequesterNotes_Solicitation_SolicitationId",
+                table: "RequesterNotes",
+                column: "SolicitationId",
+                principalTable: "Solicitation",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_RequesterNotes_UserLaboratory_CreatedById",
+                table: "RequesterNotes",
+                column: "CreatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_RequesterNotes_UserLaboratory_UpdatedById",
+                table: "RequesterNotes",
+                column: "UpdatedById",
+                principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Sample_Solicitation_SolicitationId",
                 table: "Sample",
                 column: "SolicitationId",
@@ -873,6 +1130,14 @@ namespace Data.Migrations
                 table: "Solicitation",
                 column: "UpdatedById",
                 principalTable: "UserLaboratory",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Solicitation_Users_ResponsibleAnalistId",
+                table: "Solicitation",
+                column: "ResponsibleAnalistId",
+                principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -925,10 +1190,19 @@ namespace Data.Migrations
                 table: "Users");
 
             migrationBuilder.DropTable(
+                name: "AnalisysForms");
+
+            migrationBuilder.DropTable(
+                name: "AnalystAnalisysResponsible");
+
+            migrationBuilder.DropTable(
                 name: "FormAnswer");
 
             migrationBuilder.DropTable(
                 name: "FormQuestionOption");
+
+            migrationBuilder.DropTable(
+                name: "RequesterNotes");
 
             migrationBuilder.DropTable(
                 name: "Sample");
@@ -952,13 +1226,16 @@ namespace Data.Migrations
                 name: "FormQuestionType");
 
             migrationBuilder.DropTable(
-                name: "Form");
+                name: "FormSection");
+
+            migrationBuilder.DropTable(
+                name: "Analisys");
 
             migrationBuilder.DropTable(
                 name: "SolicitationTypes");
 
             migrationBuilder.DropTable(
-                name: "Analisys");
+                name: "Form");
 
             migrationBuilder.DropTable(
                 name: "Laboratory");

@@ -29,16 +29,4 @@
     <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Analisys\Requests\" />
-    <Folder Include="DTO\Analisys\Responses\" />
-    <Folder Include="DTO\Laboratory\Requests\" />
-    <Folder Include="DTO\Sample\Requests\" />
-    <Folder Include="DTO\Sample\Responses\" />
-    <Folder Include="DTO\Solicitation\Requests\" />
-    <Folder Include="DTO\Solicitation\Responses\" />
-    <Folder Include="DTO\Submition\Requests\" />
-    <Folder Include="DTO\Users\Responses\" />
-  </ItemGroup>
-
 </Project>

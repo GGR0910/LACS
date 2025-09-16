@@ -16,26 +16,7 @@ namespace Data.Context
         }
 
         #region Dbset
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<UserInteractionType> UserInteractionType { get; set; }
-        public DbSet<UserInteraction> UserInteractions { get; set; }
-        public DbSet<SolicitationType> SolicitationTypes { get; set; }
-        public DbSet<Sample> Sample { get; set; }
-        public DbSet<Solicitation> Solicitation { get; set; }
-        public DbSet<Laboratory> Laboratory { get; set; }
-        public DbSet<Analisys> Analisys { get; set; }
-        public DbSet<Form> Form { get; set; }
-        public DbSet<FormQuestion> FormQuestion { get; set; }
-        public DbSet<FormQuestionType> FormQuestionType { get; set; }
-        public DbSet<FormQuestionOption> FormQuestionOption { get; set; }
-        public DbSet<FormAnswer> FormAnswer { get; set; }
-        public DbSet<FormSubmit> FormSubmit { get; set; }
-        public DbSet<FormSection> FormSection { get; set; }
-        public DbSet<UserLaboratory> UserLaboratory { get; set; }
-        public DbSet<RequesterNotes> RequesterNotes { get; set; }
-        public DbSet<AnalystAnalisysResponsible> AnalystAnalisysResponsible { get; set; }
-        public DbSet<AnalisysForm> AnalisysForms { get; set; }
+        
 
 
         #endregion
@@ -54,26 +35,7 @@ namespace Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Configurations
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new UserInteractionTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new UserInteractionConfiguration());
-            modelBuilder.ApplyConfiguration(new SolicitationTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new SolicitationConfiguration());
-            modelBuilder.ApplyConfiguration(new SampleConfiguration());
-            modelBuilder.ApplyConfiguration(new LaboratoryConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysConfiguration());
-            modelBuilder.ApplyConfiguration(new FormConfiguration());
-            modelBuilder.ApplyConfiguration(new FormQuestionConfiguration());
-            modelBuilder.ApplyConfiguration(new FormQuestionTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new FormQuestionOptionConfiguration());
-            modelBuilder.ApplyConfiguration(new FormAnswerConfiguration());
-            modelBuilder.ApplyConfiguration(new FormSubmitConfiguration());
-            modelBuilder.ApplyConfiguration(new FormSectionConfiguration());
-            modelBuilder.ApplyConfiguration(new RequesterNotesConfiguration());
-            modelBuilder.ApplyConfiguration(new UserLaboratoryConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalystAnalisysResponsibleConfiguration());
-            modelBuilder.ApplyConfiguration(new AnalisysFormConfiguration());
+           
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -83,57 +45,15 @@ namespace Data.Context
         public void Seed(ModelBuilder modelBuilder)
         {
             #region Seeds
-            modelBuilder.Entity<Role>().HasData(RoleSeed.GenerateSeed());
-            modelBuilder.Entity<UserInteractionType>().HasData(UserInteractionTypeSeed.GenerateSeed());
-            modelBuilder.Entity<SolicitationType>().HasData(SolicitationTypeSeed.GenerateSeed());   
-            modelBuilder.Entity<FormQuestionType>().HasData(FormQuestionTypeSeed.GenerateSeed());
+       
             #endregion
 
-            GerarBaseAdmin(modelBuilder);
+            GenerateDefaultAdminUsers(modelBuilder);
         }
 
-        public void GerarBaseAdmin(ModelBuilder modelBuilder)
+        public void GenerateDefaultAdminUsers(ModelBuilder modelBuilder)
         {
-            User adminUser = new User()
-            {
-                Id = "c7af4e3e-ff58-4f65-a942-9f5461d65b09",
-                UserName = "SystemUser",
-                Email = "ggr0910@hotmail.com",
-                EncryptedPassword = "Gogoll90@",
-                EmailConfirmed = true,
-                CreatedAt = DateTime.Now,
-            };
-            modelBuilder.Entity<User>().HasData(adminUser);
-
-            Laboratory laboratory = new Laboratory()
-            {
-                Id = "2f55736e-eafd-498f-9815-80f2ce639301",
-                Name = "Laboratório de Análises Clínicas",
-                CreatedAt = DateTime.Now,
-                CountryName = "Brasil",
-                LaboratoryAdress = "Rua dos Bobos, nº 0",
-                LaboratoryContactInfo = "11999999999",
-                LaboratoryEmail = "teste@hotmail.com",
-                ResponsibleDocument = "123456789",
-                ResponsibleName = "Admin",
-                DefaultDepartamentName = "Laboratório",
-                DefaultPassword = "Teste"
-            };
-
-            modelBuilder.Entity<Laboratory>().HasData(laboratory);
-
-            UserLaboratory userLaboratory = new UserLaboratory()
-            {
-                Id = "f3b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b",
-                UserId = adminUser.Id,
-                LaboratoryId = laboratory.Id,
-                CreatedAt = DateTime.Now,
-                RoleId = (int)RolesEnum.Admin,
-                IsCurrent = true,
-                LabUserName= "SystemUser"
-            };
-
-            modelBuilder.Entity<UserLaboratory>().HasData(userLaboratory);
+         
         }
     }
 }

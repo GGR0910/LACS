@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Configuration\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Seed\" />
   </ItemGroup>
 
   <ItemGroup>

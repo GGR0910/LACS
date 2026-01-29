@@ -24,9 +24,9 @@ namespace Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
         public string? CreatedById { get; set; }
-        public virtual UserLaboratory CreatedByUserLaboratory { get; set; }
+        public virtual User CreatedByUserLaboratory { get; set; }
         public string? UpdatedById { get; set; }
-        public virtual UserLaboratory UpdatedByUserLaboratory { get; set; }
+        public virtual User UpdatedByUserLaboratory { get; set; }
 
         public void Update(string userLaboratoryId)
         {

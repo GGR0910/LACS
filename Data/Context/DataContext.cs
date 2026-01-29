@@ -1,8 +1,4 @@
-﻿using Data.Configuration;
-using Data.Seed;
-using Domain.Entities;
-using Domain.Enum;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Data.Context

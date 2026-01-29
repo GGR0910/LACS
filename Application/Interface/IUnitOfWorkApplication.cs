@@ -12,13 +12,6 @@ namespace Application.Interface
 
         #region Interfaces
 
-        IUserApplication User { get; }
-        ISampleApplication Sample { get; }
-        ISolicitationApplication Solicitation { get; }
-        ILaboratoryApplication Laboratory { get; }
-        IAnalisysApplication Analisys { get; }
-        IUserLaboratoryApplication UserLaboratory { get; }
-        IFormApplication Form { get; }
         #endregion
     }
 }

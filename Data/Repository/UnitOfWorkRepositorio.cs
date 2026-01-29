@@ -15,12 +15,6 @@ namespace Data.Repository
         {
             _context = context;
             _configuration = configuration;
-            User = new UserRepository(_context);
-            Sample = new SampleRepository(_context);
-            Solicitation = new SolicitationRepository(_context);
-            Laboratory = new LaboratoryRepository(_context);
-            Analisys = new AnalisysRepository(_context);
-            UserLaboratory = new UserLaboratoryRepository(_context);
         }
 
         #region Repositories
@@ -28,13 +22,6 @@ namespace Data.Repository
         {
             return new BaseRepository<TEntity>(_context);
         }
-
-        public IUserRepository User { get; private set; }
-        public ISampleRepository Sample { get; private set; }
-        public ISolicitationRepository Solicitation { get; private set; }
-        public ILaboratoryRepository Laboratory { get; private set; }
-        public IAnalisysRepository Analisys { get; private set; }
-        public IUserLaboratoryRepository UserLaboratory { get; private set; }
 
         #endregion
 
